@@ -10,20 +10,23 @@ namespace DGN.Models
         // Primery key
         public int Id { get; set; }
 
-        [Required]
-        [StringLenght(20), MinimumLenght = 5]
-        [RegularExpretion("^[A-Z]*$")]
-        public string Title { get; set; }
-
-        [StringLenght(200), MinimumLenght = 5]
+        [StringLength(200), MinimumLength = 5]
         public string Body { get; set; }
 
         // Shouldnt display in the GET form
+        [Required]
         [ForeignKey("User")]
-        public User CommentWriter { get; set; }
+        public int AuthorId { get; set; }
+
+        [Required]
+        public User Author { get; set; }
 
         // Shouldnt display in the GET form
+        [Required]
         [ForeignKey("Article")]
+        public int RelatedArticleId { get; set; }
+
+        [Required]
         public Article RelatedArticle { get; set; }
     }
 }
