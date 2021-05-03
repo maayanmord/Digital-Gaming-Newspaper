@@ -14,7 +14,7 @@ namespace DGN.Models
         public int Id { get; set; }
 
         [DisplayName("Category name")]
-        [Required(AllowEmptyStrings = false)]
+        [Required]
         public string CategoryName { get; set; }
 
         [DisplayName("The articles that using this category")]
