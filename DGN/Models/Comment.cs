@@ -12,18 +12,18 @@ namespace DGN.Models
 
         [Required]
         [StringLenght(20), MinimumLenght = 5]
+        [RegularExpretion("^[A-Z]*$")]
         public string Title { get; set; }
 
         [StringLenght(200), MinimumLenght = 5]
         public string Body { get; set; }
 
         // Shouldnt display in the GET form
-        // Foreign key
+        [ForeignKey("User")]
         public User CommentWriter { get; set; }
 
         // Shouldnt display in the GET form
-        // Foreign Key
+        [ForeignKey("Article")]
         public Article RelatedArticle { get; set; }
-
     }
 }
