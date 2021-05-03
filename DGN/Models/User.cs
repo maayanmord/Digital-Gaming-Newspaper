@@ -23,5 +23,19 @@ namespace DGN.Models
         [Required]
         [RegularExpretion(@"^[A-Z]+[a-z].*$")]
         public string Password { get; set; }
+
+        [DisplayName("The Profile Image Location")]
+        public string ImageLocation { get; set; }
+
+        [DisplayName("Basic info about the user")]
+        [DataType(DataType.MultilineText)]
+        public string About { get; set; }
+
+        [DisplayName("The articles that the user liked")]
+        public IList<ArticleLikes> ArticleLikes { get; set; }
+
+        // this is one to many with articles the user wrote
+        [DisplayName("Articles The User Wrote")]
+        public IList<Article> Articles { get; set; }
     }
 }
