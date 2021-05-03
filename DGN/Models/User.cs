@@ -10,10 +10,16 @@ namespace DGN.Models
         // Primery key
         public int Id { get; set; }
 
+        [Required]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
+        [Required]
+        [Display (Name = "Username")]
         public string UserName { get; set; }
 
+        [Required]
+        [RegularExpretion("^[A-Z]+[a-z]*$")]
         public string Password { get; set; }
     }
 }
