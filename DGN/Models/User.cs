@@ -20,6 +20,8 @@ namespace DGN.Models
         [DisplayName("Username")]
         public string UserName { get; set; }
 
+        public int PssswordID { get; set; }
+
         [Required]
         [RegularExpretion(@"^[A-Z]+[a-z].*$")]
         public string Password { get; set; }
