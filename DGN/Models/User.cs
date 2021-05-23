@@ -36,7 +36,7 @@ namespace DGN.Models
         public string About { get; set; }
 
         // Shouldn't display in the form.
-        public IList<ArticleLikes> ArticleLikes { get; set; }
+        public IList<Article> ArticleLikes { get; set; }
 
         // this is one to many with articles the user wrote
         // Shouldn't display in the form.
