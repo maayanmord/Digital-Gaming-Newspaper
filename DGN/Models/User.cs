@@ -20,6 +20,7 @@ namespace DGN.Models
         [DisplayName("Username")]
         public string UserName { get; set; }
 
+        [ForeignKey("Password")]
         public int PssswordID { get; set; }
 
         [Required]
