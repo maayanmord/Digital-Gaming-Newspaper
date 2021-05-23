@@ -15,6 +15,6 @@ namespace DGN.Models
         public string CategoryName { get; set; }
 
         [DisplayName("Articles related to this category")]
-        public IList<Atricle> Articles { get; set; }
+        public IList<Article> Articles { get; set; }
     }
 }
