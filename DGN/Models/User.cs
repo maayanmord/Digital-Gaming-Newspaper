@@ -35,11 +35,11 @@ namespace DGN.Models
         [DataType(DataType.MultilineText)]
         public string About { get; set; }
 
-        // Shouldent display in the form.
+        // Shouldn't display in the form.
         public IList<ArticleLikes> ArticleLikes { get; set; }
 
         // this is one to many with articles the user wrote
-        // Shouldent display in the form.
+        // Shouldn't display in the form.
         public IList<Article> Articles { get; set; }
     }
 }
