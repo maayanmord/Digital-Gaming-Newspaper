@@ -6,6 +6,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DGN.Models
 {
+    public enum UserRole
+    {
+        Client, 
+        Author,
+        Admin
+    }
+
     public class User
     {
         // Primery key
@@ -23,6 +30,25 @@ namespace DGN.Models
 
         [Required]
         public Password Password { get; set; }
+
+        [Required]
+        [DisplayName("First name")]
+        [MinLength(2)]
+        [RegularExpression(@"^[A-Z\d].*$", ErrorMessage = "A name must begin with a capital letter.")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [DisplayName("Last name")]
+        [MinLength(2)]
+        [RegularExpression(@"^[A-Z\d].*$", ErrorMessage = "A name must begin with a capital letter.")]
+        public string LastName { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime Birthday { get; set; }
+
+        public UserRole Role { get; set; }
+
 
         [DisplayName("The Profile Image Location")]
         public string ImageLocation { get; set; }
