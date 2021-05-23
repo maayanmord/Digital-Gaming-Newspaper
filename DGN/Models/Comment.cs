@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,7 +12,9 @@ namespace DGN.Models
         // Primery key
         public int Id { get; set; }
 
-        [StringLength(200), MinimumLength = 5]
+        [Required]
+        [StringLength(200, MinimumLength = 5)]
+        [DataType(DataType.MultilineText)]
         public string Body { get; set; }
 
         // Shouldnt display in the GET form
