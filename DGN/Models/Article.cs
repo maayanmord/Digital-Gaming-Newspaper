@@ -39,16 +39,16 @@ namespace DGN.Models
         [DisplayName("Creation Timestamp")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime CreationTimestamp { get; set; }
+        public DateTime CreationTimestamp { get; set; } = DateTime.Now;
 
         [Required]
         [DisplayName("Last Updated Timestamp")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime LastUpdatedTimestamp { get; set; }
-        
-        public IList<Comment> Comments { get; set; }
+        public DateTime LastUpdatedTimestamp { get; set; } = DateTime.Now;
 
-        public IList<User> Likes { get; set; }
+        public IList<Comment> Comments { get; set; } = new List<Comment>();
+
+        public IList<User> Likes { get; set; } = new List<User>();
     }
 }
