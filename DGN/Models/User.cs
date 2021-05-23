@@ -32,14 +32,12 @@ namespace DGN.Models
         public Password Password { get; set; }
 
         [Required]
-        [DisplayName("First name")]
         [RegularExpression(@"^[A-Z][a-z]+$", ErrorMessage = "A name must begin with a capital letter.")]
-        public string FirstName { get; set; }
+        public string Firstname { get; set; }
 
         [Required]
-        [DisplayName("Last name")]
         [RegularExpression(@"^[A-Z][a-z]+$", ErrorMessage = "A name must begin with a capital letter.")]
-        public string LastName { get; set; }
+        public string Lastname { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
