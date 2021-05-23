@@ -16,8 +16,7 @@ namespace DGN.Models
         public string Email { get; set; }
 
         [Required]
-        [DisplayName("Username")]
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
         [ForeignKey("Password")]
         public int PasswordId { get; set; }
