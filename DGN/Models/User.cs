@@ -33,14 +33,12 @@ namespace DGN.Models
 
         [Required]
         [DisplayName("First name")]
-        [MinLength(2)]
-        [RegularExpression(@"^[A-Z\d].*$", ErrorMessage = "A name must begin with a capital letter.")]
+        [RegularExpression(@"^[A-Z][a-z]+$", ErrorMessage = "A name must begin with a capital letter.")]
         public string FirstName { get; set; }
 
         [Required]
         [DisplayName("Last name")]
-        [MinLength(2)]
-        [RegularExpression(@"^[A-Z\d].*$", ErrorMessage = "A name must begin with a capital letter.")]
+        [RegularExpression(@"^[A-Z][a-z]+$", ErrorMessage = "A name must begin with a capital letter.")]
         public string LastName { get; set; }
 
         [DataType(DataType.Date)]
