@@ -25,8 +25,8 @@ namespace DGN.Models
         public int PssswordID { get; set; }
 
         [Required]
-        [RegularExpression(@"^[A-Z]+[a-z].*$")]
-        public string Password { get; set; }
+        [StringLength(50, MinimumLength = 5)]
+        public Password Password { get; set; }
 
         [DisplayName("The Profile Image Location")]
         public string ImageLocation { get; set; }
@@ -35,11 +35,11 @@ namespace DGN.Models
         [DataType(DataType.MultilineText)]
         public string About { get; set; }
 
-        [DisplayName("The articles that the user liked")]
+        // Shouldent display in the form.
         public IList<ArticleLikes> ArticleLikes { get; set; }
 
         // this is one to many with articles the user wrote
-        [DisplayName("Articles The User Wrote")]
+        // Shouldent display in the form.
         public IList<Article> Articles { get; set; }
     }
 }
