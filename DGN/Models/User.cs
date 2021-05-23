@@ -20,7 +20,7 @@ namespace DGN.Models
         public string UserName { get; set; }
 
         [ForeignKey("Password")]
-        public int PasswordID { get; set; }
+        public int PasswordId { get; set; }
 
         [Required]
         public Password Password { get; set; }
