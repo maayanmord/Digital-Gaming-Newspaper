@@ -18,6 +18,7 @@ namespace DGN.Models
         public string Title { get; set; }
 
         [Required]
+        [DataType(DataType.MultilineText)]
         public string Body { get; set; }
 
         [Required]
@@ -32,7 +33,7 @@ namespace DGN.Models
         public int AuthorId { get; set; }
 
         [Required]
-        public Profile Author { get; set; }
+        public User Author { get; set; }
 
         [Required]
         [DisplayName("Creation Timestamp")]
@@ -48,7 +49,6 @@ namespace DGN.Models
         
         public IList<Comment> Comments { get; set; }
 
-        // Check how to implement many-to-many relationship 
         public IList<User> Likes { get; set; }
     }
 }
