@@ -15,7 +15,6 @@ namespace DGN.Models
 
     public class User
     {
-        // Primery key
         public int Id { get; set; }
 
         [Required]
@@ -43,8 +42,7 @@ namespace DGN.Models
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Birthday { get; set; }
 
-        public UserRole Role { get; set; }
-
+        public UserRole Role { get; set; } = UserRole.Client;
 
         [DisplayName("The Profile Image Location")]
         public string ImageLocation { get; set; }
@@ -52,6 +50,14 @@ namespace DGN.Models
         [DisplayName("Basic info about the user")]
         [DataType(DataType.MultilineText)]
         public string About { get; set; }
+
+        public string FullName
+        {
+            get
+            {
+                return Firstname + " " + Lastname;
+            }
+        }
 
         // Shouldn't display in the form.
         public IList<Article> ArticleLikes { get; set; }
