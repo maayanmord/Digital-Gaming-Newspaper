@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
 
 namespace DGN.Models
@@ -10,6 +11,7 @@ namespace DGN.Models
         public byte[] Hash { get; }
         public byte[] Salt { get; }
 
+        [Required]
         public User User { get; set; }
 
         /// <summary>
