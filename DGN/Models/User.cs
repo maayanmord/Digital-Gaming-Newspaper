@@ -57,11 +57,14 @@ namespace DGN.Models
             }
         }
 
+        // this is one to many with articles the user wrote
+        // Shouldn't display in the form.
+        [ForeignKey("AuthorId")]
+        public IList<Article> Articles { get; set; }
+
         // Shouldn't display in the form.
         public IList<Article> ArticleLikes { get; set; }
 
-        // this is one to many with articles the user wrote
-        // Shouldn't display in the form.
-        public IList<Article> Articles { get; set; }
+
     }
 }
