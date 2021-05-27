@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,12 +14,12 @@ namespace DGN.Models
         [DisplayName("Branch name")]
         public string BranchName { get; set; }
 
-        [DisplayName("Address")]
-        public Location BranchLocation { get; set; }
-
         public int PhoneNumber { get; set; }
 
         [DisplayName("Branch's Activity Time")]
         public string ActivityTime { get; set; }
+
+        public double LocationLatitude { get; set; }
+        public double LocationLongitude { get; set; }
     }
 }
