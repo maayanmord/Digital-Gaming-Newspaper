@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 
 namespace DGN.Models
 {
@@ -18,8 +19,12 @@ namespace DGN.Models
         public string Title { get; set; }
 
         [Required]
+        [AllowHtml]
         [DataType(DataType.MultilineText)]
         public string Body { get; set; }
+
+        [DisplayName("The article image location")]
+        public string ImageLocation { get; set; }
 
         [Required]
         [ForeignKey("Category")]
