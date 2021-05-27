@@ -18,16 +18,14 @@ namespace DGN.Models
         public string Body { get; set; }
 
         // Shouldnt display in the GET form
-        [Required]
-        [ForeignKey("User")]
-        public int AuthorId { get; set; }
+        [ForeignKey("Author")]
+        public int? AuthorId { get; set; }
 
-        [Required]
         public User Author { get; set; }
 
         // Shouldnt display in the GET form
         [Required]
-        [ForeignKey("Article")]
+        [ForeignKey("RelatedArticle")]
         public int RelatedArticleId { get; set; }
 
         [Required]

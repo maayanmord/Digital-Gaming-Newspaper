@@ -34,7 +34,7 @@ namespace DGN.Models
         public Category Category { get; set; }
 
         [Required]
-        [ForeignKey("User")]
+        [ForeignKey("Author")]
         public int AuthorId { get; set; }
 
         [Required]

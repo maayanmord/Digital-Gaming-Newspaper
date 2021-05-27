@@ -15,6 +15,7 @@ namespace DGN.Models
 
     public class User
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]
@@ -23,9 +24,6 @@ namespace DGN.Models
 
         [Required]
         public string Username { get; set; }
-
-        [ForeignKey("Password")]
-        public int PasswordId { get; set; }
 
         [Required]
         public Password Password { get; set; }
