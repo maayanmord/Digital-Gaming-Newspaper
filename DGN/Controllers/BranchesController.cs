@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DGN.Data;
 using DGN.Models;
@@ -16,13 +19,13 @@ namespace DGN.Controllers
             _context = context;
         }
 
-        // GET: Branch
+        // GET: Branches
         public async Task<IActionResult> Index()
         {
             return View(await _context.Branch.ToListAsync());
         }
 
-        // GET: Branch/Details/5
+        // GET: Branches/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,18 +43,18 @@ namespace DGN.Controllers
             return View(branch);
         }
 
-        // GET: Branch/Create
+        // GET: Branches/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Branch/Create
+        // POST: Branches/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BranchName,PhoneNumber,ActivityTime,LocationLatitude,LocationLongitude")] Branch branch)
+        public async Task<IActionResult> Create([Bind("Id,BranchName,Email,ActivityTime,LocationLatitude,LocationLongitude")] Branch branch)
         {
             if (ModelState.IsValid)
             {
@@ -62,7 +65,7 @@ namespace DGN.Controllers
             return View(branch);
         }
 
-        // GET: Branch/Edit/5
+        // GET: Branches/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,12 +81,12 @@ namespace DGN.Controllers
             return View(branch);
         }
 
-        // POST: Branch/Edit/5
+        // POST: Branches/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BranchName,PhoneNumber,ActivityTime,LocationLatitude,LocationLongitude")] Branch branch)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BranchName,Email,ActivityTime,LocationLatitude,LocationLongitude")] Branch branch)
         {
             if (id != branch.Id)
             {
@@ -113,7 +116,7 @@ namespace DGN.Controllers
             return View(branch);
         }
 
-        // GET: Branch/Delete/5
+        // GET: Branches/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,7 +134,7 @@ namespace DGN.Controllers
             return View(branch);
         }
 
-        // POST: Branch/Delete/5
+        // POST: Branches/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

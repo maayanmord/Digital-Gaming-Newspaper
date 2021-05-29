@@ -11,9 +11,11 @@ namespace DGN.Models
         [DisplayName("Branch Name")]
         public string BranchName { get; set; }
 
-        [DisplayName("Phone Number")]
-        public int PhoneNumber { get; set; }
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
 
+        [DataType(DataType.MultilineText)]
         [DisplayName("Branch's Activity Time")]
         public string ActivityTime { get; set; }
 
