@@ -11,9 +11,10 @@ namespace DGN.Models
     {
         public int Id { get; set; }
 
-        [DisplayName("Branch name")]
+        [DisplayName("Branch Name")]
         public string BranchName { get; set; }
 
+        [DisplayName("Phone Number")]
         public int PhoneNumber { get; set; }
 
         [DisplayName("Branch's Activity Time")]
