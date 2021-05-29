@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +14,6 @@ namespace DGN.Models
         public int Id { get; set; }
 
         [Required]
-        [Index(IsUnique = true)]
         [StringLength(50, MinimumLength = 5)]
         [RegularExpression(@"^[A-Z\d].*$", ErrorMessage = "The title must begin with a capital letter or a number")]
         public string Title { get; set; }

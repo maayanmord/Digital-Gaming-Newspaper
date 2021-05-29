@@ -14,6 +14,13 @@ namespace DGN.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Article>()
+                .HasIndex(a => a.Title)
+                .IsUnique();
+        }
+
         public DbSet<DGN.Models.Article> Article { get; set; }
 
         public DbSet<DGN.Models.Category> Category { get; set; }
