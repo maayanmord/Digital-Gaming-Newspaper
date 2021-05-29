@@ -23,28 +23,24 @@ namespace DGN.Models
         [DataType(DataType.MultilineText)]
         public string Body { get; set; }
 
-        [DisplayName("The article image location")]
+        [DisplayName("Image name")]
         public string ImageLocation { get; set; }
 
         [Required]
-        [ForeignKey("Category")]
+        [DisplayName("Category")]
         public int CategoryId { get; set; }
 
-        [Required]
         public Category Category { get; set; }
 
-        [ForeignKey("Author")]
-        public int? AuthorId { get; set; }
+        public int? UserId { get; set; }
 
-        public User Author { get; set; }
+        public User User { get; set; }
 
-        [Required]
         [DisplayName("Creation Timestamp")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime CreationTimestamp { get; set; } = DateTime.Now;
 
-        [Required]
         [DisplayName("Last Updated Timestamp")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
@@ -52,7 +48,6 @@ namespace DGN.Models
 
         public IList<Comment> Comments { get; set; } = new List<Comment>();
 
-        [InverseProperty("ArticleLikes")]
-        public IList<User> Likes { get; set; } = new List<User>();
+        public IList<User> UserLikes { get; set; } = new List<User>();
     }
 }

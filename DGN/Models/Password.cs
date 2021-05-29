@@ -14,6 +14,10 @@ namespace DGN.Models
         [Required]
         public User User { get; set; }
 
+        public Password()
+        {
+        }
+
         /// <summary>
         /// <para>This function creates Password using the clear password</para>
         /// Solting with random bytes and Using sha256
