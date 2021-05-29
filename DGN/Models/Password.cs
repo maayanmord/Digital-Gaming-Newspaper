@@ -1,17 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
 
 namespace DGN.Models
 {
     public class Password
     {
+        [ForeignKey("User")]
         public int Id { get; set; }
         public byte[] Hash { get; }
         public byte[] Salt { get; }
 
-        [Index("IX_PWD_USER_UNIQUE", IsUnique = true)]
-        [ForeignKey("User")]
-        public int UserId { get; set; }
+        [Required]
         public User User { get; set; }
 
         /// <summary>

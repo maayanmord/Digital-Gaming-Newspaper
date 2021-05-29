@@ -33,11 +33,9 @@ namespace DGN.Models
         [Required]
         public Category Category { get; set; }
 
-        [Required]
-        [ForeignKey("User")]
-        public int AuthorId { get; set; }
+        [ForeignKey("Author")]
+        public int? AuthorId { get; set; }
 
-        [Required]
         public User Author { get; set; }
 
         [Required]
@@ -54,6 +52,7 @@ namespace DGN.Models
 
         public IList<Comment> Comments { get; set; } = new List<Comment>();
 
+        [InverseProperty("ArticleLikes")]
         public IList<User> Likes { get; set; } = new List<User>();
     }
 }
