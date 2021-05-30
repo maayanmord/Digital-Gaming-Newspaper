@@ -1,5 +1,4 @@
-﻿
-    // Load the map.
+﻿    // Load the map.
     function loadMapScenario() {
         var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
         credentials: 'AoJqoJIUGkHJa_PyKKY6Bfmq8csIOizScrqoo53GElotN2XfQecO8ExsN4y2NJXV',
@@ -51,11 +50,12 @@
         }
 
         //add markers to map
-        if (Model != null)
-        {
-        foreach(item in Model)
-            {
-                addMarker(item.LocationLatitude, item.LocationLongitude, item.BranchName, item.ActivityTime, item.Email, item.Id);
-            }
+        if (branchesList != null) {
+            branchesList.forEach(item => addMarker(item.locationLatitude, item.locationLongitude, item.branchName, item.activityTime, item.email, item.id));
+
+            //for (item in branchesList) {
+            //    console.log(item)
+            //    addMarker(item.LocationLatitude, item.LocationLongitude, item.BranchName, item.ActivityTime, item.Email, item.Id);
+            //}
         }
-    }
+}

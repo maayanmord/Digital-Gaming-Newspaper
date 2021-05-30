@@ -46,11 +46,17 @@
         }
     </tbody>
 </table>
-<script src="~/js/branches.js" asp-append-version="true"></script>
-<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario' async defer></script>
 
 <div class="row">
     <div class="col-md-12 map">
         <div id="myMap" style="width:100%; height:610px;"></div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        var branchesList = @Html.Raw(Html.Raw(Json.Serialize(Model)));
+    </script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario' async defer></script>
+    <script src="~/js/branches.js" asp-append-version="true"></script>
+}
