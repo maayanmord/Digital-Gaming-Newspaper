@@ -48,7 +48,7 @@ namespace DGN.Controllers
         // GET: Passwords/Create
         public IActionResult Create()
         {
-            ViewData["Id"] = new SelectList(_context.Set<User>(), "Id", "Email");
+            ViewData["Id"] = new SelectList(_context.User, "Id", "Email");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id")] Password password)
+        public async Task<IActionResult> Create([Bind("Id,Hash,Salt")] Password password)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace DGN.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Id"] = new SelectList(_context.Set<User>(), "Id", "Email", password.Id);
+            ViewData["Id"] = new SelectList(_context.User, "Id", "Email", password.Id);
             return View(password);
         }
 
@@ -82,7 +82,7 @@ namespace DGN.Controllers
             {
                 return NotFound();
             }
-            ViewData["Id"] = new SelectList(_context.Set<User>(), "Id", "Email", password.Id);
+            ViewData["Id"] = new SelectList(_context.User, "Id", "Email", password.Id);
             return View(password);
         }
 
@@ -91,7 +91,7 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id")] Password password)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Hash,Salt")] Password password)
         {
             if (id != password.Id)
             {
@@ -118,7 +118,7 @@ namespace DGN.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Id"] = new SelectList(_context.Set<User>(), "Id", "Email", password.Id);
+            ViewData["Id"] = new SelectList(_context.User, "Id", "Email", password.Id);
             return View(password);
         }
 
