@@ -23,7 +23,7 @@ namespace DGN.Models
         [DataType(DataType.MultilineText)]
         public string Body { get; set; }
 
-        [DisplayName("Image name")]
+        [DisplayName("Image Location")]
         public string ImageLocation { get; set; }
 
         [Required]
