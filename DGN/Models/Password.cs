@@ -14,8 +14,6 @@ namespace DGN.Models
         [Required]
         public User User { get; set; }
 
-        public Password() {
-        }
         private Password(int id, byte[] hash, byte[] salt) {
             Initialize(id, hash, salt);
         }
