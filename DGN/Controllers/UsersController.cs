@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DGN.Data;
 using DGN.Models;
+using System.Text.RegularExpressions;
+using System.Net;
 
 namespace DGN.Controllers
 {
@@ -44,7 +46,7 @@ namespace DGN.Controllers
         }
 
         // GET: Users/Create
-        public IActionResult Create()
+        public IActionResult Register()
         {
             return View();
         }
@@ -54,15 +56,33 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Email,Username,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user)
+        public async Task<IActionResult> Register([Bind("Id,Email,Username,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user, string plainPass, string confirmPass)
         {
-            if (ModelState.IsValid)
+            if (!ValidPass(plainPass))
             {
+                ModelState.AddModelError("Password", "The minumum requierments are: 8 characters long containing 1 uppercase letter, 1 lowercase letter, a number and a special character");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+            if (!plainPass.Equals(confirmPass)) 
+            {
+                ModelState.AddModelError("Password", "Passwords does not match");
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+            if (ModelState.IsValid)
+            {               
                 _context.Add(user);
+                Password userPass = new Password(user.Id, plainPass, user);
+                _context.Add(userPass);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
+        }
+
+        private bool ValidPass(string plainPass)
+        {
+            Regex regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
+            return regex.IsMatch(plainPass);
         }
 
         // GET: Users/Edit/5
