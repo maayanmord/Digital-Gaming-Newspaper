@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using DGN.Data;
 using DGN.Models;
 using System.Text.RegularExpressions;
 using System.Net;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace DGN.Controllers
 {
@@ -22,12 +25,14 @@ namespace DGN.Controllers
         }
 
         // GET: Users
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _context.User.ToListAsync());
         }
 
         // GET: Users/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,6 +49,47 @@ namespace DGN.Controllers
 
             return View(user);
         }
+
+        // GET: Users/Login
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login([Bind("Email")] string Email, string password)
+        {
+            if (_context.User.Where<User>(u => u.Email == Email).ToList<User>().Count != 1)
+            {
+                ModelState.AddModelError("Password", "The email or password is incorrect");
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            }
+            else {
+                User usr = _context.User.Where(u => u.Email == Email).ToList<User>()[0];
+                Password pwd = _context.Password.Where(p => p.Id == usr.Id).ToList<Password>()[0];
+                if (pwd.Check(password))
+                {
+                    List<Claim> claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, usr.Username),
+                        new Claim(ClaimTypes.Email, usr.Email),
+                        //new Claim(ClaimTypes.Role, "Admin")
+                    };
+
+                    ClaimsIdentity claimIdentity = new ClaimsIdentity(claims, "Login");
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
+                    return Redirect("/");
+                }
+                else 
+                {
+                    ModelState.AddModelError("Password", "The email or password is incorrect");
+                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                }
+            }
+            return View();
+        }
+
 
         // GET: Users/Register
         public IActionResult Register()
@@ -79,9 +125,10 @@ namespace DGN.Controllers
                 Response.StatusCode = (int)HttpStatusCode.Conflict;
             }
             if (ModelState.IsValid)
-            {               
-                _context.Add(user);
+            {
                 Password userPass = new Password(user.Id, plainPass, user);
+                user.Password = userPass;
+                _context.Add(user);
                 _context.Add(userPass);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
