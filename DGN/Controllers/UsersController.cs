@@ -62,7 +62,7 @@ namespace DGN.Controllers
         {
             if (_context.User.Where<User>(u => u.Email == Email).ToList<User>().Count != 1)
             {
-                ModelState.AddModelError("Password", "The email or password is incorrect");
+                ViewData["Error"] = "The email or password is incorrect";
                 Response.StatusCode = (int)HttpStatusCode.Unauthorized;
             }
             else {
@@ -74,16 +74,23 @@ namespace DGN.Controllers
                     {
                         new Claim(ClaimTypes.Name, usr.Username),
                         new Claim(ClaimTypes.Email, usr.Email),
-                        //new Claim(ClaimTypes.Role, "Admin")
+                        new Claim(ClaimTypes.Role, usr.Role.ToString())
                     };
 
                     ClaimsIdentity claimIdentity = new ClaimsIdentity(claims, "Login");
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity));
+                    AuthenticationProperties authProperties = new AuthenticationProperties
+                    {
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10)
+                    };
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimIdentity),
+                        authProperties);
                     return Redirect("/");
                 }
                 else 
                 {
-                    ModelState.AddModelError("Password", "The email or password is incorrect");
+                    ViewData["Error"] = "The email or password is incorrect";
                     Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 }
             }
@@ -106,12 +113,12 @@ namespace DGN.Controllers
         {
             if (!ValidPass(plainPass))
             {
-                ModelState.AddModelError("Password", "The minumum requierments are: 8 characters long containing 1 uppercase letter, 1 lowercase letter, a number and a special character");
+                ViewData["Error"] = "The minumum requierments are: 8 characters long containing 1 uppercase letter, 1 lowercase letter, a number and a special character";
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
             if (!plainPass.Equals(confirmPass)) 
             {
-                ModelState.AddModelError("Password", "Passwords does not match");
+                ViewData["Error"] = "Passwords does not match");
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
             if (_context.User.Where<User>(u => u.Username == user.Username).ToList<User>().Count != 0)
