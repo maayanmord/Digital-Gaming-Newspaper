@@ -118,7 +118,7 @@ namespace DGN.Controllers
             }
             if (!plainPass.Equals(confirmPass)) 
             {
-                ViewData["Error"] = "Passwords does not match");
+                ViewData["Error"] = "Passwords does not match";
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
             }
             if (_context.User.Where<User>(u => u.Username == user.Username).ToList<User>().Count != 0)
