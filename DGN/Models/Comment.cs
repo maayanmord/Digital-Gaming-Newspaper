@@ -5,7 +5,6 @@ namespace DGN.Models
 {
     public class Comment
     {
-        // Primery key
         public int Id { get; set; }
 
         [Required]
@@ -13,13 +12,10 @@ namespace DGN.Models
         [DataType(DataType.MultilineText)]
         public string Body { get; set; }
 
-        // Shouldnt display in the GET form
-        [ForeignKey("Author")]
-        public int? AuthorId { get; set; }
+        public int? UserId { get; set; }
 
-        public User Author { get; set; }
+        public User User { get; set; }
 
-        // Shouldnt display in the GET form
         [Required]
         [ForeignKey("RelatedArticle")]
         public int RelatedArticleId { get; set; }
