@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DGN.Migrations
 {
     [DbContext(typeof(DGNContext))]
-    [Migration("20210603165315_Passwordhash")]
-    partial class Passwordhash
+    [Migration("20210604114949_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -125,7 +125,9 @@ namespace DGN.Migrations
             modelBuilder.Entity("DGN.Models.Password", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<byte[]>("Hash")
                         .HasColumnType("varbinary(max)");
@@ -133,7 +135,13 @@ namespace DGN.Migrations
                     b.Property<byte[]>("Salt")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Password");
                 });
@@ -231,7 +239,7 @@ namespace DGN.Migrations
                 {
                     b.HasOne("DGN.Models.User", "User")
                         .WithOne("Password")
-                        .HasForeignKey("DGN.Models.Password", "Id")
+                        .HasForeignKey("DGN.Models.Password", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

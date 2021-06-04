@@ -6,11 +6,12 @@ namespace DGN.Models
 {
     public class Password
     {
-        [ForeignKey("User")]
+        
         public int Id { get; set; }
         public byte[] Hash { get; set; }
         public byte[] Salt { get; set; }
 
+        public int UserId { get; set; }
         [Required]
         public User User { get; set; }
 

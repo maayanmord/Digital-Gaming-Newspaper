@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DGN.Migrations
 {
     [DbContext(typeof(DGNContext))]
-    [Migration("20210529151115_Update-Unique")]
-    partial class UpdateUnique
+    [Migration("20210604182233_Branches")]
+    partial class Branches
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -79,6 +79,35 @@ namespace DGN.Migrations
                     b.ToTable("Article");
                 });
 
+            modelBuilder.Entity("DGN.Models.Branch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActivityTime")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BranchName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("LocationLatitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("LocationLongitude")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Branch");
+                });
+
             modelBuilder.Entity("DGN.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -125,9 +154,23 @@ namespace DGN.Migrations
             modelBuilder.Entity("DGN.Models.Password", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte[]>("Hash")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("Salt")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Password");
                 });
@@ -225,7 +268,7 @@ namespace DGN.Migrations
                 {
                     b.HasOne("DGN.Models.User", "User")
                         .WithOne("Password")
-                        .HasForeignKey("DGN.Models.Password", "Id")
+                        .HasForeignKey("DGN.Models.Password", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
