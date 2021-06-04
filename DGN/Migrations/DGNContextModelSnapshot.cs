@@ -137,6 +137,7 @@ namespace DGN.Migrations
                 });
 
             modelBuilder.Entity("DGN.Models.User", b =>
+
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
