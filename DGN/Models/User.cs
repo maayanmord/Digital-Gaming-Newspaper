@@ -25,7 +25,6 @@ namespace DGN.Models
         [Required]
         public string Username { get; set; }
 
-        [Required]
         public Password Password { get; set; }
 
         [Required]
@@ -42,8 +41,8 @@ namespace DGN.Models
 
         public UserRole Role { get; set; } = UserRole.Client;
 
-        [DisplayName("The Profile Image Location")]
-        public string ImageLocation { get; set; }
+        [DisplayName("Image Location")]
+        public string ImageLocation { get; set; } = "~/images/DefaultProfilePicture.png";
 
         [DisplayName("Basic info about the user")]
         [DataType(DataType.MultilineText)]
@@ -57,14 +56,10 @@ namespace DGN.Models
             }
         }
 
-        // this is one to many with articles the user wrote
-        // Shouldn't display in the form.
-        [ForeignKey("AuthorId")]
-        public IList<Article> Articles { get; set; }
+        [InverseProperty("User")]
+        public IList<Article> Articles { get; set; } = new List<Article>();
 
-        // Shouldn't display in the form.
-        public IList<Article> ArticleLikes { get; set; }
-
-
+        [InverseProperty("UserLikes")]
+        public IList<Article> ArticleLikes { get; set; } = new List<Article>();
     }
 }

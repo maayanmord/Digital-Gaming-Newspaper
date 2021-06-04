@@ -8,20 +8,32 @@ namespace DGN.Models
     {
         [ForeignKey("User")]
         public int Id { get; set; }
-        public byte[] Hash { get; }
-        public byte[] Salt { get; }
+        public byte[] Hash { get; set; }
+        public byte[] Salt { get; set; }
 
         [Required]
         public User User { get; set; }
+
+        private Password(int id, byte[] hash, byte[] salt) {
+            Initialize(id, hash, salt);
+        }
 
         /// <summary>
         /// <para>This function creates Password using the clear password</para>
         /// Solting with random bytes and Using sha256
         /// </summary>
         /// <param name="PlainTextPassword">The password as plain text</param>
-        public Password(string PlainTextPassword) {
-            Salt = CreateSalt();
-            Hash = CreateHash(PlainTextPassword, Salt);
+        public Password(int id, string PlainTextPassword, User user) {
+            byte[] salt = CreateSalt();
+            Initialize(id, CreateHash(PlainTextPassword, salt), salt);
+            User = user;
+        }
+
+        private void Initialize(int id, byte[] hash, byte[] salt)
+        {
+            Id = id;
+            Hash = hash;
+            Salt = salt;
         }
 
         /// <summary>

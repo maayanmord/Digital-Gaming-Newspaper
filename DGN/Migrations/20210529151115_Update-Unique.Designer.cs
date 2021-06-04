@@ -4,14 +4,16 @@ using DGN.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DGN.Migrations
 {
     [DbContext(typeof(DGNContext))]
-    partial class DGNContextModelSnapshot : ModelSnapshot
+    [Migration("20210529151115_Update-Unique")]
+    partial class UpdateUnique
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,19 +127,12 @@ namespace DGN.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("Hash")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<byte[]>("Salt")
-                        .HasColumnType("varbinary(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Password");
                 });
 
             modelBuilder.Entity("DGN.Models.User", b =>
-
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
