@@ -30,5 +30,7 @@ namespace DGN.Data
         public DbSet<DGN.Models.Password> Password { get; set; }
 
         public DbSet<DGN.Models.User> User { get; set; }
+        
+        public DbSet<DGN.Models.Branch> Branch { get; set; }
     }
 }
