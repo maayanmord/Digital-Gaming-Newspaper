@@ -2,7 +2,7 @@
 
 namespace DGN.Migrations
 {
-    public partial class init : Migration
+    public partial class Branches : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace DGN.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BranchName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<int>(type: "int", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ActivityTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LocationLatitude = table.Column<double>(type: "float", nullable: false),
                     LocationLongitude = table.Column<double>(type: "float", nullable: false)
