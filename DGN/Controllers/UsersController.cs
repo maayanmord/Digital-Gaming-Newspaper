@@ -45,13 +45,13 @@ namespace DGN.Controllers
             return View(user);
         }
 
-        // GET: Users/Create
+        // GET: Users/Register
         public IActionResult Register()
         {
             return View();
         }
 
-        // POST: Users/Create
+        // POST: Users/Registar
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -67,6 +67,16 @@ namespace DGN.Controllers
             {
                 ModelState.AddModelError("Password", "Passwords does not match");
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+            if (_context.User.Where<User>(u => u.Username == user.Username).ToList<User>().Count != 0)
+            {
+                ModelState.AddModelError("Username", "Username is aleardy exists");
+                Response.StatusCode = (int)HttpStatusCode.Conflict;
+            }
+            if (_context.User.Where<User>(u => u.Email == user.Email).ToList<User>().Count != 0)
+            {
+                ModelState.AddModelError("Email", "This mail address is aleady in use");
+                Response.StatusCode = (int)HttpStatusCode.Conflict;
             }
             if (ModelState.IsValid)
             {               
