@@ -73,7 +73,7 @@ namespace DGN.Controllers
             }
             else {
                 User usr = _context.User.Where(u => u.Email == Email).ToList<User>()[0];
-                Password pwd = _context.Password.Where(p => p.Id == usr.Id).ToList<Password>()[0];
+                Password pwd = _context.Password.Where(p => p.UserId == usr.Id).ToList<Password>()[0];
                 if (pwd.Check(password))
                 {
                     List<Claim> claims = new List<Claim>
