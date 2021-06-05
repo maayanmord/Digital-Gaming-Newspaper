@@ -13,6 +13,7 @@ namespace DGN.Controllers
     public class ArticlesController : Controller
     {
         private readonly DGNContext _context;
+        private const string DEFAULT_IMAGE_LOCATION = "~/images/DefaultArticlePicture.png";
 
         public ArticlesController(DGNContext context)
         {
@@ -63,7 +64,7 @@ namespace DGN.Controllers
         {
             if (article.ImageLocation == null)
             {
-                article.ImageLocation = "~/images/DefaultArticlePicture.png";
+                article.ImageLocation = DEFAULT_IMAGE_LOCATION;
             }
             if (ModelState.IsValid && !ArticleExists(article.Title))
             {
@@ -105,6 +106,11 @@ namespace DGN.Controllers
             if ((currArticle == null) || (id != newArticle.Id))
             {
                 return NotFound();
+            }
+
+            if (newArticle.ImageLocation == null)
+            {
+                newArticle.ImageLocation = DEFAULT_IMAGE_LOCATION;
             }
 
             bool NotDuplicatedTitle = true;
