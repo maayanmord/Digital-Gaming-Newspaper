@@ -86,7 +86,7 @@ namespace DGN.Controllers
                 return NotFound();
             }
             ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);
+            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);*/
             return View(comment);
         }
 
@@ -123,7 +123,7 @@ namespace DGN.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);
+            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);*/
             return View(comment);
         }
 

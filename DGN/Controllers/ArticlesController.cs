@@ -38,7 +38,10 @@ namespace DGN.Controllers
             var article = await _context.Article
                 .Include(a => a.Category)
                 .Include(a => a.User)
+                .Include(a => a.Comments)
+                .ThenInclude(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
+                
             if (article == null)
             {
                 return NotFound();
