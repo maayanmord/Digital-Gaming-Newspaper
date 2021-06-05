@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DGN.Models
@@ -12,14 +13,17 @@ namespace DGN.Models
         [DataType(DataType.MultilineText)]
         public string Body { get; set; }
 
+        [DisplayName("User")]
         public int? UserId { get; set; }
 
         public User User { get; set; }
 
         [Required]
+        [DisplayName("Related Article")]
         [ForeignKey("RelatedArticle")]
         public int RelatedArticleId { get; set; }
 
+        [DisplayName("Related Article")]
         public Article RelatedArticle { get; set; }
     }
 }
