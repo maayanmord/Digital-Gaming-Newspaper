@@ -64,7 +64,7 @@ namespace DGN.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([Bind("Email")] string Email, string password)
+        public async Task<IActionResult> Login(string Email, string password)
         {
             if (_context.User.Where<User>(u => u.Email == Email).ToList<User>().Count != 1)
             {
