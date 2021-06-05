@@ -49,8 +49,8 @@ namespace DGN.Controllers
         // GET: Comments/Create
         public IActionResult Create()
         {
-            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Body");
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");
+            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title");
+            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");*/
             return View();
         }
 
@@ -67,8 +67,8 @@ namespace DGN.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Body", comment.RelatedArticleId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);
+            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);
+            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);*/
             return View(comment);
         }
 
@@ -85,7 +85,7 @@ namespace DGN.Controllers
             {
                 return NotFound();
             }
-            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Body", comment.RelatedArticleId);
+            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);
             return View(comment);
         }
@@ -122,7 +122,7 @@ namespace DGN.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Body", comment.RelatedArticleId);
+            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);
             return View(comment);
         }

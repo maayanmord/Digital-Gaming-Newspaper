@@ -20,7 +20,6 @@ namespace DGN.Models
         [ForeignKey("RelatedArticle")]
         public int RelatedArticleId { get; set; }
 
-        [Required]
         public Article RelatedArticle { get; set; }
     }
 }
