@@ -32,8 +32,8 @@ namespace DGN.Controllers
         }
 
         // GET: Users/Details/5
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Details(int? id)
+        [Authorize]
+        public async Task<IActionResult> Profile(int? id)
         {
             if (id == null)
             {
@@ -72,12 +72,13 @@ namespace DGN.Controllers
                 Response.StatusCode = (int)HttpStatusCode.Unauthorized;
             }
             else {
-                User usr = _context.User.Where(u => u.Email == Email).ToList<User>()[0];
-                Password pwd = _context.Password.Where(p => p.UserId == usr.Id).ToList<Password>()[0];
+                User usr = _context.User.Where(u => u.Email == Email).FirstOrDefault();
+                Password pwd = _context.Password.Where(p => p.UserId == usr.Id).FirstOrDefault();
                 if (pwd.Check(password))
                 {
                     List<Claim> claims = new List<Claim>
                     {
+                        new Claim(ClaimTypes.NameIdentifier, usr.Id.ToString()),
                         new Claim(ClaimTypes.Name, usr.Username),
                         new Claim(ClaimTypes.Email, usr.Email),
                         new Claim(ClaimTypes.Role, usr.Role.ToString())
@@ -155,12 +156,21 @@ namespace DGN.Controllers
             return regex.IsMatch(plainPass);
         }
 
-        // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Users/ChangePassword/5
+        [Authorize]
+        public async Task<IActionResult> ChangePassword(int? id)
         {
+            string usersid = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+
             if (id == null)
             {
                 return NotFound();
+            }
+            if ((!usersid.Equals(id.ToString())) && (!userRole.Equals(UserRole.Admin.ToString())))
+            {
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return Unauthorized();
             }
 
             var user = await _context.User.FindAsync(id);
@@ -176,34 +186,52 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user)
+        public async Task<IActionResult> ChangePassword(int id, string currentPassword, string newPassword, string confirmNewPassword)
         {
-            if (id != user.Id)
+            if (id == null)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            // Getting current user info from cookies
+            string usersid = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+            // If current user trying to replace password to diffrent user and he is not Admin
+            if ((!usersid.Equals(id.ToString())) && (!userRole.Equals(UserRole.Admin.ToString())))
             {
-                try
-                {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return Unauthorized();
             }
-            return View(user);
+
+            // Getting the user and password info from db
+            User user = _context.User.Find(id);
+            Password password = _context.Password.Where<Password>(p => p.UserId == id).FirstOrDefault();
+
+            // Checking password is correct
+            if (!password.Check(currentPassword)) {
+                ViewData["Error"] = "Password is not currect";
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return View();
+            }
+            // Making sure new password is valid
+            if (!ValidPass(newPassword))
+            {
+                ViewData["Error"] = "The minumum requierments are: 8 characters long containing 1 uppercase letter, 1 lowercase letter, a number and a special character";
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return View();
+            }
+            // Making sure new password confirmed
+            if (!newPassword.Equals(confirmNewPassword))
+            {
+                ViewData["Error"] = "Passwords does not match";
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return View();
+            }
+            // Creating the new password
+            Password p = new Password(id, newPassword, user);
+            _context.Password.Remove(password);
+            _context.Password.Add(p);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Users/Delete/5
