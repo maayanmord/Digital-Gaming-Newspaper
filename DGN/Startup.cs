@@ -55,7 +55,7 @@ namespace DGN
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Articles}/{action=Index}/{id?}");
             });
         }
     }

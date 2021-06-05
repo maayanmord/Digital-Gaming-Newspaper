@@ -50,7 +50,7 @@ namespace DGN.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName");
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");
+            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");*/
             return View();
         }
 
@@ -59,16 +59,20 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Body,ImageLocation,CategoryId,UserId,CreationTimestamp,LastUpdatedTimestamp")] Article article)
+        public async Task<IActionResult> Create([Bind("Id,Title,Body,ImageLocation,CategoryId")] Article article)
         {
-            if (ModelState.IsValid)
+            if (article.ImageLocation == null)
+            {
+                article.ImageLocation = "~/images/DefaultArticlePicture.png";
+            }
+            if (ModelState.IsValid && !ArticleExists(article.Title))
             {
                 _context.Add(article);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", article.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", article.UserId);
+            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", article.UserId);*/
             return View(article);
         }
 
@@ -86,7 +90,7 @@ namespace DGN.Controllers
                 return NotFound();
             }
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", article.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", article.UserId);
+            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", article.UserId);*/
             return View(article);
         }
 
@@ -95,23 +99,31 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Body,ImageLocation,CategoryId,UserId,CreationTimestamp,LastUpdatedTimestamp")] Article article)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Body,ImageLocation,CategoryId,CreationTimestamp,LastUpdatedTimestamp")] Article newArticle)
         {
-            if (id != article.Id)
+            var currArticle = await _context.Article.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+            if ((currArticle == null) || (id != newArticle.Id))
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            bool NotDuplicatedTitle = true;
+            if (currArticle.Title != newArticle.Title)
+            {
+                NotDuplicatedTitle = !ArticleExists(newArticle.Title);
+            }
+
+            if ((ModelState.IsValid) && (NotDuplicatedTitle))
             {
                 try
                 {
-                    _context.Update(article);
+                    _context.Update(newArticle);
+                    newArticle.LastUpdatedTimestamp = DateTime.Now;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ArticleExists(article.Id))
+                    if (!ArticleExists(newArticle.Id))
                     {
                         return NotFound();
                     }
@@ -122,9 +134,9 @@ namespace DGN.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", article.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", article.UserId);
-            return View(article);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", newArticle.CategoryId);
+            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", article.UserId);*/
+            return View(newArticle);
         }
 
         // GET: Articles/Delete/5
@@ -161,6 +173,11 @@ namespace DGN.Controllers
         private bool ArticleExists(int id)
         {
             return _context.Article.Any(e => e.Id == id);
+        }
+
+        private bool ArticleExists(string title)
+        {
+            return _context.Article.Any(e => e.Title == title);
         }
     }
 }
