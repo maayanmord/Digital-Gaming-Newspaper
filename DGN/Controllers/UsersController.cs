@@ -141,29 +141,36 @@ namespace DGN.Controllers
         [Authorize]
         public async Task<IActionResult> ChangePassword(int? id)
         {
-            string userSid = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
-
             if (id == null)
             {
                 return NotFound();
             }
+            string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+            string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             // Only when the user tring to change his own password
-            if (!userSid.Equals(id.ToString()))
+            if (!userId.Equals(id.ToString()))
             {
-                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                return Unauthorized();
+                if (!userRole.Equals(UserRole.Admin.ToString()))
+                {
+                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    return Unauthorized();
+                }
             }
 
-            var user = await _context.User.FindAsync(id);
+            User user = await _context.User.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
+
             return View(user);
         }
 
-        // POST: Users/Edit/5
+        // POST: Users/ChangePassword/5
+        // Leting users to change their own passwords
+        // And admins change all users passwords
+        //
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -171,31 +178,38 @@ namespace DGN.Controllers
         [Authorize]
         public async Task<IActionResult> ChangePassword(int? id, string currentPassword, string newPassword, string confirmNewPassword)
         {
+            
             if (id == null)
             {
                 return NotFound();
             }
 
-            // Getting current user info from cookies
-            string userSid = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
-
-            // Only when the user tring to change his own password
-            if (!userSid.Equals(id.ToString()))
-            {
-                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                return Unauthorized();
-            }
-
-            // Getting the user and password info from db
+            string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             User user = await _context.User.Include(u => u.Password).FirstOrDefaultAsync(u => u.Id == id);
 
-            // Checking password is correct
-            if (!user.Password.Check(currentPassword)) {
-                ViewData["Error"] = "Password is not currect";
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return View();
+            if (!userId.Equals(id.ToString()))
+            {
+                if (!userRole.Equals(UserRole.Admin.ToString()))
+                {
+                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    return Unauthorized();
+                }
             }
+            else 
+            {
+                if (currentPassword == null) 
+                {
+                    ViewData["Error"] = "You must specify current password";
+                    return View();
+                }
+                if (!user.Password.Check(currentPassword)) 
+                {
+                    ViewData["Error"] = "Password is not correct";
+                    return View();
+                }
+            }
+
             if (CanUsePassword(newPassword, confirmNewPassword)) {
                 // Creating the new password
                 user.Password = new Password(user.Id, newPassword, user);
@@ -207,8 +221,6 @@ namespace DGN.Controllers
         }
 
         // GET: Users/Delete/5
-        // TODO: DELETE USER ONLY IF I AM CURRENT USER AND CONFIRMD PASSWORD
-        // OR WHEN ADMIN WITHOUT CONFIRM - ADMIN PASS CONFIRMD - NEW FUNC
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -228,14 +240,51 @@ namespace DGN.Controllers
         }
 
         // POST: Users/Delete/5
-        // TODO: DELETE USER ONLY IF I AM CURRENT USER AND CONFIRMD PASSWORD
-        // OR WHEN ADMIN WITHOUT CONFIRM - ADMIN PASS CONFIRMD - NEW FUNC
+        // Allowing delete when
+        // 1. user deletes itself
+        // 2. Admin delete not admin user
+        // in both cases the user needs to confirm its password
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string plainPass)
         {
-            var user = await _context.User.FindAsync(id);
+            string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+            string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            User user = await _context.User.Include(u => u.Password).FirstOrDefaultAsync(u => u.Id == id);
+
+            if (!userId.Equals(id.ToString()))
+            {
+                if (!userRole.Equals(UserRole.Admin.ToString()))
+                {
+                    User currentUser = await _context.User.Include(u => u.Password).FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+                    if (!currentUser.Password.Check(plainPass))
+                    {
+                        ViewData["Error"] = "Password is not correct";
+                        return View();
+                    }
+                    if (user.Role == UserRole.Admin) 
+                    {
+                        ViewData["Error"] = "Can not delete admin user";
+                        return View();
+                    }
+                }
+                else
+                {
+                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    return Unauthorized();
+                }
+            }
+            else 
+            {
+                if (!user.Password.Check(plainPass))
+                {
+                    ViewData["Error"] = "password is not correct";
+                    return View();
+                }
+            }
+
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
