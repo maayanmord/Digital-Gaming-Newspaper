@@ -224,12 +224,19 @@ namespace DGN.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
+            string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+            string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             if (id == null)
             {
                 return NotFound();
             }
+            if (!userId.Equals(id.ToString()) && !userRole.Equals(UserRole.Admin.ToString())) 
+            {
+                return Unauthorized();
+            }
 
-            var user = await _context.User
+            User user = await _context.User
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
             {
@@ -249,25 +256,33 @@ namespace DGN.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id, string plainPass)
         {
+            
             string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
             string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            bool logout = false;
 
             User user = await _context.User.Include(u => u.Password).FirstOrDefaultAsync(u => u.Id == id);
 
+            if (plainPass == null)
+            {
+                ViewData["Error"] = "Your password is required";
+                return View(user);
+            }
+
             if (!userId.Equals(id.ToString()))
             {
-                if (!userRole.Equals(UserRole.Admin.ToString()))
+                if (userRole.Equals(UserRole.Admin.ToString()))
                 {
                     User currentUser = await _context.User.Include(u => u.Password).FirstOrDefaultAsync(u => u.Id.ToString() == userId);
                     if (!currentUser.Password.Check(plainPass))
                     {
                         ViewData["Error"] = "Password is not correct";
-                        return View();
+                        return View(user);
                     }
                     if (user.Role == UserRole.Admin) 
                     {
                         ViewData["Error"] = "Can not delete admin user";
-                        return View();
+                        return View(user);
                     }
                 }
                 else
@@ -283,13 +298,18 @@ namespace DGN.Controllers
                     ViewData["Error"] = "password is not correct";
                     return View();
                 }
+                logout = true;
             }
 
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (logout) 
+            {
+                await Logout();
+            }
+            return Redirect("/");
         }
-
+        
         private bool UserExists(int id)
         {
             return _context.User.Any(e => e.Id == id);
