@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DGN.Controllers
 {
@@ -50,6 +51,43 @@ namespace DGN.Controllers
             return View(user);
         }
 
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Profile(int? id, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user)
+        {
+            // TODO: If role is admin allow edit for not admin 
+            // If role is not admin only edit itself and not edit role.
+            if (id != user.Id)
+            {
+                return NotFound();
+            }
+            
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -296,7 +334,7 @@ namespace DGN.Controllers
                 if (!user.Password.Check(plainPass))
                 {
                     ViewData["Error"] = "password is not correct";
-                    return View();
+                    return View(user);
                 }
                 logout = true;
             }
