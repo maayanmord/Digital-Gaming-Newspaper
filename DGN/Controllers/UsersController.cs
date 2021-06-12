@@ -19,7 +19,7 @@ namespace DGN.Controllers
     public class UsersController : Controller
     {
         private readonly DGNContext _context;
-
+        private const string IMAGE_LOCATION = "wwwroot/images/";
         public UsersController(DGNContext context)
         {
             _context = context;
@@ -90,7 +90,7 @@ namespace DGN.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user)
+        public async Task<IActionResult> Edit(int? id, IFormFile ImageFile, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user)
         {
             string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
             string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -112,6 +112,19 @@ namespace DGN.Controllers
 
             if (ModelState.IsValid)
             {
+                //if (oldUser.Username != user.Username) 
+                //{
+                // User oldUser = await _context.User
+//                     .FirstOrDefaultAsync(m => m.Id == id);
+
+                // TODO: change image name to be new username
+                //}
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    string imagePath = IMAGE_LOCATION + user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
+                    await UploadImage(ImageFile, imagePath);
+                    user.ImageLocation = imagePath;
+                }
                 try
                 {
                     _context.Update(user);
@@ -490,6 +503,15 @@ namespace DGN.Controllers
                 return false;
             }
             return true;
+        }
+
+
+        private async Task UploadImage(IFormFile img, string filePath)
+        {
+            using (var stream = System.IO.File.Create(filePath))
+            {
+                await img.CopyToAsync(stream);
+            }
         }
     }
 }
