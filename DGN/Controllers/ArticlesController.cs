@@ -189,5 +189,10 @@ namespace DGN.Controllers
         {
             return _context.Article.Any(e => e.Title == title);
         }
+
+        public async Task<IActionResult> Search(string queryTitle, string queryBody)
+        {
+            return Json(_context.Article.Where(a => (a.Title.Contains(queryTitle))).ToListAsync());
+        }
     }
 }
