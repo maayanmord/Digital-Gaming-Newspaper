@@ -2,6 +2,13 @@
 
 @{
     ViewData["Title"] = "Details";
+    string absoluteUri = string.Concat(
+                        ViewContext.HttpContext.Request.Scheme,
+                        "://",
+                        ViewContext.HttpContext.Request.Host.ToUriComponent(),
+                        ViewContext.HttpContext.Request.PathBase.ToUriComponent(),
+                        ViewContext.HttpContext.Request.Path.ToUriComponent(),
+                        ViewContext.HttpContext.Request.QueryString.ToUriComponent());
 }
 
 <h1>Details</h1>
@@ -10,51 +17,58 @@
     <h4>Article</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Title)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Body)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Body)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ImageLocation)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ImageLocation)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Category.CategoryName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.User)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.User.Email)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CreationTimestamp)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CreationTimestamp)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.LastUpdatedTimestamp)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LastUpdatedTimestamp)
         </dd>
     </dl>
 </div>
+
+<a href="http://twitter.com/share?text=@Html.DisplayFor(model => model.Title) - &url=@absoluteUri" class="twitter-share-button" data-show-count="false">Tweet This Article!</a>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+    <!-- Load Twitter SDK for JavaScript -->
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+}
