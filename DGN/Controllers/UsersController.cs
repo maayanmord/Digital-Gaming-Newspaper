@@ -26,6 +26,7 @@ namespace DGN.Controllers
         }
 
         // GET: Users
+        // Manage users page for administrators
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
@@ -33,6 +34,7 @@ namespace DGN.Controllers
         }
 
         // GET: Users/Profile/5
+        // Getting user profile page
         [Authorize]
         public async Task<IActionResult> Profile(int? id)
         {
@@ -51,6 +53,7 @@ namespace DGN.Controllers
             return View(user);
         }
 
+        // Get the edit user as user page
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -83,6 +86,7 @@ namespace DGN.Controllers
             return View(user);
         }
 
+        // Edit user as user post request
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -129,6 +133,7 @@ namespace DGN.Controllers
             return View(user);
         }
 
+        // Edit user as admin page - able to change role 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditAsAdmin(int? id)
         {
