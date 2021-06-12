@@ -49,7 +49,7 @@ namespace DGN.Controllers
         // GET: Comments/Create
         public IActionResult Create()
         {
-            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title");
+            /*ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title");*/
             /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");*/
             return View();
         }
@@ -59,7 +59,7 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Body,UserId,CreationTimestamp,RelatedArticleId")] Comment comment)
+        public async Task<IActionResult> Create([Bind("Id,Body,UserId,CreationTimestamp")] Comment comment)
         {
             if (ModelState.IsValid)
             {
@@ -152,12 +152,12 @@ namespace DGN.Controllers
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, int RelatedArticleId)
         {
             var comment = await _context.Comment.FindAsync(id);
             _context.Comment.Remove(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), "Articles", new {id=RelatedArticleId});
         }
 
         private bool CommentExists(int id)
