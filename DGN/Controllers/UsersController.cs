@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
 
 namespace DGN.Controllers
 {
@@ -41,7 +41,7 @@ namespace DGN.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User
+            User user = await _context.User
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
             {
@@ -52,17 +52,60 @@ namespace DGN.Controllers
         }
 
         [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Profile(int? id, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user)
+        public async Task<IActionResult> Edit(int? id)
         {
-            // TODO: If role is admin allow edit for not admin 
-            // If role is not admin only edit itself and not edit role.
-            if (id != user.Id)
+            string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+            string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Only when the user tring to change his own password
+            if (!userId.Equals(id.ToString()))
+            {
+                if (!userRole.Equals(UserRole.Admin.ToString()))
+                {
+                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    return Unauthorized();
+                }
+            }
+
+            if (id == null)
             {
                 return NotFound();
             }
-            
+
+            User user = await _context.User
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (user == null) 
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int? id, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user)
+        {
+            string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+            string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Only when the user tring to change his own password
+            if (!userId.Equals(id.ToString()))
+            {
+                if (!userRole.Equals(UserRole.Admin.ToString()))
+                {
+                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    return Unauthorized();
+                }
+            }
+
+            if (id == null || user == null || id != user.Id)
+            {
+                return NotFound();
+            }
+
             if (ModelState.IsValid)
             {
                 try
@@ -85,6 +128,59 @@ namespace DGN.Controllers
             }
             return View(user);
         }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> EditAsAdmin(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            User user = await _context.User
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAsAdmin(int? id, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user)
+        {
+            if (id == null || user == null || id != user.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(user);
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -109,10 +205,12 @@ namespace DGN.Controllers
                 ViewData["Error"] = "The email or password is incorrect";
                 Response.StatusCode = (int)HttpStatusCode.Unauthorized;
             }
-            else {
+            else
+            {
                 User usr = await _context.User.Include(u => u.Password).FirstOrDefaultAsync(u => u.Email == Email);
                 if (usr.Password.Check(password))
                 {
+                    // Cookies that are encrypted
                     List<Claim> claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.NameIdentifier, usr.Id.ToString()),
@@ -130,6 +228,11 @@ namespace DGN.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimIdentity),
                         authProperties);
+
+                    // Session info for client
+                    HttpContext.Session.SetString("FirstName", usr.Firstname);
+                    HttpContext.Session.SetString("LastName", usr.Lastname);
+
                     return Redirect("/");
                 }
                 else 
