@@ -187,6 +187,8 @@ namespace DGN.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Response.Cookies.Delete("firstName");
+            HttpContext.Response.Cookies.Delete("lastName");
             return RedirectToAction("Login");
         }
 
@@ -229,9 +231,8 @@ namespace DGN.Controllers
                         new ClaimsPrincipal(claimIdentity),
                         authProperties);
 
-                    // Session info for client
-                    HttpContext.Session.SetString("FirstName", usr.Firstname);
-                    HttpContext.Session.SetString("LastName", usr.Lastname);
+                    HttpContext.Response.Cookies.Append("firstName", usr.Firstname);
+                    HttpContext.Response.Cookies.Append("lastName", usr.Lastname);
 
                     return Redirect("/");
                 }
