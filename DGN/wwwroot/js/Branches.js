@@ -8,19 +8,22 @@ function loadMapScenario() {
 
     // Create the infobox for the pushpin.
     var infobox = null;
+    var infoboxTemplate = '<div class="customInfobox"><img src="https://www.bingmapsportal.com/Content/images/poi_custom.png" align="left" style="margin-right:5px;"/><div class="title">{infoTitle}</div>{infoDescription}</div>';
 
     //Declare addMarker function
     function addMarker(latitude, longitude, title, activity, mail, pid) {
         var marker = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(latitude, longitude), { color: 'green' });
 
-        infobox = new Microsoft.Maps.Infobox(marker.getLocation(), {
-            visible: false
-        });
+        //A title and description for the infobox.
+        var infoTitle = title
+        var infoDescription = 'Activity Hours: {activity} <br/> Email Address: {mail}.';
+        var content = infoboxTemplate.replace('{infoTitle}', infoTitle).replace('{infoDescription}', infoDescription).replace('{activity}', activity).replace('{mail}', mail)
+
+        infobox = new Microsoft.Maps.Infobox(marker.getLocation(), { visible: false });
 
         marker.metadata = {
             id: pid,
-            title: title,
-            description: "Activity Hours: " + activity + '\n' + "Email Address: " + mail
+            description: content
         };
 
         Microsoft.Maps.Events.addHandler(marker, 'mouseout', hideInfobox);

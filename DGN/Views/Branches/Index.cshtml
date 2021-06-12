@@ -4,53 +4,58 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.BranchName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ActivityTime)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BranchName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ActivityTime)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<div class="row">
-    <div class="col-md-12 map">
-        <div id="myMap" style="width:100%; height:610px;"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 map">
+            <div id="myMap" style="width:100%; height:610px;"></div>
+        </div>
     </div>
+
+    <br />
+    <h2>Branches list</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.BranchName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ActivityTime)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BranchName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        <pre>
+                            @Html.DisplayFor(modelItem => item.ActivityTime)
+                        </pre>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Add new branch</a>
+    </p>
 </div>
 
 @section Scripts {
@@ -59,4 +64,9 @@
     </script>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario' async defer></script>
     <script src="~/js/branches.js" asp-append-version="true"></script>
+}
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/map.css" />
 }
