@@ -1,0 +1,238 @@
+﻿/*--------------------------------------------------------------
+  # General Sections
+  --------------------------------------------------------------*/
+
+section h2 {
+    font-size: 34px;
+    color: #000;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1.2em;
+    display: block;
+    margin: 0px 0px 18px 0px;
+    font-family: ui-rounded;
+}
+
+/*--------------------------------------------------------------
+  # Articles
+  --------------------------------------------------------------*/
+
+article.card {
+    border: none;
+}
+
+section.best-articles {
+    display: table;
+}
+
+    section.best-articles article, section.hot-articles article {
+        display: table-cell;
+        width: 25%;
+        vertical-align: top;
+        position: relative;
+        overflow: hidden;
+        background-color: rgba(0, 0, 0, 0.0)
+    }
+
+article a.thumb {
+    box-sizing: border-box;
+    margin: 0 12px;
+    position: relative;
+    overflow: hidden;
+    display: block;
+}
+
+section.best-articles article img, section.hot-articles article img {
+    width: 100%;
+    min-width: 100%;
+    background: #333;
+    transition: transform .5s ease-out;
+    border-radius: 4px;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* ----- Best Articles ----- */
+
+section.best-articles {
+    max-width: 1200px;
+    display: block;
+    margin: 0px auto;
+    padding-bottom: 100px;
+    background: #f3f3f3e6;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+    section.best-articles article img {
+        height: 475px;
+    }
+
+    section.best-articles img.thumb:hover {
+        -moz-transform: scale(1.04);
+        -webkit-transform: scale(1.04);
+        transform: scale(1.04);
+        transition: transform .75s ease-in-out
+    }
+
+    section.best-articles .caption {
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+        margin: 0px;
+        padding: 12px 24px;
+        min-height: 66px;
+        box-sizing: border-box;
+        background-color: rgba(34, 63, 90, 0.75);
+        color: #FFF;
+        font-size: 18px;
+        line-height: 1.21em;
+        font-weight: 900;
+    }
+
+        section.best-articles .caption a {
+            color: #FFF;
+        }
+
+/* ----- Hot Articles ----- */
+
+section.hot-articles {
+    display: block;
+    padding: 16px 0px;
+    background-color: #dee3f8;
+}
+
+    section.hot-articles > div.wrap {
+        max-width: 1200px;
+        margin: 0px auto;
+    }
+
+.wrap {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+section.hot-articles article img {
+    height: 160px;
+}
+
+section.hot-articles .caption {
+    display: block;
+    margin: 12px 12px 0px 12px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 22px;
+    color: #252627;
+}
+
+    section.hot-articles .caption a {
+        color: #252627;
+        text-decoration: none;
+    }
+
+section.hot-articles img.thumb:hover {
+    opacity: 0.85;
+}
+
+/* ----- Latest Articles ----- */
+
+section.latest-articles {
+    display: -ms-grid;
+    grid-template-columns: [mainContent-start] auto [mainContent-end rightRail-start] 320px [rightRail-end];
+    display: grid;
+    margin: 0 auto;
+    -ms-grid-columns: auto 320px;
+    max-width: 1200px;
+    display: block;
+    padding: 25px 0px;
+    margin: 0px auto;
+    background-color: #f3f3f3e6;
+}
+
+    section.latest-articles div.tbl {
+        grid-area: mainContent;
+        margin-right: 0;
+        display: table;
+        position: relative;
+        margin-right: 320px;
+    }
+
+    section.latest-articles + section.latest-articles {
+        padding: 0px;
+    }
+
+    section.latest-articles > h2 {
+        border-bottom: solid 1px rgba(37, 38, 39, 0.15);
+    }
+
+    section.latest-articles article {
+        display: table-row;
+        position: relative;
+        margin-left: 0px;
+    }
+
+    section.latest-articles div.left {
+        display: table-cell;
+        width: auto;
+        box-sizing: border-box;
+        vertical-align: top;
+        width: 25%;
+        max-width: 280px;
+        margin: 0px;
+        position: relative;
+    }
+
+    section.latest-articles div.right {
+        display: table-cell;
+        vertical-align: top;
+        padding: 0px 20px;
+        width: 75%;
+        box-sizing: border-box;
+    }
+
+        section.latest-articles div.right div.info {
+            color: #cc0000;
+        }
+
+    section.latest-articles div.right, section.latest-articles div.left {
+        padding-top: 25px;
+        padding-bottom: 25px;
+        border-bottom: solid 1px rgba(37, 38, 39, 0.15);
+    }
+
+    section.latest-articles img.thumb {
+        display: block;
+        width: 100%;
+        border-radius: 4px;
+        max-height: 160px;
+        max-width: 280px;
+        object-fit: cover;
+    }
+
+    section.latest-articles h3 {
+        margin: 6px 0px;
+    }
+
+    section.latest-articles h3 a {
+        font-size: 18px;
+        line-height: 20px;
+        font-weight: 700;
+        margin: 0;
+        color: #252627;
+        text-decoration: none;
+    }
+
+    section.latest-articles h3 a:hover {
+        text-decoration: underline;
+    }
+
+    section.latest-articles img.thumb:hover {
+        opacity: 0.85;
+    }
+
+    section.latest-articles div.right > p {
+        display: block;
+        margin: 0px;
+    }
