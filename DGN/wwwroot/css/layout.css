@@ -133,3 +133,8 @@ body {
         padding: 0px 7px 0px 7px;
     }
 }
+
+/* ----- Main ----- */
+main.main-body {
+    padding-top: 100px;
+}
