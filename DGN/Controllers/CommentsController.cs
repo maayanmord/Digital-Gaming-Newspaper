@@ -59,7 +59,7 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Body,UserId,RelatedArticleId")] Comment comment)
+        public async Task<IActionResult> Create([Bind("Id,Body,UserId,CreationTimestamp,RelatedArticleId")] Comment comment)
         {
             if (ModelState.IsValid)
             {
@@ -97,6 +97,7 @@ namespace DGN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Body,UserId,RelatedArticleId")] Comment comment)
         {
+            var currComment = await _context.Comment.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
             if (id != comment.Id)
             {
                 return NotFound();
@@ -106,6 +107,7 @@ namespace DGN.Controllers
             {
                 try
                 {
+                    comment.CreationTimestamp = currComment.CreationTimestamp;
                     _context.Update(comment);
                     await _context.SaveChangesAsync();
                 }

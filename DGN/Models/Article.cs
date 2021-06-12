@@ -24,7 +24,7 @@ namespace DGN.Models
         public string Body { get; set; }
 
         [DisplayName("Image Location")]
-        public string ImageLocation { get; set; }/* = "~/images/DefaultArticlePicture.png";*/
+        public string ImageLocation { get; set; } = "~/images/DefaultArticlePicture.png";
 
         [Required]
         [DisplayName("Category")]

@@ -19,6 +19,9 @@
                 @Html.DisplayNameFor(model => model.User)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.CreationTimestamp)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.RelatedArticle)
             </th>
             <th></th>
@@ -34,7 +37,10 @@
                 @Html.DisplayFor(modelItem => item.User.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RelatedArticle.Title)
+                @Html.DisplayFor(modelItem => item.CreationTimestamp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RelatedArticle.Body)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

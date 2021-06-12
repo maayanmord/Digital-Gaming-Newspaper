@@ -103,7 +103,7 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Body,ImageLocation,CategoryId,CreationTimestamp,LastUpdatedTimestamp")] Article newArticle)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Body,ImageLocation,CategoryId")] Article newArticle)
         {
             var currArticle = await _context.Article.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
             if ((currArticle == null) || (id != newArticle.Id))
@@ -128,6 +128,7 @@ namespace DGN.Controllers
                 {
                     _context.Update(newArticle);
                     newArticle.LastUpdatedTimestamp = DateTime.Now;
+                    newArticle.CreationTimestamp = currArticle.CreationTimestamp;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
