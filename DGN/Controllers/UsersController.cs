@@ -90,7 +90,7 @@ namespace DGN.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, IFormFile ImageFile, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user)
+        public async Task<IActionResult> Edit(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user)
         {
             string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
             string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
