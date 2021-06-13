@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using DGN.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace DGN
 {
@@ -26,7 +27,10 @@ namespace DGN
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie( o => 
+            {
+                o.LoginPath = "/Users/Login";
+            });
             services.AddDbContext<DGNContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DGNContext")));
         }
@@ -49,6 +53,7 @@ namespace DGN
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
