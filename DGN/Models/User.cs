@@ -36,7 +36,7 @@ namespace DGN.Models
         public string Lastname { get; set; }
 
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime Birthday { get; set; }
 
         public UserRole Role { get; set; } = UserRole.Client;
