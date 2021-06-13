@@ -85,7 +85,7 @@ namespace DGN.Controllers
             {
                 return NotFound();
             }
-            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);
+            /*ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);*/
             /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);*/
             return View(comment);
         }
@@ -95,7 +95,7 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Body,UserId,RelatedArticleId")] Comment comment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Body,UserId")] Comment comment)
         {
             var currComment = await _context.Comment.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
             if (id != comment.Id)
@@ -108,6 +108,7 @@ namespace DGN.Controllers
                 try
                 {
                     comment.CreationTimestamp = currComment.CreationTimestamp;
+                    comment.RelatedArticleId = currComment.RelatedArticleId;
                     _context.Update(comment);
                     await _context.SaveChangesAsync();
                 }
@@ -122,7 +123,7 @@ namespace DGN.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), "Articles", new { id = comment.RelatedArticleId });
             }
             ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);
             /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);*/
@@ -152,12 +153,12 @@ namespace DGN.Controllers
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id, int RelatedArticleId)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var comment = await _context.Comment.FindAsync(id);
             _context.Comment.Remove(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Details), "Articles", new {id=RelatedArticleId});
+            return RedirectToAction(nameof(Details), "Articles", new {id=comment.RelatedArticleId});
         }
 
         private bool CommentExists(int id)
