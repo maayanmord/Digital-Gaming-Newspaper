@@ -49,8 +49,8 @@ namespace DGN.Controllers
         // GET: Comments/Create
         public IActionResult Create()
         {
-            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Body");
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");
+            /*ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title");*/
+            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");*/
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Body,UserId,RelatedArticleId")] Comment comment)
+        public async Task<IActionResult> Create([Bind("Id,Body,UserId,CreationTimestamp")] Comment comment)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +67,8 @@ namespace DGN.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Body", comment.RelatedArticleId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);
+            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);
+            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);*/
             return View(comment);
         }
 
@@ -85,8 +85,8 @@ namespace DGN.Controllers
             {
                 return NotFound();
             }
-            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Body", comment.RelatedArticleId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);
+            /*ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);*/
+            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);*/
             return View(comment);
         }
 
@@ -95,8 +95,9 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Body,UserId,RelatedArticleId")] Comment comment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Body,UserId")] Comment comment)
         {
+            var currComment = await _context.Comment.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
             if (id != comment.Id)
             {
                 return NotFound();
@@ -106,6 +107,8 @@ namespace DGN.Controllers
             {
                 try
                 {
+                    comment.CreationTimestamp = currComment.CreationTimestamp;
+                    comment.RelatedArticleId = currComment.RelatedArticleId;
                     _context.Update(comment);
                     await _context.SaveChangesAsync();
                 }
@@ -120,10 +123,10 @@ namespace DGN.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), "Articles", new { id = comment.RelatedArticleId });
             }
-            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Body", comment.RelatedArticleId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);
+            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);
+            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);*/
             return View(comment);
         }
 
@@ -155,7 +158,7 @@ namespace DGN.Controllers
             var comment = await _context.Comment.FindAsync(id);
             _context.Comment.Remove(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), "Articles", new {id=comment.RelatedArticleId});
         }
 
         private bool CommentExists(int id)

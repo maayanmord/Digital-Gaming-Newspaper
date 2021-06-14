@@ -24,7 +24,7 @@ namespace DGN.Models
         public string Body { get; set; }
 
         [DisplayName("Image Location")]
-        public string ImageLocation { get; set; }
+        public string ImageLocation { get; set; } = "~/images/DefaultArticlePicture.png";
 
         [Required]
         [DisplayName("Category")]
@@ -37,13 +37,13 @@ namespace DGN.Models
         public User User { get; set; }
 
         [DisplayName("Creation Timestamp")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}")]
         public DateTime CreationTimestamp { get; set; } = DateTime.Now;
 
         [DisplayName("Last Updated Timestamp")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}")]
         public DateTime LastUpdatedTimestamp { get; set; } = DateTime.Now;
 
         public IList<Comment> Comments { get; set; } = new List<Comment>();
