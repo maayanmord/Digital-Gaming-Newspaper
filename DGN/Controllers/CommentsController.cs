@@ -49,7 +49,7 @@ namespace DGN.Controllers
         // GET: Comments/Create
         public IActionResult Create()
         {
-            /*ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title");*/
+            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title");
             /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");*/
             return View();
         }
@@ -59,10 +59,11 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Body,UserId,CreationTimestamp")] Comment comment)
+        public async Task<IActionResult> Create([Bind("Id,Body,UserId,RelatedArticleId")] Comment comment)
         {
             if (ModelState.IsValid)
             {
+                comment.CreationTimestamp = DateTime.Now;
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
