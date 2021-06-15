@@ -55,6 +55,30 @@
     </dl>
 </div>
 <div>
+    <h4>Comments</h4>
+    <hr />
+    @foreach (var item in Model.Comments.OrderByDescending(e => e.CreationTimestamp))
+    {
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayFor(modelItem => item.User.FullName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(modelItem => item.Body)
+            </dd>
+        </dl>
+        <dl class="row">
+            <dd class="col-sm-4 offset-2">
+                @Html.DisplayFor(modelItem => item.CreationTimestamp)
+            </dd>
+            <dd class="col-sm-6">
+                <a asp-controller="Comments" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </dd>
+        </dl>
+    }
+</div>
+<div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
