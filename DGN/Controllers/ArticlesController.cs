@@ -13,7 +13,6 @@ namespace DGN.Controllers
     public class ArticlesController : Controller
     {
         private readonly DGNContext _context;
-        private const string DEFAULT_IMAGE_LOCATION = "~/images/DefaultArticlePicture.png";
 
         public ArticlesController(DGNContext context)
         {
@@ -65,12 +64,9 @@ namespace DGN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Body,ImageLocation,CategoryId")] Article article)
         {
-            if (article.ImageLocation == null)
-            {
-                article.ImageLocation = DEFAULT_IMAGE_LOCATION;
-            }
             if (ModelState.IsValid && !ArticleExists(article.Title))
             {
+                article.CreationTimestamp = DateTime.Now;
                 _context.Add(article);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -111,11 +107,6 @@ namespace DGN.Controllers
                 return NotFound();
             }
 
-            if (newArticle.ImageLocation == null)
-            {
-                newArticle.ImageLocation = DEFAULT_IMAGE_LOCATION;
-            }
-
             bool NotDuplicatedTitle = true;
             if (currArticle.Title != newArticle.Title)
             {
@@ -127,7 +118,6 @@ namespace DGN.Controllers
                 try
                 {
                     _context.Update(newArticle);
-                    newArticle.LastUpdatedTimestamp = DateTime.Now;
                     newArticle.CreationTimestamp = currArticle.CreationTimestamp;
                     await _context.SaveChangesAsync();
                 }

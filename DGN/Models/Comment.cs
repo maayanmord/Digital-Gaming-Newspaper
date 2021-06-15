@@ -22,7 +22,7 @@ namespace DGN.Models
         [DisplayName("Creation Timestamp")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}")]
-        public DateTime CreationTimestamp { get; set; } = DateTime.Now;
+        public DateTime CreationTimestamp { get; set; }
 
         [Required]
         [DisplayName("Related Article")]
