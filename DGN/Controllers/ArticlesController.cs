@@ -184,5 +184,21 @@ namespace DGN.Controllers
         {
             return Json(await _context.Article.Where(a => (a.Title.Contains(queryTitle))).ToListAsync());
         }
+
+        public async Task<IActionResult> GetMostCommentedArticles(int count)
+        {
+            var query = from comment in _context.Comment
+                        join article in _context.Article on comment.RelatedArticleId equals article.Id
+                        group comment by new { comment.RelatedArticleId, article.Title, article.ImageLocation } into ArticleCommentsGroup
+                        orderby ArticleCommentsGroup.Count() descending
+                        select ArticleCommentsGroup.Key;
+
+            return Json(await query.Take(count).ToListAsync());
+        }
+
+        public async Task<IActionResult> GetMostLikedArticles(int count)
+        {
+            return Json(await _context.Article.Include(a => a.UserLikes).OrderByDescending(a => a.UserLikes.Count()).Take(count).ToListAsync());
+        }
     }
 }
