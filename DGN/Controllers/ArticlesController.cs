@@ -22,7 +22,7 @@ namespace DGN.Controllers
         // GET: Articles
         public async Task<IActionResult> Index()
         {
-            var dGNContext = _context.Article.Include(a => a.Category).Include(a => a.User);
+            var dGNContext = _context.Article.Include(a => a.Category).Include(a => a.User).OrderByDescending(a => a.CreationTimestamp);
             return View(await dGNContext.ToListAsync());
         }
 
@@ -189,7 +189,7 @@ namespace DGN.Controllers
         {
             var query = from comment in _context.Comment
                         join article in _context.Article on comment.RelatedArticleId equals article.Id
-                        group comment by new { comment.RelatedArticleId, article.Title, article.ImageLocation } into ArticleCommentsGroup
+                        group comment by new { article.Id, article.Title, article.ImageLocation } into ArticleCommentsGroup
                         orderby ArticleCommentsGroup.Count() descending
                         select ArticleCommentsGroup.Key;
 
