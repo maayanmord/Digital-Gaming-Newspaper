@@ -112,13 +112,6 @@ namespace DGN.Controllers
 
             if (ModelState.IsValid)
             {
-                //if (oldUser.Username != user.Username) 
-                //{
-                // User oldUser = await _context.User
-//                     .FirstOrDefaultAsync(m => m.Id == id);
-
-                // TODO: change image name to be new username
-                //}
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
                     string imagePath = IMAGE_LOCATION + user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
@@ -127,6 +120,7 @@ namespace DGN.Controllers
                 }
                 try
                 {
+              
                     _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
@@ -169,7 +163,7 @@ namespace DGN.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAsAdmin(int? id, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user)
+        public async Task<IActionResult> EditAsAdmin(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user)
         {
             if (id == null || user == null || id != user.Id)
             {
@@ -178,6 +172,12 @@ namespace DGN.Controllers
 
             if (ModelState.IsValid)
             {
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    string imagePath = IMAGE_LOCATION + user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
+                    await UploadImage(ImageFile, imagePath);
+                    user.ImageLocation = imagePath;
+                }
                 try
                 {
                     _context.Update(user);
@@ -272,7 +272,7 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("Id,Email,Username,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user, string plainPass, string confirmPass)
+        public async Task<IActionResult> Register(IFormFile ImageFile, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user, string plainPass, string confirmPass)
         {
             if (UsernameExists(user.Username))
             {
@@ -287,6 +287,12 @@ namespace DGN.Controllers
             if (CanUsePassword(plainPass, confirmPass) && ModelState.IsValid)
             {
                 user.Password = new Password(user.Id, plainPass, user);
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    string imagePath = IMAGE_LOCATION + user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
+                    await UploadImage(ImageFile, imagePath);
+                    user.ImageLocation = imagePath;
+                }
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
