@@ -138,6 +138,13 @@ section.hot-articles img.thumb:hover {
 
 /* ----- Latest Articles ----- */
 
+.fifty-chars {
+    width: 50ch;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 section.latest-articles {
     display: -ms-grid;
     grid-template-columns: [mainContent-start] auto [mainContent-end rightRail-start] 320px [rightRail-end];

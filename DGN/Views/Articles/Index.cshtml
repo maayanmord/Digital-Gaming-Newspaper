@@ -51,142 +51,28 @@
 <section class="latest-articles">
     <h2>Latest Articles</h2>
     <div class="tbl">
-        <article class="article">
-            <div class="left">
-                <a href="#" class="thumb">
-                    <img src="https://sm.ign.com/t/ign_il/news/b/battlefiel/battlefield-2042-wont-include-a-campaign-or-a-battle-royale_tsnu.280.jpg"
-                         alt="Battlefield 3 is better than Fruit Ninja!" class="thumb" />
-                </a>
-            </div>
-            <div class="right">
-                <div class="info">
-                    <time datetime="2021-06-11T12:00:42+03:00">1 hour, 3 minutes</time>
-                </div>
-                <h3>
-                    <a href="#">Battlefield 3 is better than Fruit Ninja!</a>
-                </h3>
-                <p>Fruit ninja is also better than CS:GO</p>
-            </div>
-        </article>
-        <article class="article">
-            <div class="left">
-                <a href="#" class="thumb">
-                    <img src="https://sm.ign.com/t/ign_il/news/b/battlefiel/battlefield-2042-wont-include-a-campaign-or-a-battle-royale_tsnu.280.jpg"
-                         alt="Battlefield 3 is better than Fruit Ninja!" class="thumb" />
-                </a>
-            </div>
-            <div class="right">
-                <div class="info">
-                    <time datetime="2021-06-11T12:00:42+03:00">1 hour, 3 minutes</time>
-                </div>
-                <h3>
-                    <a href="#">Battlefield 3 is better than Fruit Ninja!</a>
-                </h3>
-                <p>Fruit ninja is also better than CS:GO</p>
-            </div>
-        </article>
-        <article class="article">
-            <div class="left">
-                <a href="#" class="thumb">
-                    <img src="https://sm.ign.com/t/ign_il/news/b/battlefiel/battlefield-2042-wont-include-a-campaign-or-a-battle-royale_tsnu.280.jpg"
-                         alt="Battlefield 3 is better than Fruit Ninja!" class="thumb" />
-                </a>
-            </div>
-            <div class="right">
-                <div class="info">
-                    <time datetime="2021-06-11T12:00:42+03:00">1 hour, 3 minutes</time>
-                </div>
-                <h3>
-                    <a href="#">Battlefield 3 is better than Fruit Ninja!</a>
-                </h3>
-                <p>Fruit ninja is also better than CS:GO</p>
-            </div>
-        </article>
-        <article class="article">
-            <div class="left">
-                <a href="#" class="thumb">
-                    <img src="https://sm.ign.com/t/ign_il/news/b/battlefiel/battlefield-2042-wont-include-a-campaign-or-a-battle-royale_tsnu.280.jpg"
-                         alt="Battlefield 3 is better than Fruit Ninja!" class="thumb" />
-                </a>
-            </div>
-            <div class="right">
-                <div class="info">
-                    <time datetime="2021-06-11T12:00:42+03:00">1 hour, 3 minutes</time>
-                </div>
-                <h3>
-                    <a href="#">Battlefield 3 is better than Fruit Ninja!</a>
-                </h3>
-                <p>Fruit ninja is also better than CS:GO</p>
-            </div>
-        </article>
-    </div>
-</section>
-
-@*=========================================================
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Body)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageLocation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreationTimestamp)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastUpdatedTimestamp)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Body)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ImageLocation)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreationTimestamp)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastUpdatedTimestamp)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+            <article class="article">
+                <div class="left">
+                    <a asp-action="Details" asp-route-id="@item.Id" class="thumb">
+                        <img src="@Html.DisplayFor(modelItem => item.ImageLocation)"
+                             alt="@Html.DisplayFor(modelItem => item.Title)" class="thumb" />
+                    </a>
+                </div>
+                <div class="right">
+                    <div class="info">
+                        <time datetime="@Html.DisplayFor(modelItem => item.CreationTimestamp)"></time>
+                    </div>
+                    <h3>
+                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Title)</a>
+                    </h3>
+                    <p class="fifty-chars">@Html.DisplayFor(modelItem => item.Body)</p>
+                </div>
+            </article>
         }
-    </tbody>
-</table>*@
+    </div>
+</section>
 
 @section Scripts {
     <script src="~/js/Index.js"></script>

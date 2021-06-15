@@ -23,7 +23,7 @@ namespace DGN.Controllers
         public async Task<IActionResult> Index()
         {
             var dGNContext = _context.Article.Include(a => a.Category).Include(a => a.User).OrderByDescending(a => a.CreationTimestamp);
-            return View(await dGNContext.ToListAsync());
+            return View(await dGNContext.Take(5).ToListAsync());
         }
 
         // GET: Articles/Details/5
