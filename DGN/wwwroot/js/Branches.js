@@ -8,7 +8,7 @@ function loadMapScenario() {
 
     // Create the infobox for the pushpin.
     var infobox = null;
-    var infoboxTemplate = '<div class="customInfobox"><img src="https://www.bingmapsportal.com/Content/images/poi_custom.png" align="left" style="margin-right:5px;"/><div class="title">{infoTitle}</div>{infoDescription}</div>';
+    var infoboxTemplate = '<div class="customInfobox"><img src="https://www.bingmapsportal.com/Content/images/poi_custom.png" align="left" style="margin-right:5px;"/><pre><div class="title">{infoTitle}</div>{infoDescription}</div></pre>';
 
     //Declare addMarker function
     function addMarker(latitude, longitude, title, activity, mail, pid) {
