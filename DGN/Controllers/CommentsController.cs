@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DGN.Data;
 using DGN.Models;
+using System.Security.Claims;
 
 namespace DGN.Controllers
 {
@@ -50,7 +51,6 @@ namespace DGN.Controllers
         public IActionResult Create()
         {
             ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title");
-            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");*/
             return View();
         }
 
@@ -59,18 +59,19 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Body,UserId,RelatedArticleId")] Comment comment)
+        public async Task<IActionResult> Create([Bind("Id,Body,RelatedArticleId")] Comment comment)
         {
             if (ModelState.IsValid)
             {
                 comment.CreationTimestamp = DateTime.Now;
+                comment.UserId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var user = await _context.User.FirstOrDefaultAsync(u => u.Id == comment.UserId);
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Json(new { comment, user.FullName });
             }
             ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);
-            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);*/
-            return View(comment);
+            return BadRequest();
         }
 
         // GET: Comments/Edit/5
@@ -86,8 +87,6 @@ namespace DGN.Controllers
             {
                 return NotFound();
             }
-            /*ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);*/
-            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);*/
             return View(comment);
         }
 
@@ -125,8 +124,6 @@ namespace DGN.Controllers
                 }
                 return RedirectToAction(nameof(Details), "Articles", new { id = comment.RelatedArticleId });
             }
-            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);
-            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", comment.UserId);*/
             return View(comment);
         }
 

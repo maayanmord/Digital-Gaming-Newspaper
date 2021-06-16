@@ -32,17 +32,56 @@
     <br />
     <p class="h4">Comments</p>
     <br />
-    @foreach (var item in Model.Comments.OrderByDescending(e => e.CreationTimestamp))
-    {
+    <form id="comment-form" method="post">
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <textarea class="form-control" id="comment-body" maxlength="200" minlength="5" required></textarea>
+                <div id="comment-validation"></div>
+            </div>
+            <div class="col-md-2 mb-3">
+                <button class="btn btn-outline-primary" type="submit" style="height: 60px">Send</button>
+            </div>
+            <input id="ArticleId" hidden type="text" value="@Html.DisplayFor(model => model.Id)" />
+        </div>
+    </form>
+    <div id="comment-section">
+        @foreach (var item in Model.Comments.OrderByDescending(e => e.CreationTimestamp))
+        {
+            <div class="card text-dark bg-light mb-3" style="max-width: 100%;">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.User.FullName)</h5>
+                    <p class="card-text">@Html.DisplayFor(modelItem => item.Body)</p>
+                </div>
+                <div class="card-footer bg-light">
+                    <a asp-controller="Comments" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+    function gettoken() {
+        var token = '@Html.AntiForgeryToken()';
+        token = $(token).val();
+        return token;
+    }
+    </script>
+
+    <script id="commentTemplate" type="text/html">
         <div class="card text-dark bg-light mb-3" style="max-width: 100%;">
             <div class="card-body">
-                <h5 class="card-title">@Html.DisplayFor(modelItem => item.User.FullName)</h5>
-                <p class="card-text">@Html.DisplayFor(modelItem => item.Body)</p>
+                <h5 class="card-title">{fullName}</h5>
+                <p class="card-text">{body}</p>
             </div>
             <div class="card-footer bg-light">
-                <a asp-controller="Comments" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a href="/Comments/Edit/{id}">Edit</a> |
+                <a href="/Comments/Delete/{id}">Delete</a>
             </div>
         </div>
-    }
-</div>
+    </script>
+
+    <script src="~/js/ArticleDetails.js"></script>
+}

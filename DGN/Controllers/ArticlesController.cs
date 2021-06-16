@@ -71,7 +71,7 @@ namespace DGN.Controllers
             if (ModelState.IsValid && !ArticleExists(article.Title))
             {
                 article.CreationTimestamp = DateTime.Now;
-                article.UserId = int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                article.UserId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
                 _context.Add(article);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
