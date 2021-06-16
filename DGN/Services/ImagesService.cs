@@ -11,7 +11,8 @@ namespace DGN.Services
 {
     public class ImagesService
     {
-        public readonly string IMAGES_LOCATION = "wwwroot/images/";
+        private readonly string IMAGES_LOCATION = "wwwroot/images/";
+        public readonly string CLIENT_IMAGES_LOCATION = "/images/";
 
         public async Task<bool> UploadImage(IFormFile img, string fileName)
         {

@@ -88,7 +88,7 @@ namespace DGN.Controllers
                 {
                     string imageName = user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
                     await _service.UploadImage(ImageFile, imageName);
-                    user.ImageLocation = _service.IMAGES_LOCATION + imageName;
+                    user.ImageLocation = _service.CLIENT_IMAGES_LOCATION + imageName;
                 }
                 _context.Add(user);
                 await _context.SaveChangesAsync();
@@ -409,7 +409,7 @@ namespace DGN.Controllers
                 bool uploaded = await _service.UploadImage(ImageFile, fileName);
                 if (uploaded)
                 {
-                    user.ImageLocation = _service.IMAGES_LOCATION + fileName;
+                    user.ImageLocation = _service.CLIENT_IMAGES_LOCATION + fileName;
                 }
                 else
                 {

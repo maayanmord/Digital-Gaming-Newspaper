@@ -42,7 +42,7 @@ namespace DGN.Models
         public UserRole Role { get; set; } = UserRole.Client;
 
         [DisplayName("Image Location")]
-        public string ImageLocation { get; set; } = "wwwroot/images/DefaultProfileImage.jpg";
+        public string ImageLocation { get; set; } = "/images/DefaultProfileImage.jpg";
 
         [DisplayName("Basic info about the user")]
         [DataType(DataType.MultilineText)]
