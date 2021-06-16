@@ -87,8 +87,15 @@ namespace DGN.Controllers
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
                     string imageName = user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
-                    await _service.UploadImage(ImageFile, imageName);
-                    user.ImageLocation = _service.CLIENT_IMAGES_LOCATION + imageName;
+                    bool uploaded = await _service.UploadImage(ImageFile, imageName);
+                    if (uploaded)
+                    {
+                        user.ImageLocation = _service.CLIENT_IMAGES_LOCATION + imageName;
+                    }
+                    else
+                    {
+                        ViewData["Error"] = "can't upload this image";
+                    }
                 }
                 _context.Add(user);
                 await _context.SaveChangesAsync();
@@ -324,6 +331,7 @@ namespace DGN.Controllers
                 logout = true;
             }
 
+            await _service.DeleteImage(System.IO.Path.GetFileName(user.ImageLocation));
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
             if (logout)
@@ -410,6 +418,7 @@ namespace DGN.Controllers
                 if (uploaded)
                 {
                     user.ImageLocation = _service.CLIENT_IMAGES_LOCATION + fileName;
+                    await _service.DeleteImage(System.IO.Path.GetFileName(user.ImageLocation));
                 }
                 else
                 {
