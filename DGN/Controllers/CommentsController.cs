@@ -128,7 +128,7 @@ namespace DGN.Controllers
         }
 
         // GET: Comments/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        /*public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -145,7 +145,7 @@ namespace DGN.Controllers
             }
 
             return View(comment);
-        }
+        }*/
 
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -155,7 +155,7 @@ namespace DGN.Controllers
             var comment = await _context.Comment.FindAsync(id);
             _context.Comment.Remove(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Details), "Articles", new {id=comment.RelatedArticleId});
+            return Json(comment);
         }
 
         private bool CommentExists(int id)

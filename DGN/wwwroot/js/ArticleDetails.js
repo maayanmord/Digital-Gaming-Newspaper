@@ -40,6 +40,41 @@
                 item = item.replaceAll('{fullName}', data.fullName)
 
                 $("#comment-section").prepend(item);
+                $("#comment-body").val("");
+                $("#comment-body").removeClass("is-valid")
+                $("#comment-validation").html("");
+                $("#comment-validation").removeClass("valid-feedback");
+            },
+            error: function (data) {
+
+            }
+        }).done(function (data) {
+
+        });
+    });
+
+    $('#commentDeleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var body = button.data('body');
+        var fullname = button.data('fullname');
+        var commentId = button.data('id');
+        var modal = $(this);
+        modal.find('.modal-body h6').text("Comment by: " + fullname);
+        modal.find('.modal-body p').text(body);
+        modal.find('.modal-footer #comment-delete').val(commentId);
+    });
+
+    $("#comment-delete").click(function (e) {
+        var commentId = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: "/Comments/Delete",
+            data: {
+                Id: commentId,
+                __RequestVerificationToken: gettoken()
+            },
+            success: function (data) {
+                $("#comment-section div[name=" + data.id + "]").remove();
             },
             error: function (data) {
 
