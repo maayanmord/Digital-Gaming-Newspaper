@@ -36,7 +36,10 @@ namespace DGN.Services
 
         public async Task DeleteImage(string fileName)
         {
-            System.IO.File.Delete(IMAGES_LOCATION + fileName);
+            if (System.IO.File.Exists(IMAGES_LOCATION + fileName))
+            {
+                await Task.Run(() => { System.IO.File.Delete(IMAGES_LOCATION + fileName); });
+            }
         }
     }
 }
