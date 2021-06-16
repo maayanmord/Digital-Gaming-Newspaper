@@ -162,7 +162,7 @@ namespace DGN.Controllers
         [Authorize]
         public async Task<IActionResult> ChangePassword(int? id)
         {
-            if (isAuthorizeEditor(id))
+            if (!isAuthorizeEditor(id))
             {
                 Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return Unauthorized();
@@ -231,7 +231,7 @@ namespace DGN.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (isAuthorizeEditor(id)) {
+            if (!isAuthorizeEditor(id)) {
                 Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return Unauthorized();
             }
@@ -244,7 +244,7 @@ namespace DGN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user, IFormFile image)
         {
-            if (isAuthorizeEditor(id))
+            if (!isAuthorizeEditor(id))
             {
                 Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return Unauthorized();
@@ -260,7 +260,7 @@ namespace DGN.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (isAuthorizeEditor(id))
+            if (!isAuthorizeEditor(id))
             {
                 Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return Unauthorized();
@@ -449,7 +449,6 @@ namespace DGN.Controllers
         {
             string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
             string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
             return userId.Equals(id.ToString()) || userRole.Equals(UserRole.Admin.ToString());
         }
     }
