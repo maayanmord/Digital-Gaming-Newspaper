@@ -30,6 +30,7 @@ namespace DGN
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie( o => 
             {
                 o.LoginPath = "/Users/Login";
+                o.AccessDeniedPath = "/Users/AccessDenied";
             });
             services.AddDbContext<DGNContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DGNContext")));

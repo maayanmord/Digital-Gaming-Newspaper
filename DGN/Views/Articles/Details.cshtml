@@ -8,7 +8,7 @@
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
             <h1 class="display-4">@Html.DisplayFor(model => model.Title)</h1>
-            <p class="lead">Author: Ran Biderman</p>
+            <p class="lead">By: @Html.DisplayFor(model => model.User.FullName)</p>
             <p>
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info btn-md" role="button">Edit</a>
                 <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger btn-md" role="button">Delete</a>

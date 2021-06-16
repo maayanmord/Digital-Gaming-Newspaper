@@ -491,5 +491,9 @@ namespace DGN.Controllers
             }
             return true;
         }
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

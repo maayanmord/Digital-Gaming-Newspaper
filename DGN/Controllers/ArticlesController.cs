@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DGN.Data;
 using DGN.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DGN.Controllers
 {
@@ -26,6 +28,7 @@ namespace DGN.Controllers
             return View(await dGNContext.Take(5).ToListAsync());
         }
 
+        [Authorize]
         // GET: Articles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -50,16 +53,17 @@ namespace DGN.Controllers
         }
 
         // GET: Articles/Create
+        [Authorize(Roles = "Author,Admin")]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName");
-            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");*/
             return View();
         }
 
         // POST: Articles/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Author,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Body,ImageLocation,CategoryId")] Article article)
@@ -67,16 +71,17 @@ namespace DGN.Controllers
             if (ModelState.IsValid && !ArticleExists(article.Title))
             {
                 article.CreationTimestamp = DateTime.Now;
+                article.UserId = int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 _context.Add(article);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", article.CategoryId);
-            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", article.UserId);*/
             return View(article);
         }
 
         // GET: Articles/Edit/5
+        [Authorize(Roles = "Author,Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,13 +95,13 @@ namespace DGN.Controllers
                 return NotFound();
             }
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", article.CategoryId);
-            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", article.UserId);*/
             return View(article);
         }
 
         // POST: Articles/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Author,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Body,ImageLocation,CategoryId")] Article newArticle)
@@ -119,6 +124,7 @@ namespace DGN.Controllers
                 {
                     _context.Update(newArticle);
                     newArticle.CreationTimestamp = currArticle.CreationTimestamp;
+                    newArticle.UserId = currArticle.UserId;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -132,14 +138,14 @@ namespace DGN.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = newArticle.Id });
             }
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", newArticle.CategoryId);
-            /*ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", article.UserId);*/
             return View(newArticle);
         }
 
         // GET: Articles/Delete/5
+        [Authorize(Roles = "Author,Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -160,6 +166,7 @@ namespace DGN.Controllers
         }
 
         // POST: Articles/Delete/5
+        [Authorize(Roles = "Author,Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
