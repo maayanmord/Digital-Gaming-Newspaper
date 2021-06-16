@@ -71,7 +71,7 @@ namespace DGN.Controllers
         // POST: Users/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(IFormFile ImageFile, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user, string plainPass, string confirmPass)
+        public async Task<IActionResult> Register(IFormFile ImageFile, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,About")] User user, string plainPass, string confirmPass)
         {
             if (UsernameExists(user.Username))
             {
