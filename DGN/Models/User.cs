@@ -57,9 +57,9 @@ namespace DGN.Models
         }
 
         [InverseProperty("User")]
-        public IList<Article> Articles { get; set; } = new List<Article>();
+        public IList<Article> Articles { get; set; }
 
         [InverseProperty("UserLikes")]
-        public IList<Article> ArticleLikes { get; set; } = new List<Article>();
+        public IList<Article> ArticleLikes { get; set; }
     }
 }

@@ -20,6 +20,7 @@ namespace DGN.Controllers
     {
         private readonly DGNContext _context;
         private const string IMAGE_LOCATION = "wwwroot/images/";
+
         public UsersController(DGNContext context)
         {
             _context = context;
@@ -90,7 +91,7 @@ namespace DGN.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,ImageLocation,About")] User user)
+        public async Task<IActionResult> Edit(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user)
         {
             string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
             string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -112,11 +113,20 @@ namespace DGN.Controllers
 
             if (ModelState.IsValid)
             {
+<<<<<<< HEAD
+=======
+                User oldUser = await _context.User.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+                user.Username = oldUser.Username;
+>>>>>>> 240066a7008310b42487e520b01c7645318cf8e6
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
                     string imagePath = IMAGE_LOCATION + user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
                     await UploadImage(ImageFile, imagePath);
                     user.ImageLocation = imagePath;
+                }
+                else
+                {
+                    user.ImageLocation = oldUser.ImageLocation;
                 }
                 try
                 {
@@ -202,8 +212,6 @@ namespace DGN.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            HttpContext.Response.Cookies.Delete("firstName");
-            HttpContext.Response.Cookies.Delete("lastName");
             return RedirectToAction("Login");
         }
 
@@ -232,7 +240,6 @@ namespace DGN.Controllers
                     {
                         new Claim(ClaimTypes.NameIdentifier, usr.Id.ToString()),
                         new Claim(ClaimTypes.Name, usr.Username),
-                        new Claim(ClaimTypes.Email, usr.Email),
                         new Claim(ClaimTypes.Role, usr.Role.ToString())
                     };
 
@@ -245,9 +252,6 @@ namespace DGN.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimIdentity),
                         authProperties);
-
-                    HttpContext.Response.Cookies.Append("firstName", usr.Firstname);
-                    HttpContext.Response.Cookies.Append("lastName", usr.Lastname);
 
                     return Redirect("/");
                 }

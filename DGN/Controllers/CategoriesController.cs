@@ -34,6 +34,7 @@ namespace DGN.Controllers
             }
 
             var category = await _context.Category
+                .Include(c => c.Articles)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {

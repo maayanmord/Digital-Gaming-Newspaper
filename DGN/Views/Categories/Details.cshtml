@@ -19,6 +19,21 @@
     </dl>
 </div>
 <div>
+    <h4>Articles</h4>
+    <hr />
+@foreach (var item in Model.Articles)
+{
+<dl class="row">
+    <dt class="col-sm-10">
+        @Html.DisplayFor(modelItem => item.Title)
+    </dt>
+    <dd class="col-sm-2">
+        <a asp-controller="Articles" asp-action="Details" asp-route-id="@item.Id">Details</a>
+    </dd>
+</dl>
+}
+</div>
+<div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
