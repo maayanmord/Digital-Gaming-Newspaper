@@ -21,11 +21,13 @@ namespace DGN.Controllers
     {
         private readonly DGNContext _context;
         private readonly ImagesService _service;
+        private string DEFAULT_IMAGE;
 
         public UsersController(DGNContext context, ImagesService service)
         {
             _context = context;
             _service = service;
+            DEFAULT_IMAGE = _service.CLIENT_IMAGES_LOCATION + "DefaultProfileImage.jpg";
         }
 
         //
@@ -96,6 +98,10 @@ namespace DGN.Controllers
                     {
                         ViewData["Error"] = "can't upload this image";
                     }
+                }
+                else
+                {
+                    user.ImageLocation = DEFAULT_IMAGE;
                 }
                 _context.Add(user);
                 await _context.SaveChangesAsync();
@@ -330,8 +336,10 @@ namespace DGN.Controllers
                 }
                 logout = true;
             }
-
-            await _service.DeleteImage(System.IO.Path.GetFileName(user.ImageLocation));
+            if (DEFAULT_IMAGE != user.ImageLocation)
+            {
+                await _service.DeleteImage(System.IO.Path.GetFileName(user.ImageLocation));
+            }
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
             if (logout)
@@ -418,7 +426,10 @@ namespace DGN.Controllers
                 if (uploaded)
                 {
                     user.ImageLocation = _service.CLIENT_IMAGES_LOCATION + fileName;
-                    await _service.DeleteImage(System.IO.Path.GetFileName(user.ImageLocation));
+                    if (DEFAULT_IMAGE != oldUser.ImageLocation && user.ImageLocation != oldUser.ImageLocation)
+                    {
+                        await _service.DeleteImage(System.IO.Path.GetFileName(oldUser.ImageLocation));
+                    }
                 }
                 else
                 {

@@ -36,10 +36,7 @@ namespace DGN.Services
 
         public async Task DeleteImage(string fileName)
         {
-            if (fileName != "DefaultProfileImage.jpg")
-            {
-                System.IO.File.Delete(IMAGES_LOCATION + fileName);
-            }
+            System.IO.File.Delete(IMAGES_LOCATION + fileName);
         }
     }
 }
