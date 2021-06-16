@@ -6,6 +6,11 @@
 
 <h1>Index</h1>
 
+<form asp-action="Search">
+    <input name="query" id="query" autocomplete="off" />
+    <input type="submit" />
+</form>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -59,4 +64,24 @@
     </script>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario' async defer></script>
     <script src="~/js/branches.js" asp-append-version="true"></script>
+
+    <script src="~/js/search.js"></script>
+    <script type="text/html" id="hidden-template">
+        <tr>
+            <td>
+                {branchName}
+            </td>
+            <td>
+                {email}
+            </td>
+            <td>
+                {activityTime}
+            </td>
+            <td>
+                <a href="/Branches/Edit/{id}">Edit</a> |
+                <a href="/Branches/Details/{id}">Details</a> |
+                <a href="/Branches/Delete/{id}">Delete</a>
+            </td>
+        </tr>
+    </script>
 }
