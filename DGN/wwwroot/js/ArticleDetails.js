@@ -46,10 +46,8 @@
                 $("#comment-validation").removeClass("valid-feedback");
             },
             error: function (data) {
-
+                $("#alert-body").show();
             }
-        }).done(function (data) {
-
         });
     });
 
