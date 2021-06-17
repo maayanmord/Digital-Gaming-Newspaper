@@ -29,6 +29,18 @@
                 </a>
                 <div class="collapse navbar-collapse" id="navbarToggler">
                     <ul class="navbar-nav nav-menu mr-auto mt-2 mt-lg-0">
+                        @if (User.Identity.Name != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Users/Profile/@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Hello @User.Identity.Name!</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Users/Register">Hello Guest!</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link" href="#home">PC</a>
                         </li>
@@ -45,14 +57,11 @@
                     <ul class="navbar-nav nav-menu ml-auto">
                         @if (User.Identity.Name != null)
                         {
-                            <li class="nav-item last">
-                                <a class="navbar-text">Hello @User.Identity.Name </a>
-                            </li>
                             <li class="nav-item last btn-item">
                                 <a href="/Users/Logout" class="nav-btn login-btn">Logout</a>
                             </li>
                         }
-                        else
+                        @if (User.Identity.Name == null)
                         {
                             <li class="nav-item btn-item">
                                 <a href="/Users/Register" class="nav-btn register-btn">Register</a>
