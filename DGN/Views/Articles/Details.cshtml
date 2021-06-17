@@ -44,6 +44,12 @@
             <input id="ArticleId" hidden type="text" value="@Html.DisplayFor(model => model.Id)" />
         </div>
     </form>
+    <div id="alert-body" class="alert alert-danger" role="alert" style="display: none;">
+        <strong>Holy guacamole!</strong> An error occurred while we were processing your request, try again or stop messing with our site! :)
+        <button id="alert-button" type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <div id="comment-section">
         @foreach (var item in Model.Comments.OrderByDescending(e => e.CreationTimestamp))
         {
@@ -52,16 +58,22 @@
                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.User.FullName)</h5>
                     <p class="card-text">@Html.DisplayFor(modelItem => item.Body)</p>
                 </div>
+
                 <div class="card-footer bg-light">
-                    <button type="button" class="btn btn-link" 
-                            data-toggle="modal" 
-                            data-target="#commentEditModal">Edit</button> |
-                    <button type="button" class="btn btn-link" 
-                            data-toggle="modal" 
-                            data-target="#commentDeleteModal"
-                            data-body="@Html.DisplayFor(modelItem => item.Body)"
+                    <button type="button" class="btn btn-link"
+                            data-toggle="modal"
+                            data-target="#commentEditModal"
                             data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
-                            data-id="@Html.DisplayFor(modelItem => item.Id)">Delete</button>
+                            data-id="@Html.DisplayFor(modelItem => item.Id)">
+                        Edit
+                    </button> |
+                    <button type="button" class="btn btn-link"
+                            data-toggle="modal"
+                            data-target="#commentDeleteModal"
+                            data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
+                            data-id="@Html.DisplayFor(modelItem => item.Id)">
+                        Delete
+                    </button>
                 </div>
             </div>
         }
@@ -71,20 +83,46 @@
 <div class="modal fade" id="commentDeleteModal" tabindex="-1" role="dialog" aria-labelledby="commentDeleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="commentDeleteModalLabel">Are you sure you want to delete this comment?</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <h6></h6>
-                <p></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button id="comment-delete" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
-            </div>
+            <form id="comment-delete">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commentDeleteModalLabel">Are you sure you want to delete this comment?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h6></h6>
+                    <p></p>
+                    <input id="comment-delete-id" hidden type="text" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="commentEditModal" tabindex="-1" role="dialog" aria-labelledby="commentEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form id="comment-edit">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commentEditModalLabel">Edit</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="comment-edit-body" class="form-control" maxlength="200" minlength="5" required></textarea>
+                    <input id="comment-edit-id" hidden type="text" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-info">Edit</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -105,13 +143,20 @@
                 <p class="card-text">{body}</p>
             </div>
             <div class="card-footer bg-light">
-                <button type="button" class="btn btn-link comment-edit">Edit</button> |
-                <button type="button" class="btn btn-link" 
-                            data-toggle="modal" 
-                            data-target="#commentDeleteModal"
-                            data-body="{body}"
-                            data-fullname="{fullName}"
-                            data-id="{id}">Delete</button>
+                <button type="button" class="btn btn-link"
+                        data-toggle="modal"
+                        data-target="#commentEditModal"
+                        data-fullname="{fullName}"
+                        data-id="{id}">
+                    Edit
+                </button> |
+                <button type="button" class="btn btn-link"
+                        data-toggle="modal"
+                        data-target="#commentDeleteModal"
+                        data-fullname="{fullName}"
+                        data-id="{id}">
+                    Delete
+                </button>
             </div>
         </div>
     </script>

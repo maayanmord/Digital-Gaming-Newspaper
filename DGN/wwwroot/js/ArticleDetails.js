@@ -55,17 +55,28 @@
 
     $('#commentDeleteModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
-        var body = button.data('body');
-        var fullname = button.data('fullname');
         var commentId = button.data('id');
+        var fullname = button.data('fullname');
+        var body = $("#comment-section div[name=" + commentId + "] .card-body .card-text").text();
         var modal = $(this);
         modal.find('.modal-body h6').text("Comment by: " + fullname);
         modal.find('.modal-body p').text(body);
-        modal.find('.modal-footer #comment-delete').val(commentId);
+        modal.find('.modal-body #comment-delete-id').val(commentId);
     });
 
-    $("#comment-delete").click(function (e) {
-        var commentId = $(this).val();
+    $('#commentEditModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var commentId = button.data('id');
+        var body = $("#comment-section div[name=" + commentId + "] .card-body .card-text").text();
+        var modal = $(this);
+        modal.find('.modal-body #comment-edit-body').val(body);
+        modal.find('.modal-body #comment-edit-id').val(commentId);
+    });
+
+    $("#comment-delete").submit(function (e) {
+        e.preventDefault();
+        var commentId = $("#comment-delete-id").val();
+
         $.ajax({
             type: "POST",
             url: "/Comments/Delete",
@@ -77,10 +88,38 @@
                 $("#comment-section div[name=" + data.id + "]").remove();
             },
             error: function (data) {
-
+                $("#alert-body").show();
             }
         }).done(function (data) {
-
+            $("#commentDeleteModal").modal('hide');
         });
+    });
+
+    $("#comment-edit").submit(function (e) {
+        e.preventDefault();
+        var commentId = $("#comment-edit-id").val();
+        var commentBody = $("#comment-edit-body").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/Comments/Edit",
+            data: {
+                Id: commentId,
+                Body: commentBody,
+                __RequestVerificationToken: gettoken()
+            },
+            success: function (data) {
+                $("#comment-section div[name=" + data.id + "] .card-body .card-text").html(data.body);
+            },
+            error: function (data) {
+                $("#alert-body").show();
+            }
+        }).done(function (data) {
+            $("#commentEditModal").modal('hide');
+        });
+    });
+
+    $('#alert-button').click(function () {
+        $("#alert-body").hide();
     });
 });

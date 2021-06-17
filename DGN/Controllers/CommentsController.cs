@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DGN.Data;
 using DGN.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DGN.Controllers
 {
@@ -28,6 +29,7 @@ namespace DGN.Controllers
         }
 
         // GET: Comments/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,16 +49,10 @@ namespace DGN.Controllers
             return View(comment);
         }
 
-        // GET: Comments/Create
-        public IActionResult Create()
-        {
-            ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title");
-            return View();
-        }
-
         // POST: Comments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Body,RelatedArticleId")] Comment comment)
@@ -74,25 +70,10 @@ namespace DGN.Controllers
             return BadRequest();
         }
 
-        // GET: Comments/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var comment = await _context.Comment.FindAsync(id);
-            if (comment == null)
-            {
-                return NotFound();
-            }
-            return View(comment);
-        }
-
         // POST: Comments/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, string Body)
@@ -103,7 +84,7 @@ namespace DGN.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (Body.Length >= 5)
             {
                 try
                 {
@@ -122,32 +103,13 @@ namespace DGN.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Details), "Articles", new { id = comment.RelatedArticleId });
+                return Json(comment);
             }
-            return View(comment);
+            return BadRequest();
         }
 
-        // GET: Comments/Delete/5
-        /*public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var comment = await _context.Comment
-                .Include(c => c.RelatedArticle)
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (comment == null)
-            {
-                return NotFound();
-            }
-
-            return View(comment);
-        }*/
-
         // POST: Comments/Delete/5
+        [Authorize(Roles = "Admin,Author")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
