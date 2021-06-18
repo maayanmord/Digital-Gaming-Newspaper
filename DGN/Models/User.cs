@@ -44,10 +44,11 @@ namespace DGN.Models
         [DisplayName("Image Location")]
         public string ImageLocation { get; set; }
 
-        [DisplayName("About Me")]
+        [DisplayName("About")]
         [DataType(DataType.MultilineText)]
         public string About { get; set; }
 
+        [DisplayName("Full Name")]
         public string FullName
         {
             get
