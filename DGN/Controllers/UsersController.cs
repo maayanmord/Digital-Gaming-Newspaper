@@ -401,6 +401,8 @@ namespace DGN.Controllers
             }
 
             User user = await _context.User
+                .Include(u => u.ArticleLikes)
+                .Include(u => u.Articles)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (user == null)
