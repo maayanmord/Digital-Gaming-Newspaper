@@ -44,7 +44,7 @@ namespace DGN.Models
         [DisplayName("Image Location")]
         public string ImageLocation { get; set; }
 
-        [DisplayName("Basic info about the user")]
+        [DisplayName("About Me")]
         [DataType(DataType.MultilineText)]
         public string About { get; set; }
 
@@ -59,6 +59,7 @@ namespace DGN.Models
         [InverseProperty("User")]
         public IList<Article> Articles { get; set; }
 
+        [DisplayName("Articles Liked")]
         [InverseProperty("UserLikes")]
         public IList<Article> ArticleLikes { get; set; }
     }
