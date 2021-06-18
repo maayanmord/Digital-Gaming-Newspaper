@@ -55,7 +55,7 @@ namespace DGN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditAsAdmin(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user)
         {
-            return await PostEditUser(id, ImageFile, user);
+            return await PostEditUser(id, ImageFile, user, true);
         }
 
         //
@@ -262,7 +262,7 @@ namespace DGN.Controllers
                 Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return Unauthorized();
             }
-            return await PostEditUser(id, ImageFile, user);
+            return await PostEditUser(id, ImageFile, user, false);
         }
 
         //
@@ -410,7 +410,7 @@ namespace DGN.Controllers
 
             return View(user);
         }
-        private async Task<IActionResult> PostEditUser(int? id, IFormFile ImageFile, User user)
+        private async Task<IActionResult> PostEditUser(int? id, IFormFile ImageFile, User user, bool RoleChanged)
         {
             if (id == null || user == null || id != user.Id)
             {
@@ -419,6 +419,10 @@ namespace DGN.Controllers
 
             User oldUser = await _context.User.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
             user.Username = oldUser.Username;
+            if (!RoleChanged)
+            {
+                user.Role = oldUser.Role;
+            }
             if (ImageFile != null)
             {
                 string fileName = user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
