@@ -63,5 +63,8 @@ namespace DGN.Models
         [DisplayName("Articles Liked")]
         [InverseProperty("UserLikes")]
         public IList<Article> ArticleLikes { get; set; }
+
+        [InverseProperty("User")]
+        public IList<Comment> Comments { get; set; }
     }
 }
