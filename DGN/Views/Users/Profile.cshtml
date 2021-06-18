@@ -20,24 +20,26 @@
                     </div>
                 </div>
                 <div class="card mt-3">
-                    @if (Model.ArticleLikes != null)
-                    {
-                        <ul class="list-group list-group-flush">
+                    <ul class="list-group list-group-flush">
+                        @if (Model.ArticleLikes.Count > 0)
+                        {
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0"><strong>@Html.DisplayNameFor(model => model.ArticleLikes) by @Model.Username</strong></h6>
                             </li>
                             @foreach (Article article in Model.ArticleLikes)
                             {
-                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                <a class="mb-0" asp-controller="Article" asp-action="Details" asp-route-id="@article.Id"> @article.Title </a>
-                            </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <a class="mb-0" asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id"> @article.Title </a>
+                                </li>
                             }
-                        </ul>
-                    }
-                    else
-                    {
-
-                    }
+                        }
+                        else
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <h6 class="mb-0"><strong>There are no @Html.DisplayNameFor(model => model.ArticleLikes) by @Model.Username</strong></h6>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
             <div class="col-md-8">
@@ -80,6 +82,31 @@
                         </div>
                     </div>
                 </div>
+                @if (Model.Role != UserRole.Client)
+                {
+                    <div class="card mb-3">
+                        <ul class="list-group list-group-flush">
+                            @if (Model.Articles.Count > 0)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <h6 class="mb-0"><strong>@Html.DisplayNameFor(model => model.Articles) by @Model.Username</strong></h6>
+                                </li>
+                                @foreach (Article article in Model.Articles)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                        <a class="mb-0" asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id"> @article.Title </a>
+                                    </li>
+                                }
+                            }
+                            else
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <h6 class="mb-0"><strong>There are no @Html.DisplayNameFor(model => model.Articles) by @Model.Username</strong></h6>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
             </div>
         </div>
     </div>
