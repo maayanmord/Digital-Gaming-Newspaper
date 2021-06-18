@@ -32,13 +32,13 @@
                         @if (User.Identity.Name != null)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" href="/Users/Profile/@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Hello @User.Identity.Name!</a>
+                                <a class="nav-link" asp-controller="Users" asp-action="Profile" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Hello @User.Identity.Name!</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link" href="/Users/Register">Hello Guest!</a>
+                                <a class="nav-link" asp-controller="Users" asp-action="Register">Hello Guest!</a>
                             </li>
                         }
                         <li class="nav-item">
@@ -81,7 +81,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - DGN - <a asp-area="" asp-controller="Branches">Contact us</a>
+            &copy; 2021 - DGN - <a asp-action="Index" asp-controller="Branches">Contact us</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
