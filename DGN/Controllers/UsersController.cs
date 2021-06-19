@@ -55,7 +55,7 @@ namespace DGN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditAsAdmin(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user)
         {
-            return await PostEditUser(id, ImageFile, user);
+            return await PostEditUser(id, ImageFile, user, true);
         }
 
         //
@@ -76,12 +76,10 @@ namespace DGN.Controllers
             if (UsernameExists(user.Username))
             {
                 ModelState.AddModelError("Username", "Username is aleardy exists");
-                Response.StatusCode = (int)HttpStatusCode.Conflict;
             }
             if (EmailExists(user.Email))
             {
                 ModelState.AddModelError("Email", "This Email address is aleady in use");
-                Response.StatusCode = (int)HttpStatusCode.Conflict;
             }
             if (CanUsePassword(plainPass, confirmPass) && ModelState.IsValid)
             {
@@ -131,7 +129,6 @@ namespace DGN.Controllers
             if (!EmailExists(Email))
             {
                 ViewData["Error"] = "The email or password is incorrect";
-                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
             }
             else
             {
@@ -161,7 +158,6 @@ namespace DGN.Controllers
                 else
                 {
                     ViewData["Error"] = "The email or password is incorrect";
-                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 }
             }
             return View();
@@ -177,7 +173,6 @@ namespace DGN.Controllers
         {
             if (!isAuthorizeEditor(id))
             {
-                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return Unauthorized();
             }
             return await GetUserView(id);
@@ -201,7 +196,6 @@ namespace DGN.Controllers
 
             if (isAuthorizeEditor(id))
             {
-                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return Unauthorized();
             }
             else
@@ -245,7 +239,6 @@ namespace DGN.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (!isAuthorizeEditor(id)) {
-                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return Unauthorized();
             }
             return await GetUserView(id);
@@ -259,10 +252,9 @@ namespace DGN.Controllers
         {
             if (!isAuthorizeEditor(id))
             {
-                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return Unauthorized();
             }
-            return await PostEditUser(id, ImageFile, user);
+            return await PostEditUser(id, ImageFile, user, false);
         }
 
         //
@@ -275,7 +267,6 @@ namespace DGN.Controllers
         {
             if (!isAuthorizeEditor(id))
             {
-                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return Unauthorized();
             }
 
@@ -323,7 +314,6 @@ namespace DGN.Controllers
                 }
                 else
                 {
-                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     return Unauthorized();
                 }
             }
@@ -380,14 +370,12 @@ namespace DGN.Controllers
             if (!ValidPass(password))
             {
                 ViewData["Error"] = "The minumum requierments are: 8 characters long containing 1 uppercase letter, 1 lowercase letter, a number and a special character";
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return false;
             }
             // Making sure new password confirmed
             if (!password.Equals(confirmPassword))
             {
                 ViewData["Error"] = "Passwords does not match";
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return false;
             }
             return true;
@@ -410,7 +398,7 @@ namespace DGN.Controllers
 
             return View(user);
         }
-        private async Task<IActionResult> PostEditUser(int? id, IFormFile ImageFile, User user)
+        private async Task<IActionResult> PostEditUser(int? id, IFormFile ImageFile, User user, bool RoleChanged)
         {
             if (id == null || user == null || id != user.Id)
             {
@@ -419,6 +407,10 @@ namespace DGN.Controllers
 
             User oldUser = await _context.User.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
             user.Username = oldUser.Username;
+            if (!RoleChanged)
+            {
+                user.Role = oldUser.Role;
+            }
             if (ImageFile != null)
             {
                 string fileName = user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
