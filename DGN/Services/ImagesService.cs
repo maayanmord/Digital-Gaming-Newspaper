@@ -1,9 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using DGN.Data;
-using DGN.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
@@ -27,8 +22,9 @@ namespace DGN.Services
                     await img.CopyToAsync(stream);
                 }
             }
-            catch (Exception) 
+            catch (Exception e) 
             {
+                Console.WriteLine(e.ToString());
                 return false;
             }
             return true;
