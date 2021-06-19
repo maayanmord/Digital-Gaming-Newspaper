@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace DGN.Controllers
 {
-    public class HomeController : Controller
+    public class NotFoundController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<NotFoundController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public NotFoundController(ILogger<NotFoundController> logger)
         {
             _logger = logger;
         }
