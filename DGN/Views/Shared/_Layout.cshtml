@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+@using Microsoft.AspNetCore.Http;
+@using System.Security.Claims;
+@using DGN.Models;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -26,6 +30,18 @@
                 </a>
                 <div class="collapse navbar-collapse" id="navbarToggler">
                     <ul class="navbar-nav nav-menu mr-auto mt-2 mt-lg-0">
+                        @if (User.Identity.Name != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Users" asp-action="Profile" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Hello @User.Identity.Name!</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Users" asp-action="Register">Hello Guest!</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link" href="#home">PC</a>
                         </li>
@@ -40,12 +56,21 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav nav-menu ml-auto">
-                        <li class="nav-item btn-item">
-                            <a href="#" class="nav-btn register-btn">Register</a>
-                        </li>
-                        <li class="nav-item last btn-item">
-                            <a href="#" class="nav-btn login-btn">Login</a>
-                        </li>
+                        @if (User.Identity.Name != null)
+                        {
+                            <li class="nav-item last btn-item">
+                                <a asp-controller="Users" asp-action="Logout" class="nav-btn login-btn">Logout</a>
+                            </li>
+                        }
+                        @if (User.Identity.Name == null)
+                        {
+                            <li class="nav-item btn-item">
+                                <a asp-controller="Users" asp-action="Register" class="nav-btn register-btn">Register</a>
+                            </li>
+                            <li class="nav-item last btn-item">
+                                <a asp-controller="Users" asp-action="Login" class="nav-btn login-btn">Login</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </nav>
@@ -57,7 +82,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - DGN - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - DGN - <a asp-action="Index" asp-controller="Branches">Contact us</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

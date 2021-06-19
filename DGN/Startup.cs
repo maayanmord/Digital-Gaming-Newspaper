@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using DGN.Data;
+using DGN.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace DGN
@@ -26,6 +27,8 @@ namespace DGN
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ImagesService>();
+
             services.AddControllersWithViews();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie( o => 
             {

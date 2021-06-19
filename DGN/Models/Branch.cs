@@ -20,9 +20,11 @@ namespace DGN.Models
         public string ActivityTime { get; set; }
 
         [Required]
+        [DisplayName("Location Latitude")]
         public double LocationLatitude { get; set; }
 
         [Required]
+        [DisplayName("Location Longitude")]
         public double LocationLongitude { get; set; }
     }
 }
