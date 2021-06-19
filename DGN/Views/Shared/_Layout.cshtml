@@ -55,21 +55,12 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav nav-menu ml-auto">
-                        @if (User.Identity.Name != null)
-                        {
-                            <li class="nav-item last btn-item">
-                                <a href="/Users/Logout" class="nav-btn login-btn">Logout</a>
-                            </li>
-                        }
-                        @if (User.Identity.Name == null)
-                        {
-                            <li class="nav-item btn-item">
-                                <a href="/Users/Register" class="nav-btn register-btn">Register</a>
-                            </li>
-                            <li class="nav-item last btn-item">
-                                <a href="/Users/Login" class="nav-btn login-btn">Login</a>
-                            </li>
-                        }
+                        <li class="nav-item btn-item">
+                            <a asp-controller="Users" asp-action="Register" class="nav-btn register-btn">Register</a>
+                        </li>
+                        <li class="nav-item last btn-item">
+                            <a asp-controller="Users" asp-action="Login" class="nav-btn login-btn">Login</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
