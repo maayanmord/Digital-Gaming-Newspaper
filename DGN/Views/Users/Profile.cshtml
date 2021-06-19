@@ -4,144 +4,65 @@
     ViewData["Title"] = "Profile";
 }
 
-<div class="container">
-    <div class="main-body">
-        <div class="row gutters-sm">
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex flex-column align-items-center text-center">
-                            <img src="@Model.ImageLocation" alt="Admin" class="rounded-circle" width="150" height="150">
-                            <div class="mt-3">
-                                <h4>@Model.Username</h4>
-                                <p class="text-secondary mb-1">@Model.About</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mt-3">
-                    <ul class="list-group list-group-flush">
-                        @if (Model.ArticleLikes.Count > 0)
-                        {
-                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                <h6 class="mb-0"><strong>@Html.DisplayNameFor(model => model.ArticleLikes) by @Model.Username</strong></h6>
-                            </li>
-                            @foreach (Article article in Model.ArticleLikes)
-                            {
-                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <row>
-                                    <img src="@article.ImageLocation" alt="Admin" width="50" height="50">
-                                    <a class="mb-0" asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id"> @article.Title </a>
-                                    </row>
-                                </li>
-                                
-                            }
-                        }
-                        else
-                        {
-                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                <h6 class="mb-0"><strong>There are no @Html.DisplayNameFor(model => model.ArticleLikes) by @Model.Username</strong></h6>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-8">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.FullName)</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                @Model.FullName
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Email)</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                @Model.Email
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Role)</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                @Model.Role.ToString()
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Birthday)</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                @Model.Birthday.ToString("dd/MM/yyyy")
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-3">
-                    <ul class="list-group list-group-flush">
-                        @if (Model.Articles.Count > 0)
-                        {
-                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                <h6 class="mb-0"><strong>@Html.DisplayNameFor(model => model.Articles) by @Model.Username</strong></h6>
-                            </li>
-                            @foreach (Article article in Model.Articles)
-                            {
-                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <row>
-                                        <img src="@article.ImageLocation" alt="Admin" width="50" height="50">
-                                        <a class="mb-0" asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id"> @article.Title </a>
-                                    </row>
-                                </li>
-                            }
-                        }
-                        else
-                        {
-                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                <h6 class="mb-0"><strong>There are no @Html.DisplayNameFor(model => model.Articles) by @Model.Username</strong></h6>
-                            </li>
-                        }
-                    </ul>
-                </div>
-                <div class="card mb-3">
-                    <ul class="list-group list-group-flush">
-                        @if (Model.Comments.Count > 0)
-                        {
-                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                <h6 class="mb-0"><strong>The articles @Model.Username commented on </strong></h6>
-                            </li>
-                            @foreach (Comment comment in Model.Comments.Distinct())
-                            {
-                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <row>
-                                        <img src="@comment.RelatedArticle.ImageLocation" alt="Admin" width="50" height="50">
-                                        <a class="mb-0" asp-controller="Articles" asp-action="Details" asp-route-id="@comment.RelatedArticleId"> @comment.RelatedArticle.Title </a>
-                                    </row>
-                                </li>
-                            }
-                        }
-                        else
-                        {
-                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                <h6 class="mb-0"><strong>There are no @Html.DisplayNameFor(model => model.Comments) by @Model.Username</strong></h6>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+<h1>
+    @Html.DisplayFor(model => model.Username)
+</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <td><img src=@Model.ImageLocation style="width:500px;height:600px;"/></td>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Username)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Username)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Firstname)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Firstname)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Lastname)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Lastname)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Birthday)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Birthday)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Role)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Role)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ImageLocation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ImageLocation)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.About)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.About)
+        </dd>
+    </dl>
 </div>
-
-
-@section Styles {
-    <link rel="stylesheet" href="/css/Profile.css" />
-}
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    <a asp-action="Index">Back to List</a>
+</div>
