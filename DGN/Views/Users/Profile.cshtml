@@ -1,4 +1,5 @@
 ﻿@model DGN.Models.User
+@using System.Security.Claims;
 
 @{
     ViewData["Title"] = "Profile";
@@ -30,11 +31,11 @@
                             {
                                 <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                     <row>
-                                    <img src="@article.ImageLocation" alt="Admin" width="50" height="50">
-                                    <a class="mb-0" asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id"> @article.Title </a>
+                                        <img src="@article.ImageLocation" alt="Admin" width="50" height="50">
+                                        <a class="mb-0" asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id"> @article.Title </a>
                                     </row>
                                 </li>
-                                
+
                             }
                         }
                         else
@@ -47,44 +48,8 @@
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.FullName)</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                @Model.FullName
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Email)</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                @Model.Email
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Role)</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                @Model.Role.ToString()
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Birthday)</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                @Model.Birthday.ToString("dd/MM/yyyy")
-                            </div>
-                        </div>
-                    </div>
+                <div class="card mb-3" id="ViewProperties">
+
                 </div>
                 <div class="card mb-3">
                     <ul class="list-group list-group-flush">
@@ -141,7 +106,125 @@
     </div>
 </div>
 
+@section Scripts {
+    <script type="text/javascript">
+        function gettoken() {
+            var token = '@Html.AntiForgeryToken()';
+            token = $(token).val();
+            return token;
+        }
+    </script>
 
+    <script id="EditTemplate" type="text/html">
+        <div class="col-lg-8">
+            <div class="card">
+                <form class="card-body" asp-action="Edit" enctype="multipart/form-data">
+                    <div class="row mb-3">
+                        <div class="col-sm-3">
+                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Firstname)</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            <input type="text" class="form-control" asp-for="Firstname" value="@Model.Firstname">
+                            <span asp-validation-for="Firstname" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3">
+                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Lastname)</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            <input type="text" class="form-control" asp-for="Lastname" value="@Model.Lastname">
+                            <span asp-validation-for="Lastname" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3">
+                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Email)</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            <input type="text" class="form-control" asp-for="Email" value="@Model.Email">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3">
+                            <h6 class="mb-0">Role</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            <input type="text" class="form-control" value="@Model.Role" readonly>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-3">
+                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Birthday)</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                            <input type="text" class="form-control" asp-for="Birthday" value="@Model.Birthday">
+                            <span asp-validation-for="Birthday" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-9 text-secondary">
+                            <input type="submit" class="btn btn-primary px-4" value="Save Changes">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </script>
+
+
+    <script id="ViewTemplate" type="text/html">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">@Html.DisplayNameFor(model => model.FullName)</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                    @Model.FullName
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">@Html.DisplayNameFor(model => model.Email)</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                    @Model.Email
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">@Html.DisplayNameFor(model => model.Role)</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                    @Model.Role.ToString()
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">@Html.DisplayNameFor(model => model.Birthday)</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                    @Model.Birthday.ToString("dd/MM/yyyy")
+                </div>
+            </div>
+            @if ((User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Equals(Model.Id.ToString()))
+            {
+                <hr/>
+                <div class="row" id="EditButton">
+                    <div class="col-sm-12 text-secondary">
+                        <button class="btn btn-info">Edit</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </script>
+    <script src="~/js/Profile.js"></script>
+}
 @section Styles {
     <link rel="stylesheet" href="/css/Profile.css" />
 }
