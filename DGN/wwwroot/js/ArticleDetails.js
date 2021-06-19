@@ -38,6 +38,7 @@
                 });
 
                 item = item.replaceAll('{fullName}', data.fullName)
+                item = item.replaceAll('{imageLocation}', data.imageLocation)
 
                 $("#comment-section").prepend(item);
                 $("#comment-body").val("");
@@ -58,7 +59,7 @@
         var body = $("#comment-section div[name=" + commentId + "] .card-body .card-text").text();
         var modal = $(this);
         modal.find('.modal-body h6').text("Comment by: " + fullname);
-        modal.find('.modal-body p').text(body);
+        modal.find('.modal-body textarea').text(body);
         modal.find('.modal-body #comment-delete-id').val(commentId);
     });
 

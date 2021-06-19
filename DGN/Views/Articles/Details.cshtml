@@ -1,4 +1,5 @@
 ﻿@model DGN.Models.Article
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Details";
@@ -9,10 +10,14 @@
         <div class="container">
             <h1 class="display-4">@Html.DisplayFor(model => model.Title)</h1>
             <p class="lead">By: @Html.DisplayFor(model => model.User.FullName)</p>
+            @if (User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()) ||
+                   User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Author.ToString()))
+            { 
             <p>
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info btn-md" role="button">Edit</a>
                 <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger btn-md" role="button">Delete</a>
             </p>
+            }
         </div>
     </div>
     <div class="card text-center">
@@ -20,7 +25,7 @@
             <span class="text-white badge bg-secondary">@Html.DisplayFor(model => model.Category.CategoryName)</span>
         </div>
         <div class="card-body">
-            <pre class="card-text">@Html.DisplayFor(model => model.Body)</pre>
+            <p class="card-text">@Html.DisplayFor(model => model.Body)</p>
         </div>
         <div class="card-footer text-muted">
             Creation Date @Html.DisplayFor(model => model.CreationTimestamp)
@@ -54,27 +59,37 @@
         @foreach (var item in Model.Comments.OrderByDescending(e => e.CreationTimestamp))
         {
             <div name="@Html.DisplayFor(modelItem => item.Id)" class="card text-dark bg-light mb-3" style="max-width: 100%;">
-                <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.User.FullName)</h5>
-                    <p class="card-text">@Html.DisplayFor(modelItem => item.Body)</p>
+                <div class="row">
+                    <div class="col-md-2">
+                        <img style="height: 100%" class="rounded card-img" src="@Html.DisplayFor(modelItem => item.User.ImageLocation)" />
+                    </div>
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <a asp-controller="Users" asp-action="Profile" asp-route-id="@item.UserId" class="h5 card-title" style="color: black">@Html.DisplayFor(modelItem => item.User.FullName)</a>
+                            <p class="card-text">@Html.DisplayFor(modelItem => item.Body)</p>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="card-footer bg-light">
-                    <button type="button" class="btn btn-link"
-                            data-toggle="modal"
-                            data-target="#commentEditModal"
-                            data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
-                            data-id="@Html.DisplayFor(modelItem => item.Id)">
-                        Edit
-                    </button> |
-                    <button type="button" class="btn btn-link"
-                            data-toggle="modal"
-                            data-target="#commentDeleteModal"
-                            data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
-                            data-id="@Html.DisplayFor(modelItem => item.Id)">
-                        Delete
-                    </button>
-                </div>
+                @if (User.FindFirstValue(ClaimTypes.NameIdentifier).Equals(item.UserId.ToString()) ||
+                   User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()))
+                {
+                    <div class="card-footer bg-light">
+                        <button type="button" class="btn btn-link"
+                                data-toggle="modal"
+                                data-target="#commentEditModal"
+                                data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
+                                data-id="@Html.DisplayFor(modelItem => item.Id)">
+                            Edit
+                        </button> |
+                        <button type="button" class="btn btn-link"
+                                data-toggle="modal"
+                                data-target="#commentDeleteModal"
+                                data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
+                                data-id="@Html.DisplayFor(modelItem => item.Id)">
+                            Delete
+                        </button>
+                    </div>
+                }
             </div>
         }
     </div>
@@ -92,7 +107,7 @@
                 </div>
                 <div class="modal-body">
                     <h6></h6>
-                    <p></p>
+                    <textarea class="form-control" disabled></textarea>
                     <input id="comment-delete-id" hidden type="text" />
                 </div>
                 <div class="modal-footer">
@@ -129,18 +144,25 @@
 
 @section Scripts {
     <script type="text/javascript">
-    function gettoken() {
-        var token = '@Html.AntiForgeryToken()';
-        token = $(token).val();
-        return token;
-    }
+        function gettoken() {
+            var token = '@Html.AntiForgeryToken()';
+            token = $(token).val();
+            return token;
+        }
     </script>
 
     <script id="commentTemplate" type="text/html">
         <div name="{id}" class="card text-dark bg-light mb-3" style="max-width: 100%;">
-            <div class="card-body">
-                <h5 class="card-title">{fullName}</h5>
-                <p class="card-text">{body}</p>
+            <div class="row">
+                <div class="col-md-2">
+                    <img style="height: 100%" class="rounded card-img" src="{imageLocation}" />
+                </div>
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <a href="/Users/Profile/{userId}" class="h5 card-title" style="color: black">{fullName}</a>
+                        <p class="card-text">{body}</p>
+                    </div>
+                </div>
             </div>
             <div class="card-footer bg-light">
                 <button type="button" class="btn btn-link"

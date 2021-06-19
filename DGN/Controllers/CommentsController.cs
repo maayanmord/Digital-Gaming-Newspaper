@@ -64,7 +64,7 @@ namespace DGN.Controllers
                 var user = await _context.User.FirstOrDefaultAsync(u => u.Id == comment.UserId);
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return Json(new { comment, user.FullName });
+                return Json(new { comment, user.FullName, user.ImageLocation });
             }
             ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);
             return BadRequest();
@@ -83,7 +83,13 @@ namespace DGN.Controllers
             {
                 return NotFound();
             }
-
+            
+            var userId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userRole = HttpContext.User.FindFirstValue(ClaimTypes.Role);
+            if ((userId != comment.UserId) && !(userRole.Equals(UserRole.Admin.ToString())))
+            {
+                return Unauthorized();
+            }
             if (Body.Length >= 5)
             {
                 try
@@ -109,12 +115,18 @@ namespace DGN.Controllers
         }
 
         // POST: Comments/Delete/5
-        [Authorize(Roles = "Admin,Author")]
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var comment = await _context.Comment.FindAsync(id);
+            var userId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userRole = HttpContext.User.FindFirstValue(ClaimTypes.Role);
+            if ((userId != comment.UserId) && !(userRole.Equals(UserRole.Admin.ToString())))
+            {
+                return Unauthorized();
+            }
             _context.Comment.Remove(comment);
             await _context.SaveChangesAsync();
             return Json(comment);
