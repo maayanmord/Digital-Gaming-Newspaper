@@ -9,16 +9,21 @@ using System.Threading.Tasks;
 
 namespace DGN.Controllers
 {
-    public class NotFoundController : Controller
+    public class HomeController : Controller
     {
-        private readonly ILogger<NotFoundController> _logger;
+        private readonly ILogger<HomeController> _logger;
 
-        public NotFoundController(ILogger<NotFoundController> logger)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Privacy()
         {
             return View();
         }
