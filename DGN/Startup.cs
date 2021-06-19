@@ -33,6 +33,7 @@ namespace DGN
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie( o => 
             {
                 o.LoginPath = "/Users/Login";
+                o.AccessDeniedPath = "/Users/AccessDenied";
             });
             services.AddDbContext<DGNContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DGNContext")));
@@ -75,7 +76,7 @@ namespace DGN
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Articles}/{action=Index}/{id?}");
             });
 
         }

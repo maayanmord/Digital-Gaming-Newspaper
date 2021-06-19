@@ -4,68 +4,90 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="container">
+    <section class="best-articles container">
+    </section>
+</div>
+<section class="hot-articles">
+    <div class="wrap">
+        <h2>Hottest Articles</h2>
+        <article class="card">
+            <a href="#" class="thumb">
+                <img src="https://sm.ign.com/t/ign_il/screenshot/default/netflix-on-laptop-jxg5-xfvd640-km42_6vtn.320.jpg"
+                     alt="New on Netflix this June" class="thumb" />
+            </a>
+            <h3 class="caption">
+                <a href="#">New on Netflix this June</a>
+            </h3>
+        </article>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Body)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageLocation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreationTimestamp)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastUpdatedTimestamp)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Body)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageLocation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationTimestamp)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastUpdatedTimestamp)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+        <article class="card">
+            <a href="#" class="thumb">
+                <img src="https://sm.ign.com/t/ign_il/news/o/official-e/official-e3-2021-awards-show-announced_5tp3.320.jpg"
+                     alt="Tashtiot for ever!" class="thumb" />
+            </a>
+            <h3 class="caption"><a href="#">Tashtiot for ever!</a></h3>
+        </article>
+
+        <article class="card">
+            <a href="#" class="thumb">
+                <img src="https://sm.ign.com/t/ign_il/video/w/watch-dogs/watch-dogs-legion-of-the-dead-22-minutes-of-alpha-gameplay-1_82ex.320.jpg"
+                     alt="22 gameplay minutes of Watch Dogs: Legion of the Dead" class="thumb" />
+            </a>
+            <h3 class="caption">
+                <a href="#">22 gameplay minutes of Watch Dogs: Legion of the Dead</a>
+            </h3>
+        </article>
+
+        <article class="card">
+            <a href="#" class="thumb">
+                <img src="https://sm.ign.com/t/ign_il/news/p/playstatio/playstation-planning-expansion-into-mobile-games-and-apps_ewhk.320.jpg"
+                     alt=">Sony has just announced new cooperation with IAF!" class="thumb" />
+            </a>
+            <h3 class="caption"><a href="#">Sony has just announced new cooperation with IAF!</a></h3>
+        </article>
+    </div>
+</section>
+<section class="latest-articles">
+    <h2>Latest Articles</h2>
+    <div class="tbl">
+        @foreach (var item in Model)
+        {
+            <article class="article">
+                <div class="left">
+                    <a asp-action="Details" asp-route-id="@item.Id" class="thumb">
+                        <img src="@Html.DisplayFor(modelItem => item.ImageLocation)"
+                             alt="@Html.DisplayFor(modelItem => item.Title)" class="thumb" />
+                    </a>
+                </div>
+                <div class="right">
+                    <div class="info">
+                        <time datetime="@Html.DisplayFor(modelItem => item.CreationTimestamp)"></time>
+                    </div>
+                    <h3>
+                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Title)</a>
+                    </h3>
+                    <p class="fifty-chars">@Html.DisplayFor(modelItem => item.Body)</p>
+                </div>
+            </article>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/Index.js"></script>
+
+    <script id="mostCommentedArticlesTemplate" type="text/html">
+        <article class="card">
+            <a href="/Articles/Details/{id}" class="thumb">
+                <img src={imageLocation}
+                     alt={title} class="thumb" />
+                <h3 class="caption">{title}</h3>
+            </a>
+        </article>
+    </script>
 }
-    </tbody>
-</table>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/index.css" />
+}
