@@ -1,37 +1,46 @@
 ﻿@model IEnumerable<DGN.Models.Branch>
 
-@{
-    ViewData["Title"] = "Index";
-}
+@{ ViewData["Title"] = "Index"; }
 
-<h1>Index</h1>
+<div class="container">
+    <h2 class="text-center">Contact Us</h2><br />
 
-<form asp-action="Search">
-    <input name="query" id="query" autocomplete="off" />
-    <input type="submit" />
+    <div class="row">
+        <div class="col-md-12 map">
+            <div id="myMap" style="width:100%; height:610px;"></div>
+        </div>
+    </div>
+
+    <br />
+    <h2>Branches list</h2>   
+    <form asp-action="Search">
+        <div class="row">
+            <div class="col">
+                <input name="query" id="query" autocomplete="off" class="form-control" />
+            </div>
+            <div class="col">
+                <input type="submit" class="btn btn-primary" />
+            </div>
+        </div>
 </form>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.BranchName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ActivityTime)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.BranchName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ActivityTime)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.BranchName)
@@ -40,22 +49,22 @@
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ActivityTime)
+                    <pre>
+                        @Html.DisplayFor(modelItem => item.ActivityTime)
+                    </pre>
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
-            </tr>
-        }
-    </tbody>
-</table>
+            </tr>}
+        </tbody>
+    </table>
 
-<div class="row">
-    <div class="col-md-12 map">
-        <div id="myMap" style="width:100%; height:610px;"></div>
-    </div>
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Add new branch</a>
+    </p>
 </div>
 
 @section Scripts {
@@ -75,7 +84,9 @@
                 {email}
             </td>
             <td>
-                {activityTime}
+                <pre>
+                    {activityTime}
+                </pre>
             </td>
             <td>
                 <a href="/Branches/Edit/{id}">Edit</a> |
@@ -84,4 +95,9 @@
             </td>
         </tr>
     </script>
+}
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/map.css" />
 }
