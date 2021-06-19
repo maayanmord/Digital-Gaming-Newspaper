@@ -38,7 +38,10 @@
                 });
 
                 item = item.replaceAll('{fullName}', data.fullName)
+<<<<<<< HEAD
+=======
                 item = item.replaceAll('{imageLocation}', data.imageLocation)
+>>>>>>> b7ef64e45560ec766cb03ff52d9da93b570ff2ee
 
                 $("#comment-section").prepend(item);
                 $("#comment-body").val("");
@@ -59,7 +62,11 @@
         var body = $("#comment-section div[name=" + commentId + "] .card-body .card-text").text();
         var modal = $(this);
         modal.find('.modal-body h6').text("Comment by: " + fullname);
+<<<<<<< HEAD
+        modal.find('.modal-body p').text(body);
+=======
         modal.find('.modal-body textarea').text(body);
+>>>>>>> b7ef64e45560ec766cb03ff52d9da93b570ff2ee
         modal.find('.modal-body #comment-delete-id').val(commentId);
     });
 

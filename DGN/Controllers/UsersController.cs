@@ -393,6 +393,10 @@ namespace DGN.Controllers
             }
 
             User user = await _context.User
+                .Include(u => u.ArticleLikes)
+                .Include(u => u.Articles)
+                .Include(u => u.Comments)
+                .ThenInclude(c => c.RelatedArticle)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (user == null)

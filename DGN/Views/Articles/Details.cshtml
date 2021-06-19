@@ -3,6 +3,13 @@
 
 @{
     ViewData["Title"] = "Details";
+    string absoluteUri = string.Concat(
+                        ViewContext.HttpContext.Request.Scheme,
+                        "://",
+                        ViewContext.HttpContext.Request.Host.ToUriComponent(),
+                        ViewContext.HttpContext.Request.PathBase.ToUriComponent(),
+                        ViewContext.HttpContext.Request.Path.ToUriComponent(),
+                        ViewContext.HttpContext.Request.QueryString.ToUriComponent());
 }
 
 <div class="container">
@@ -33,6 +40,81 @@
     </div>
 </div>
 
+<<<<<<< HEAD
+<div>
+    <h4>Article</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Body)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Body)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ImageLocation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ImageLocation)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Category.CategoryName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CreationTimestamp)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreationTimestamp)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LastUpdatedTimestamp)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LastUpdatedTimestamp)
+        </dd>
+    </dl>
+</div>
+
+<a href="http://twitter.com/share?text=@Html.DisplayFor(model => model.Title) - &url=@absoluteUri" class="twitter-share-button" data-show-count="false">Tweet This Article!</a>
+<div>
+    <h4>Comments</h4>
+    <hr />
+    @foreach (var item in Model.Comments.OrderByDescending(e => e.CreationTimestamp))
+    {
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayFor(modelItem => item.User.FullName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(modelItem => item.Body)
+            </dd>
+        </dl>
+        <dl class="row">
+            <dd class="col-sm-4 offset-2">
+                @Html.DisplayFor(modelItem => item.CreationTimestamp)
+            </dd>
+            <dd class="col-sm-6">
+                <a asp-controller="Comments" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </dd>
+        </dl>
+    }
+=======
 <div class="container">
     <br />
     <p class="h4">Comments</p>
@@ -117,6 +199,7 @@
             </form>
         </div>
     </div>
+>>>>>>> b7ef64e45560ec766cb03ff52d9da93b570ff2ee
 </div>
 
 <div class="modal fade" id="commentEditModal" tabindex="-1" role="dialog" aria-labelledby="commentEditModalLabel" aria-hidden="true">
@@ -143,6 +226,10 @@
 </div>
 
 @section Scripts {
+<<<<<<< HEAD
+    <!-- Load Twitter SDK for JavaScript -->
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+=======
     <script type="text/javascript">
         function gettoken() {
             var token = '@Html.AntiForgeryToken()';
@@ -184,4 +271,5 @@
     </script>
 
     <script src="~/js/ArticleDetails.js"></script>
+>>>>>>> b7ef64e45560ec766cb03ff52d9da93b570ff2ee
 }
