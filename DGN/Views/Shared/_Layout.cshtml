@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Http;
 @using System.Security.Claims;
 @using DGN.Models;
 
@@ -55,12 +55,21 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav nav-menu ml-auto">
-                        <li class="nav-item btn-item">
-                            <a asp-controller="Users" asp-action="Register" class="nav-btn register-btn">Register</a>
-                        </li>
-                        <li class="nav-item last btn-item">
-                            <a asp-controller="Users" asp-action="Login" class="nav-btn login-btn">Login</a>
-                        </li>
+                        @if (User.Identity.Name != null)
+                        {
+                            <li class="nav-item last btn-item">
+                                <a asp-controller="Users" asp-action="Logout" class="nav-btn login-btn">Logout</a>
+                            </li>
+                        }
+                        @if (User.Identity.Name == null)
+                        {
+                            <li class="nav-item btn-item">
+                                <a asp-controller="Users" asp-action="Register" class="nav-btn register-btn">Register</a>
+                            </li>
+                            <li class="nav-item last btn-item">
+                                <a asp-controller="Users" asp-action="Login" class="nav-btn login-btn">Login</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </nav>
