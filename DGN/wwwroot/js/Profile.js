@@ -12,8 +12,20 @@ $(function () {
         viewEdit();
     });
 
-})
 
+    $('.button').click(function () {
+        $.ajax({
+            url: "",
+            context: document.body,
+            success: function (s, x) {
+
+                $('html[manifest=saveappoffline.appcache]').attr('content', '');
+                $(this).html(s);
+            }
+        });
+    });
+
+})
 
 
 

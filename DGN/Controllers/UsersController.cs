@@ -248,7 +248,7 @@ namespace DGN.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Profile(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user, IFormFile image)
+        public async Task<IActionResult> Profile(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user)
         {
             if (!isAuthorizeEditor(id))
             {
