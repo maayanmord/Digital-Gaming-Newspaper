@@ -34,7 +34,7 @@ namespace DGN.Services
         {
             if (System.IO.File.Exists(IMAGES_LOCATION + fileName))
             {
-                await Task.Run(() => { System.IO.File.Delete(IMAGES_LOCATION + fileName); });
+                System.IO.File.Delete(IMAGES_LOCATION + fileName);
             }
         }
     }

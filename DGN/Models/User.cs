@@ -44,10 +44,11 @@ namespace DGN.Models
         [DisplayName("Image Location")]
         public string ImageLocation { get; set; }
 
-        [DisplayName("Basic info about the user")]
+        [DisplayName("About")]
         [DataType(DataType.MultilineText)]
         public string About { get; set; }
 
+        [DisplayName("Full Name")]
         public string FullName
         {
             get
@@ -60,6 +61,10 @@ namespace DGN.Models
         public IList<Article> Articles { get; set; }
 
         [InverseProperty("UserLikes")]
+        [DisplayName("Article Likes")]
         public IList<Article> ArticleLikes { get; set; }
+
+        [InverseProperty("User")]
+        public IList<Comment> Comments { get; set; }
     }
 }
