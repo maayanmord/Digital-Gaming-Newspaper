@@ -2,9 +2,11 @@
 $(function () {
 
     function viewEdit() {
-        var item = $("#EditTemplate").html();
-        $("#ViewProperties").html(item);
-    }    
+        var editProperties = $("#EditTemplate").html();
+        $("#ViewProperties").html(editProperties);
+        var editAbout = $("#EditAboutTemplate").html();
+        $("#EditAbout").html(editAbout);
+    }  
 
     $("#EditButton").click(function () {
         viewEdit();
