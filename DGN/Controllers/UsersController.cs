@@ -34,7 +34,7 @@ namespace DGN.Controllers
         //  The following function are for the Managers to manage the users
         //  From here Admins can change users and user roles and see all users
         //
-         
+
         // GET Users
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
@@ -55,7 +55,7 @@ namespace DGN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditAsAdmin(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user)
         {
-            return await PostEditUser(id, ImageFile, user, true);
+            return await PostEditUser(id, ImageFile, user, true, RedirectToPage(nameof(Index)));
         }
 
         //
@@ -235,26 +235,26 @@ namespace DGN.Controllers
         }
 
         // GET: Users/Edit/5
-        [Authorize]
+        /*[Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (!isAuthorizeEditor(id)) {
                 return Unauthorized();
             }
             return await GetUserView(id);
-        }
+        }*/
 
         // POST: Users/Edit/5
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user, IFormFile image)
+        public async Task<IActionResult> Profile(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user, IFormFile image)
         {
             if (!isAuthorizeEditor(id))
             {
                 return Unauthorized();
             }
-            return await PostEditUser(id, ImageFile, user, false);
+            return await PostEditUser(id, ImageFile, user, false, View(user));
         }
 
         //
@@ -342,7 +342,7 @@ namespace DGN.Controllers
         //
         // The following functions are private helpful functions
         //
-        
+
         private bool UserExists(int id)
         {
             return _context.User.Any(e => e.Id == id);
@@ -402,14 +402,20 @@ namespace DGN.Controllers
 
             return View(user);
         }
-        private async Task<IActionResult> PostEditUser(int? id, IFormFile ImageFile, User user, bool RoleChanged)
+
+        private async Task<IActionResult> PostEditUser(int? id, IFormFile ImageFile, User user, bool RoleChanged, IActionResult redirectPage)
         {
             if (id == null || user == null || id != user.Id)
             {
                 return NotFound();
             }
 
-            User oldUser = await _context.User.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+            User oldUser = await _context.User.AsNoTracking()
+                .Include(u => u.ArticleLikes)
+                .Include(u => u.Articles)
+                .Include(u => u.Comments)
+                .ThenInclude(c => c.RelatedArticle)
+                .FirstOrDefaultAsync(m => m.Id == id);
             user.Username = oldUser.Username;
             if (!RoleChanged)
             {
@@ -437,12 +443,22 @@ namespace DGN.Controllers
                 user.ImageLocation = oldUser.ImageLocation;
             }
             ModelState.Remove("Username");
+            if (oldUser.Email != user.Email)
+            {
+                if (EmailExists(user.Email))
+                {
+                    ModelState.AddModelError("Email", "The email already exists");
+                }
+            }
             if (ModelState.IsValid)
             {
                 try
                 {
                     _context.Update(user);
                     await _context.SaveChangesAsync();
+                    user.ArticleLikes = oldUser.ArticleLikes;
+                    user.Articles = oldUser.Articles;
+                    user.Comments = oldUser.Comments;
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -455,7 +471,13 @@ namespace DGN.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return redirectPage;
+            }
+            else
+            {
+                user.ArticleLikes = oldUser.ArticleLikes;
+                user.Articles = oldUser.Articles;
+                user.Comments = oldUser.Comments;
             }
             return View(user);
         }
