@@ -232,17 +232,7 @@ namespace DGN.Controllers
         public async Task<IActionResult> Profile(int? id)
         {
             return await GetUserView(id);
-        }
-
-        // GET: Users/Edit/5
-        /*[Authorize]
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (!isAuthorizeEditor(id)) {
-                return Unauthorized();
-            }
-            return await GetUserView(id);
-        }*/
+        } 
 
         // POST: Users/Edit/5
         [Authorize]
