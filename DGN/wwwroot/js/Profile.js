@@ -8,11 +8,7 @@ $(function () {
         $("#EditAbout").html(editAbout);
     }
 
-    $("#EditButton").click(function () {
-        viewEdit();
-    });
-
-    $('.button').click(function () {
+    function reloadCache() {
         $.ajax({
             url: "",
             context: document.body,
@@ -22,5 +18,12 @@ $(function () {
                 $(this).html(s);
             }
         });
+    }
+
+    $("#EditButton").click(function () {
+        viewEdit();
+        $('.button').click(reloadCache);
     });
+
+    $('.button').click(reloadCache);
 })

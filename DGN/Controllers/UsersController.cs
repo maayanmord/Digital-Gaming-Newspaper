@@ -410,32 +410,11 @@ namespace DGN.Controllers
                 .ThenInclude(c => c.RelatedArticle)
                 .FirstOrDefaultAsync(m => m.Id == id);
             user.Username = oldUser.Username;
+            user.ImageLocation = oldUser.ImageLocation;
             if (!RoleChanged)
             {
                 user.Role = oldUser.Role;
             }
-            if (ImageFile != null)
-            {
-                string fileName = user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
-                bool uploaded = await _service.UploadImage(ImageFile, fileName);
-                if (uploaded)
-                {
-                    user.ImageLocation = _service.CLIENT_IMAGES_LOCATION + fileName;
-                    if (DEFAULT_IMAGE != oldUser.ImageLocation && user.ImageLocation != oldUser.ImageLocation)
-                    {
-                        await _service.DeleteImage(System.IO.Path.GetFileName(oldUser.ImageLocation));
-                    }
-                }
-                else
-                {
-                    ViewData["Error"] = "can't upload the image file";
-                }
-            }
-            else
-            {
-                user.ImageLocation = oldUser.ImageLocation;
-            }
-            ModelState.Remove("Username");
             if (oldUser.Email != user.Email)
             {
                 if (EmailExists(user.Email))
@@ -443,8 +422,26 @@ namespace DGN.Controllers
                     ModelState.AddModelError("Email", "The email already exists");
                 }
             }
+            ModelState.Remove("Username");
             if (ModelState.IsValid)
             {
+                if (ImageFile != null)
+                {
+                    string fileName = user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
+                    bool uploaded = await _service.UploadImage(ImageFile, fileName);
+                    if (uploaded)
+                    {
+                        user.ImageLocation = _service.CLIENT_IMAGES_LOCATION + fileName;
+                        if (DEFAULT_IMAGE != oldUser.ImageLocation && user.ImageLocation != oldUser.ImageLocation)
+                        {
+                            await _service.DeleteImage(System.IO.Path.GetFileName(oldUser.ImageLocation));
+                        }
+                    }
+                    else
+                    {
+                        ViewData["Error"] = "can't upload the image file";
+                    }
+                }
                 try
                 {
                     _context.Update(user);
