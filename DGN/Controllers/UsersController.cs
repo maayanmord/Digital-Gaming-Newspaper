@@ -330,9 +330,35 @@ namespace DGN.Controllers
         }
 
         //
+        // The following functions are for searching and getting partial data
+        // 
+
+        [Authorize]
+        public async Task<IActionResult> GetUserLikedArticles(int? id, int count)
+        {          
+            return Json(await _context.User.Include(u => u.ArticleLikes).Where(u => u.Id == id).Select(u => u.ArticleLikes).Take(count).FirstOrDefaultAsync());
+        }
+
+        [Authorize]
+        public async Task<IActionResult> GetUserCommentedArticles(int? id, int count)
+        {
+            var query = from comment in _context.Comment
+                        join article in _context.Article on comment.RelatedArticleId equals article.Id
+                        where comment.UserId == id
+                        select article;
+            return Json(await query.Distinct().Take(count).ToListAsync());
+        }
+
+        [Authorize]
+        public async Task<IActionResult> GetUserArticles(int? id, int count)
+        {
+            return Json(await _context.Article.Where(a => a.UserId == id).Take(count).ToListAsync());
+        }
+
+        //
         // The following functions are private helpful functions
         //
-        
+
         private bool UserExists(int id)
         {
             return _context.User.Any(e => e.Id == id);
