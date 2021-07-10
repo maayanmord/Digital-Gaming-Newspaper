@@ -192,6 +192,12 @@ namespace DGN.Controllers
             return Json(await _context.Article.Where(a => (a.Title.Contains(queryTitle))).ToListAsync());
         }
 
+        public async Task<IActionResult> GetAll()
+        {
+            var dGNContext = _context.Article.Include(a => a.Category).Include(a => a.User).OrderByDescending(a => a.CreationTimestamp);
+            return View(await dGNContext.ToListAsync());
+        }
+
         public async Task<IActionResult> GetMostCommentedArticles(int count)
         {
             var query = from comment in _context.Comment

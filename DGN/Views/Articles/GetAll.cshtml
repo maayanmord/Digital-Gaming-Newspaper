@@ -1,0 +1,31 @@
+﻿@model IEnumerable<DGN.Models.Article>
+
+<section class="all-articles">
+    <h2>All Articles</h2>
+    <div class="tbl">
+        @foreach (var item in Model)
+        {
+            <article class="article">
+                <div class="left">
+                    <a asp-action="Details" asp-route-id="@item.Id" class="thumb">
+                        <img src="@Html.DisplayFor(modelItem => item.ImageLocation)"
+                                alt="@Html.DisplayFor(modelItem => item.Title)" class="thumb" />
+                    </a>
+                </div>
+                <div class="right">
+                    <div class="info">
+                        <time datetime="@Html.DisplayFor(modelItem => item.CreationTimestamp)"></time>
+                    </div>
+                    <h3>
+                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Title)</a>
+                    </h3>
+                    <p class="fifty-chars">@Html.DisplayFor(modelItem => item.Body)</p>
+                </div>
+            </article>
+        }
+    </div>
+</section>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/index.css" />
+}
