@@ -33,12 +33,9 @@
             success: function (data) {
                 var item = $('#commentTemplate').html();
 
-                $.each(data.comment, function (key, value) {
+                $.each(data, function (key, value) {
                     item = item.replaceAll('{' + key + '}', value)
                 });
-
-                item = item.replaceAll('{fullName}', data.fullName)
-                item = item.replaceAll('{imageLocation}', data.imageLocation)
 
                 $("#comment-section").prepend(item);
                 $("#comment-body").val("");
