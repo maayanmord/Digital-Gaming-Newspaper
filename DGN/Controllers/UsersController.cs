@@ -55,7 +55,7 @@ namespace DGN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditAsAdmin(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user)
         {
-            return await PostEditUser(id, ImageFile, user, true);
+            return await PostEditUser(id, ImageFile, user, true, RedirectToPage(nameof(Index)));
         }
 
         //
@@ -234,27 +234,17 @@ namespace DGN.Controllers
             return await GetUserView(id);
         }
 
-        // GET: Users/Edit/5
-        [Authorize]
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (!isAuthorizeEditor(id)) {
-                return Unauthorized();
-            }
-            return await GetUserView(id);
-        }
-
-        // POST: Users/Edit/5
+        // POST: Users/Profile/5
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user, IFormFile image)
+        public async Task<IActionResult> Profile(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user)
         {
             if (!isAuthorizeEditor(id))
             {
                 return Unauthorized();
             }
-            return await PostEditUser(id, ImageFile, user, false);
+            return await PostEditUser(id, ImageFile, user, false, View(user));
         }
 
         //
@@ -340,9 +330,35 @@ namespace DGN.Controllers
         }
 
         //
+        // The following functions are for searching and getting partial data
+        // 
+
+        [Authorize]
+        public async Task<IActionResult> GetUserLikedArticles(int? id, int count)
+        {          
+            return Json(await _context.User.Include(u => u.ArticleLikes).Where(u => u.Id == id).Select(u => u.ArticleLikes).Take(count).FirstOrDefaultAsync());
+        }
+
+        [Authorize]
+        public async Task<IActionResult> GetUserCommentedArticles(int? id, int count)
+        {
+            var query = from comment in _context.Comment
+                        join article in _context.Article on comment.RelatedArticleId equals article.Id
+                        where comment.UserId == id
+                        select article;
+            return Json(await query.Distinct().Take(count).ToListAsync());
+        }
+
+        [Authorize]
+        public async Task<IActionResult> GetUserArticles(int? id, int count)
+        {
+            return Json(await _context.Article.Where(a => a.UserId == id).Take(count).ToListAsync());
+        }
+
+        //
         // The following functions are private helpful functions
         //
-        
+
         private bool UserExists(int id)
         {
             return _context.User.Any(e => e.Id == id);
@@ -393,6 +409,10 @@ namespace DGN.Controllers
             }
 
             User user = await _context.User
+                .Include(u => u.ArticleLikes)
+                .Include(u => u.Articles)
+                .Include(u => u.Comments)
+                .ThenInclude(c => c.RelatedArticle)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (user == null)
@@ -402,47 +422,59 @@ namespace DGN.Controllers
 
             return View(user);
         }
-        private async Task<IActionResult> PostEditUser(int? id, IFormFile ImageFile, User user, bool RoleChanged)
+        private async Task<IActionResult> PostEditUser(int? id, IFormFile ImageFile, User user, bool RoleChanged, IActionResult redirectPage)
         {
             if (id == null || user == null || id != user.Id)
             {
                 return NotFound();
             }
 
-            User oldUser = await _context.User.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+            User oldUser = await _context.User.AsNoTracking()
+                .Include(u => u.ArticleLikes)
+                .Include(u => u.Articles)
+                .Include(u => u.Comments)
+                .ThenInclude(c => c.RelatedArticle)
+                .FirstOrDefaultAsync(m => m.Id == id);
             user.Username = oldUser.Username;
+            user.ImageLocation = oldUser.ImageLocation;
             if (!RoleChanged)
             {
                 user.Role = oldUser.Role;
             }
-            if (ImageFile != null)
+            if (oldUser.Email != user.Email)
             {
-                string fileName = user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
-                bool uploaded = await _service.UploadImage(ImageFile, fileName);
-                if (uploaded)
+                if (EmailExists(user.Email))
                 {
-                    user.ImageLocation = _service.CLIENT_IMAGES_LOCATION + fileName;
-                    if (DEFAULT_IMAGE != oldUser.ImageLocation && user.ImageLocation != oldUser.ImageLocation)
-                    {
-                        await _service.DeleteImage(System.IO.Path.GetFileName(oldUser.ImageLocation));
-                    }
+                    ModelState.AddModelError("Email", "The email already exists");
                 }
-                else
-                {
-                    ViewData["Error"] = "can't upload the image file";
-                }
-            }
-            else
-            {
-                user.ImageLocation = oldUser.ImageLocation;
             }
             ModelState.Remove("Username");
             if (ModelState.IsValid)
             {
+                if (ImageFile != null)
+                {
+                    string fileName = user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
+                    bool uploaded = await _service.UploadImage(ImageFile, fileName);
+                    if (uploaded)
+                    {
+                        user.ImageLocation = _service.CLIENT_IMAGES_LOCATION + fileName;
+                        if (DEFAULT_IMAGE != oldUser.ImageLocation && user.ImageLocation != oldUser.ImageLocation)
+                        {
+                            await _service.DeleteImage(System.IO.Path.GetFileName(oldUser.ImageLocation));
+                        }
+                    }
+                    else
+                    {
+                        ViewData["Error"] = "can't upload the image file";
+                    }
+                }
                 try
                 {
                     _context.Update(user);
                     await _context.SaveChangesAsync();
+                    user.ArticleLikes = oldUser.ArticleLikes;
+                    user.Articles = oldUser.Articles;
+                    user.Comments = oldUser.Comments;
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -455,7 +487,13 @@ namespace DGN.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return redirectPage;
+            }
+            else
+            {
+                user.ArticleLikes = oldUser.ArticleLikes;
+                user.Articles = oldUser.Articles;
+                user.Comments = oldUser.Comments;
             }
             return View(user);
         }

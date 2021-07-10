@@ -64,7 +64,7 @@ namespace DGN.Controllers
                 var user = await _context.User.FirstOrDefaultAsync(u => u.Id == comment.UserId);
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return Json(new { comment, user.FullName, user.ImageLocation });
+                return Json(new { comment.Id, comment.UserId, comment.Body, user.FullName, user.ImageLocation });
             }
             ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);
             return BadRequest();
