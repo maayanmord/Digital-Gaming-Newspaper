@@ -66,11 +66,11 @@
                     <form asp-action="Delete">
                         <div class="form-group">
                             <label class="control-label">Your Password</label>
-                            <input name="plainPass" class="form-control" />
+                            <input type="password" name="plainPass" class="form-control" />
                         </div>
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="Id" />
-                        <input type="submit" value="Delete" class="btn btn-danger" /> |
+                        <input type="submit" value="Delete" class="btn btn-danger" /> 
                         <a asp-action="Index">Back to List</a>
                         @if (ViewBag.Error != null)
                         {
