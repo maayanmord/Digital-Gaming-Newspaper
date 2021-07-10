@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using DGN.Data;
 using DGN.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace DGN
 {
@@ -42,27 +43,19 @@ namespace DGN
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            // Check for 404 response
-            app.Use(async (context, next) =>
-            {
-                await next();
-                if (context.Response.StatusCode == 404)
-                {
-                    context.Request.Path = "/Error/NotFoundPage";
-                    await next();
-                }
-            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
