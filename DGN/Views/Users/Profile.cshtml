@@ -88,9 +88,9 @@
                         @if ((User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Equals(Model.Id.ToString()))
                         {
                             <hr />
-                            <div class="row" id="EditButton">
+                            <div class="row">
                                 <div class="col-sm-12 text-secondary">
-                                    <button class="btn btn-info">Edit</button>
+                                    <button class="btn btn-info" id="EditButton">Edit</button>
                                 </div>
                             </div>
                         }
