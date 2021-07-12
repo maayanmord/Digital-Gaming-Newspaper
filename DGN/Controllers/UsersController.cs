@@ -340,13 +340,18 @@ namespace DGN.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> GetUserCommentedArticles(int? id, int count)
+        public async Task<IActionResult> GetUserCommentedArticles(int? id, int page, int count)
         {
             var query = from comment in _context.Comment
                         join article in _context.Article on comment.RelatedArticleId equals article.Id
                         where comment.UserId == id
                         select article;
-            return Json(await query.Distinct().Take(count).ToListAsync());
+
+            if (query.Count() < (page * count))
+            {
+                return Json(new { });
+            }
+            return Json(await query.Distinct().Skip(page*count).Take(count).ToListAsync());
         }
 
         [Authorize]

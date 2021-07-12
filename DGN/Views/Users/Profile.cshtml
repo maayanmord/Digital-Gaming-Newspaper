@@ -8,7 +8,7 @@
 <div class="container">
     <div class="main-body">
         <form id="form" class="row gutters-sm" method="post" asp-action="Profile" enctype="multipart/form-data">
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Id" id="ProfileId"/>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="col-md-4 mb-3">
                 <div class="card">
@@ -62,135 +62,61 @@
             </div>
             <div class="col-md-8">
                 <div class="card mb-3" id="ViewProperties">
-                    @if (ViewData.ModelState.IsValid && ViewData["Error"] == null)
-                    {
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">@Html.DisplayNameFor(model => model.Firstname)</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    @Model.Firstname
-                                </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Firstname)</h6>
                             </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">@Html.DisplayNameFor(model => model.Lastname)</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    @Model.Lastname
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">@Html.DisplayNameFor(model => model.Email)</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    @Model.Email
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">@Html.DisplayNameFor(model => model.Role)</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    @Model.Role.ToString()
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">@Html.DisplayNameFor(model => model.Birthday)</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    @Model.Birthday.ToString("dd/MM/yyyy")
-                                </div>
-                            </div>
-                            @if ((User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Equals(Model.Id.ToString()))
-                            {
-                                <hr />
-                                <div class="row" id="EditButton">
-                                    <div class="col-sm-12 text-secondary">
-                                        <button class="btn btn-info">Edit</button>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="col-lg-8">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Firstname)</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input class="form-control" asp-for="Firstname">
-                                            <span asp-validation-for="Firstname" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Lastname)</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input class="form-control" asp-for="Lastname">
-                                            <span asp-validation-for="Lastname" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Email)</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input asp-for="Email" class="form-control">
-                                            <span asp-validation-for="Email" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">Role</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input type="text" class="form-control" value="@Model.Role" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Birthday)</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input class="form-control" asp-for="Birthday">
-                                            <span asp-validation-for="Birthday" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">Update Profile Image</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input type="file" name="ImageFile" id="ImageFile" />
-                                        </div>
-                                    </div>
-                                    @if (ViewBag.Error != null)
-                                    {
-                                        <div class="text-danger">@ViewBag.Error</div>
-                                    }
-                                    <div class="row" id="SaveChangesButton">
-                                        <div class="col-sm-3"></div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input type="submit" class="btn btn-primary px-4" value="Save Changes">
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Firstname
                             </div>
                         </div>
-                    }
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Lastname)</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Lastname
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Email)</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Email
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Role)</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Role.ToString()
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Birthday)</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Birthday.ToString("dd/MM/yyyy")
+                            </div>
+                        </div>
+                        @if ((User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Equals(Model.Id.ToString()))
+                        {
+                            <hr />
+                            <div class="row" id="EditButton">
+                                <div class="col-sm-12 text-secondary">
+                                    <button class="btn btn-info">Edit</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
                 </div>
                 <div class="card mb-3">
                     <ul class="list-group list-group-flush">
@@ -219,27 +145,17 @@
                 </div>
                 <div class="card mb-3">
                     <ul class="list-group list-group-flush">
-                        @if (Model.Comments.Count > 0)
-                        {
-                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                <h6 class="mb-0"><strong>The articles @Model.Username commented on </strong></h6>
-                            </li>
-                            @foreach (Comment comment in Model.Comments.Distinct())
-                            {
-                                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <row>
-                                        <img src="@comment.RelatedArticle.ImageLocation" alt="Admin" width="50" height="50">
-                                        <a class="mb-0" asp-controller="Articles" asp-action="Details" asp-route-id="@comment.RelatedArticleId"> @comment.RelatedArticle.Title </a>
-                                    </row>
-                                </li>
-                            }
-                        }
-                        else
-                        {
-                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                <h6 class="mb-0"><strong>There are no @Html.DisplayNameFor(model => model.Comments) by @Model.Username</strong></h6>
-                            </li>
-                        }
+                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                            <h6 class="mb-0"><strong>The articles @Model.Username commented on </strong></h6>
+                        </li>
+                        <div id="MostCommentedArticlePage">
+                        </div>
+                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                            <div class="col-sm-12 text-secondary">
+                                <button class="btn" id="NextPage">Next Page</button>
+                                <button class="btn" id="PrevPage">Prev Page</button>
+                            </div>   
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -274,8 +190,8 @@
                             <h6 class="mb-0">@Html.DisplayNameFor(model => model.Firstname)</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            <input class="form-control" asp-for="Firstname">
-                            <span asp-validation-for="Firstname" class="text-danger"></span>
+                            <input class="form-control" asp-for="Firstname" id="firstName" >
+                            <span class="text-danger" id="firstNameMessage"></span>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -283,8 +199,8 @@
                             <h6 class="mb-0">@Html.DisplayNameFor(model => model.Lastname)</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            <input class="form-control" asp-for="Lastname">
-                            <span asp-validation-for="Lastname" class="text-danger"></span>
+                            <input class="form-control" asp-for="Lastname" id="lastName">
+                            <span class="text-danger" id="lastNameMessage"></span>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -292,8 +208,8 @@
                             <h6 class="mb-0">@Html.DisplayNameFor(model => model.Email)</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            <input asp-for="Email" class="form-control">
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <input asp-for="Email" class="form-control" id="email">
+                            <span class="text-danger" id="emailMessage"></span>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -328,13 +244,14 @@
                     <div class="row" id="SaveChangesButton">
                         <div class="col-sm-3"></div>
                         <div class="col-sm-9 text-secondary">
-                            <input type="submit" class="btn btn-primary px-4" value="Save Changes">
+                            <input type="submit" class="btn btn-primary px-4" value="Save Changes" id="SaveChanges">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </script>
+
     <script src="~/js/Profile.js"></script>
 }
 @section Styles {
