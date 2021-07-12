@@ -334,9 +334,9 @@ namespace DGN.Controllers
         // 
 
         [Authorize]
-        public async Task<IActionResult> GetUserLikedArticles(int? id, int count)
+        public async Task<IActionResult> GetUserLikedArticles(int? id, int page, int count)
         {          
-            return Json(await _context.User.Include(u => u.ArticleLikes).Where(u => u.Id == id).Select(u => u.ArticleLikes).Take(count).FirstOrDefaultAsync());
+            return Json(await _context.User.Include(u => u.ArticleLikes).Where(u => u.Id == id).Select(u => u.ArticleLikes).Skip(page * count).Take(count).FirstOrDefaultAsync());
         }
 
         [Authorize]
@@ -347,17 +347,13 @@ namespace DGN.Controllers
                         where comment.UserId == id
                         select article;
 
-            if (query.Count() < (page * count))
-            {
-                return Json(new { });
-            }
             return Json(await query.Distinct().Skip(page*count).Take(count).ToListAsync());
         }
 
         [Authorize]
-        public async Task<IActionResult> GetUserArticles(int? id, int count)
+        public async Task<IActionResult> GetUserArticles(int? id, int page, int count)
         {
-            return Json(await _context.Article.Where(a => a.UserId == id).Take(count).ToListAsync());
+            return Json(await _context.Article.Where(a => a.UserId == id).Skip(page * count).Take(count).ToListAsync());
         }
 
         //

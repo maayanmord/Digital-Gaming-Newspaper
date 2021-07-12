@@ -70,65 +70,91 @@ $(function () {
             }
         });
     });
-
-    $('#editButton').click(reloadCache);
     
-    function mostCommentedPage(id, page) {
+    function getArticlePage(id, page, getUrl, sectionId) {
+        count=5
         $.ajax({
-            type: "POST",
-            url: "/Users/GetUserCommentedArticles",
+            type: "GET",
+            url: getUrl + id,
             data: {
-                Id: id,
                 page: page,
-                count: 10,
+                count: count,
                 __RequestVerificationToken: gettoken()
             },
             success: function (data) {
-                alert("here2");
-                var item = $('#ArticleTemplate').html();
+                countCheck = 0;
+                $('#' + sectionId).html('');
 
-                $('#MostCommentedArticlePage').empty();
+                $.each(data, function (i, val) {
+                    var item = $('#ArticleTemplate').html();
 
-                var thereAreArticles = false;
-                $.each(data, function (key, value) {
-                    thereAreArticles = true;
-                    item = item.replaceAll('{' + key + '}', value)
-                });
+                    $.each(val, function (key, value) {
+                        item = item.replaceAll('{' + key + '}', value)
+                    });
 
-                if (!thereAreArticles) {
+                    $('#' + sectionId).prepend(item);
+                    countCheck += 1;
+                })
+                
+                if (countCheck < count) {
+                    $('#NextPage' + sectionId).hide();
+                } else {
+                    $('#NextPage' + sectionId).show();
+                }
+                if (page == 0) {
+                    $('#PrevPage' + sectionId).hide();
+                } else {
+                    $('#PrevPage' + sectionId).show();
+                }
+
+                if (countCheck == 0) {
                     if (page == 0) {
-                        alert("0")
                         var noArticles = $('#NoArticleTemplate').html();
-                        $('#MostCommentedArticlePage').prepend(noArticles);
+                        $('#' + sectionId).html(noArticles);
                     } else {
                         var noMoreArticles = $('#NoMoreArticleTemplate').html()
-                        $('#MostCommentedArticlePage').prepend(noMoreArticles);
+                        $('#' + sectionId).html(noMoreArticles);
                     }
-                }
-                else {
-                    alert("there are articles")
-                    $('#MostCommentedArticlePage').prepend(item);
                 }
             },
             error: function (data) {
-                alert("nanana");
-                //$("#alert-body").show();
+                alert(data);
             }
         });
     }
 
-    var counter = 0;
+    var counterCommented = 0;
+    var counterLiked = 0;
+    var counterAuthored = 0;
+
     var profileId = $("#ProfileId").val();
-    mostCommentedPage(profileId, counter);
 
+    getArticlePage(profileId, counterCommented, "/Users/GetUserCommentedArticles/", "MostCommented");
+    getArticlePage(profileId, counterLiked, "/Users/GetUserLikedArticles/", "Liked");
+    getArticlePage(profileId, counterAuthored, "/Users/GetUserArticles/", "Authored");
 
-    $("#PrevPage").click(function () {
-        counter -= 1;
-        mostCommentedPage(profileId, counter);
+    $("#PrevPageMostCommented").click(function () {
+        counterCommented -= 1;
+        getArticlePage(profileId, counterCommented, "/Users/GetUserCommentedArticles/", "MostCommented");
     });
-    $("#NextPage").click(function () {
-        counter += 1;
-        mostCommentedPage(profileId, counter);
+    $("#NextPageMostCommented").click(function () {
+        counterCommented += 1;
+        getArticlePage(profileId, counterCommented, "/Users/GetUserCommentedArticles/", "MostCommented");
     });
-
+    $("#PrevPageLiked").click(function () {
+        counterLiked -= 1;
+        getArticlePage(profileId, counterLiked, "/Users/GetUserLikedArticles/", "Liked");
+    });
+    $("#NextPageLiked").click(function () {
+        counterLiked += 1;
+        getArticlePage(profileId, counterLiked, "/Users/GetUserLikedArticles/", "Liked");
+    });
+    $("#PrevPageAuthored").click(function () {
+        counterAuthored -= 1;
+        getArticlePage(profileId, counterAuthored, "/Users/GetUserArticles/", "Authored");
+    });
+    $("#NextPageAuthored").click(function () {
+        counterAuthored += 1;
+        getArticlePage(profileId, counterAuthored, "/Users/GetUserArticles/", "Authored");
+    });
 })
