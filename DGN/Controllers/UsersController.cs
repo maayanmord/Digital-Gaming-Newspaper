@@ -194,7 +194,7 @@ namespace DGN.Controllers
 
             User user = await _context.User.Include(u => u.Password).FirstOrDefaultAsync(u => u.Id == id);
 
-            if (isAuthorizeEditor(id))
+            if (!isAuthorizeEditor(id))
             {
                 return Unauthorized();
             }
