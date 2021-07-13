@@ -28,10 +28,7 @@
             confPasswordNOTEmpty = false;
         }
 
-        if (passwordsMatch && passwordNOTEmpty && confPasswordNOTEmpty) {
-            $('#submit').prop('disabled', false)
-        } else {
-            $('#submit').prop('disabled', true)
-        }
+        // The submit button is enable only when the passwords match AND both of the passwords fields are not empty.
+        $('#submit').prop('disabled', (!(passwordsMatch && passwordNOTEmpty && confPasswordNOTEmpty)));
     });
 })
