@@ -1,6 +1,40 @@
 ﻿@model IEnumerable<DGN.Models.Article>
 
 <section class="all-articles">
+    <div class="input-group" id="adv-search">
+        <input type="text" class="form-control" placeholder="Search for Articles" />
+        <div class="input-group-btn">
+            <div class="btn-group" role="group">
+                <div class="dropdown dropdown-lg">
+                    <button type="button" class="drop-btn btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                    <div class="dropdown-menu dropdown-menu-right" role="menu">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="filter">Choose a category</label>
+                                <select class="form-control">
+                                    <option value="0" selected>Action</option>
+                                    <option value="1">Horror</option>
+                                    <option value="2">....</option>
+                                    <option value="3">....</option>
+                                    <option value="4">....</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="contain">Author</label>
+                                <input class="form-control" type="text" />
+                            </div>
+                            <div class="form-group">
+                                <label for="contain">Contains the words</label>
+                                <input class="form-control" type="text" />
+                            </div>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </div>
     <h2>All Articles</h2>
     <div class="tbl">
         @foreach (var item in Model)
@@ -9,7 +43,7 @@
                 <div class="left">
                     <a asp-action="Details" asp-route-id="@item.Id" class="thumb">
                         <img src="@Html.DisplayFor(modelItem => item.ImageLocation)"
-                                alt="@Html.DisplayFor(modelItem => item.Title)" class="thumb" />
+                             alt="@Html.DisplayFor(modelItem => item.Title)" class="thumb" />
                     </a>
                 </div>
                 <div class="right">
@@ -27,5 +61,7 @@
 </section>
 
 @section Styles {
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"/>
     <link rel="stylesheet" href="~/css/index.css" />
+    <link rel="stylesheet" href="~/css/getAll.css" />
 }
