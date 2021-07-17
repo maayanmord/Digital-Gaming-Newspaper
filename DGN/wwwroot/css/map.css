@@ -16,3 +16,7 @@
         margin-bottom: 5px;
     }
 
+pre {
+    text-align: left;
+    white-space: pre-line;
+}

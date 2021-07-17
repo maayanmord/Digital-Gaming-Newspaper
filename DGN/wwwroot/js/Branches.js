@@ -21,7 +21,7 @@ function loadMapScenario() {
 
         //A title and description for the infobox.
         var infoTitle = title
-        var infoDescription = 'Activity Hours: {activity} <br/> Email Address: {mail}.';
+        var infoDescription = 'Activity Hours: <br/> {activity} <br/> Email Address: {mail}.';
         var content = infoboxTemplate.replace('{infoTitle}', infoTitle).replace('{infoDescription}', infoDescription).replace('{activity}', activity).replace('{mail}', mail)
 
         infobox = new Microsoft.Maps.Infobox(marker.getLocation(), { visible: false });
