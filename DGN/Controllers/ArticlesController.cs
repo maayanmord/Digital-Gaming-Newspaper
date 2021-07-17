@@ -7,18 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DGN.Data;
 using DGN.Models;
+using DGN.Services;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace DGN.Controllers
 {
     public class ArticlesController : Controller
     {
         private readonly DGNContext _context;
+        private readonly ImagesService _service;
+        private string DEFAULT_IMAGE;
 
-        public ArticlesController(DGNContext context)
+        public ArticlesController(DGNContext context, ImagesService service)
         {
             _context = context;
+            _service = service;
+            DEFAULT_IMAGE = _service.CLIENT_IMAGES_LOCATION + "DefaultArticleImage.jpg";
         }
 
         // GET: Articles
@@ -66,10 +72,28 @@ namespace DGN.Controllers
         [Authorize(Roles = "Author,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Body,ImageLocation,CategoryId")] Article article)
+        public async Task<IActionResult> Create(IFormFile ImageFile, [Bind("Id,Title,Body,CategoryId")] Article article)
         {
             if (ModelState.IsValid && !ArticleExists(article.Title))
             {
+                // If an image were sent to the server
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    string imageName = "Article" + article.Id + System.IO.Path.GetExtension(ImageFile.FileName);
+                    bool uploaded = await _service.UploadImage(ImageFile, imageName);
+                    if (uploaded)
+                    {
+                        article.ImageLocation = _service.CLIENT_IMAGES_LOCATION + imageName;
+                    }
+                    else
+                    {
+                        ViewData["Error"] = "Can't upload this image, make sure its png,jpeg,jpg";
+                    }
+                }
+                else
+                {
+                    article.ImageLocation = DEFAULT_IMAGE;
+                }
                 article.CreationTimestamp = DateTime.Now;
                 article.UserId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
                 _context.Add(article);
@@ -104,7 +128,7 @@ namespace DGN.Controllers
         [Authorize(Roles = "Author,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Body,ImageLocation,CategoryId")] Article newArticle)
+        public async Task<IActionResult> Edit(int id, IFormFile ImageFile, [Bind("Id,Title,Body,ImageLocation,CategoryId")] Article newArticle)
         {
             var currArticle = await _context.Article.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
             if ((currArticle == null) || (id != newArticle.Id))
@@ -120,6 +144,26 @@ namespace DGN.Controllers
 
             if ((ModelState.IsValid) && (NotDuplicatedTitle))
             {
+                newArticle.ImageLocation = currArticle.ImageLocation;
+                if (ImageFile != null)
+                {
+                    string imageName = "Article" + newArticle.Id + System.IO.Path.GetExtension(ImageFile.FileName);
+                    bool uploaded = await _service.UploadImage(ImageFile, imageName);
+                    if (uploaded)
+                    {
+                        newArticle.ImageLocation = _service.CLIENT_IMAGES_LOCATION + imageName;
+
+                        // Delete the old image if the name was changed, for exmaple: Article2.png changed to Article2.jpg
+                        if (DEFAULT_IMAGE != currArticle.ImageLocation && newArticle.ImageLocation != currArticle.ImageLocation)
+                        {
+                            await _service.DeleteImage(System.IO.Path.GetFileName(currArticle.ImageLocation));
+                        }
+                    }
+                    else
+                    {
+                        ViewData["Error"] = "Can't upload this image, make sure its png,jpeg,jpg";
+                    }
+                }
                 try
                 {
                     _context.Update(newArticle);
@@ -172,6 +216,10 @@ namespace DGN.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var article = await _context.Article.FindAsync(id);
+            if (DEFAULT_IMAGE != article.ImageLocation)
+            {
+                await _service.DeleteImage(System.IO.Path.GetFileName(article.ImageLocation));
+            }
             _context.Article.Remove(article);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
