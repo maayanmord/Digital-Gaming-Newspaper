@@ -79,7 +79,7 @@ namespace DGN.Controllers
                 // If an image were sent to the server
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
-                    string imageName = ImageFile.FileName;
+                    string imageName = "Article" + article.Id + System.IO.Path.GetExtension(ImageFile.FileName);
                     bool uploaded = await _service.UploadImage(ImageFile, imageName);
                     if (uploaded)
                     {
@@ -128,7 +128,7 @@ namespace DGN.Controllers
         [Authorize(Roles = "Author,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Body,ImageLocation,CategoryId")] Article newArticle)
+        public async Task<IActionResult> Edit(int id, IFormFile ImageFile, [Bind("Id,Title,Body,ImageLocation,CategoryId")] Article newArticle)
         {
             var currArticle = await _context.Article.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
             if ((currArticle == null) || (id != newArticle.Id))
@@ -144,6 +144,26 @@ namespace DGN.Controllers
 
             if ((ModelState.IsValid) && (NotDuplicatedTitle))
             {
+                newArticle.ImageLocation = currArticle.ImageLocation;
+                if (ImageFile != null)
+                {
+                    string imageName = "Article" + newArticle.Id + System.IO.Path.GetExtension(ImageFile.FileName);
+                    bool uploaded = await _service.UploadImage(ImageFile, imageName);
+                    if (uploaded)
+                    {
+                        newArticle.ImageLocation = _service.CLIENT_IMAGES_LOCATION + imageName;
+
+                        // Delete the old image if the name was changed, for exmaple: Article2.png changed to Article2.jpg
+                        if (DEFAULT_IMAGE != currArticle.ImageLocation && newArticle.ImageLocation != currArticle.ImageLocation)
+                        {
+                            await _service.DeleteImage(System.IO.Path.GetFileName(currArticle.ImageLocation));
+                        }
+                    }
+                    else
+                    {
+                        ViewData["Error"] = "can't upload the image file";
+                    }
+                }
                 try
                 {
                     _context.Update(newArticle);
