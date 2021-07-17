@@ -216,6 +216,10 @@ namespace DGN.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var article = await _context.Article.FindAsync(id);
+            if (DEFAULT_IMAGE != article.ImageLocation)
+            {
+                await _service.DeleteImage(System.IO.Path.GetFileName(article.ImageLocation));
+            }
             _context.Article.Remove(article);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
