@@ -49,6 +49,13 @@
         });
     });
 
+    $('#articleDeleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var articleId = button.data('id');
+        var modal = $(this);
+        modal.find('.modal-body #article-delete-id').val(articleId);
+    });
+
     $('#commentDeleteModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var commentId = button.data('id');
