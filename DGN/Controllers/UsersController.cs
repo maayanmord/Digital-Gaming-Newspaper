@@ -194,7 +194,7 @@ namespace DGN.Controllers
 
             User user = await _context.User.Include(u => u.Password).FirstOrDefaultAsync(u => u.Id == id);
 
-            if (isAuthorizeEditor(id))
+            if (!isAuthorizeEditor(id))
             {
                 return Unauthorized();
             }
@@ -334,25 +334,26 @@ namespace DGN.Controllers
         // 
 
         [Authorize]
-        public async Task<IActionResult> GetUserLikedArticles(int? id, int count)
+        public async Task<IActionResult> GetUserLikedArticles(int? id, int page, int count)
         {          
-            return Json(await _context.User.Include(u => u.ArticleLikes).Where(u => u.Id == id).Select(u => u.ArticleLikes).Take(count).FirstOrDefaultAsync());
+            return Json(await _context.User.Include(u => u.ArticleLikes).Where(u => u.Id == id).Select(u => u.ArticleLikes).Skip(page * count).Take(count).FirstOrDefaultAsync());
         }
 
         [Authorize]
-        public async Task<IActionResult> GetUserCommentedArticles(int? id, int count)
+        public async Task<IActionResult> GetUserCommentedArticles(int? id, int page, int count)
         {
             var query = from comment in _context.Comment
                         join article in _context.Article on comment.RelatedArticleId equals article.Id
                         where comment.UserId == id
                         select article;
-            return Json(await query.Distinct().Take(count).ToListAsync());
+
+            return Json(await query.Distinct().Skip(page*count).Take(count).ToListAsync());
         }
 
         [Authorize]
-        public async Task<IActionResult> GetUserArticles(int? id, int count)
+        public async Task<IActionResult> GetUserArticles(int? id, int page, int count)
         {
-            return Json(await _context.Article.Where(a => a.UserId == id).Take(count).ToListAsync());
+            return Json(await _context.Article.Where(a => a.UserId == id).Skip(page * count).Take(count).ToListAsync());
         }
 
         //
