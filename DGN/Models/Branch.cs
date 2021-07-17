@@ -16,6 +16,7 @@ namespace DGN.Models
         public string Email { get; set; }
 
         [DataType(DataType.MultilineText)]
+        [DisplayFormat(NullDisplayText = "Currently there are no activity hours for this branch")]
         [DisplayName("Branch's Activity Time")]
         public string ActivityTime { get; set; }
 
