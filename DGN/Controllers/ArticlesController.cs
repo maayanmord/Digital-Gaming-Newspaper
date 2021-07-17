@@ -7,18 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DGN.Data;
 using DGN.Models;
+using DGN.Services;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace DGN.Controllers
 {
     public class ArticlesController : Controller
     {
         private readonly DGNContext _context;
+        private readonly ImagesService _service;
+        private string DEFAULT_IMAGE;
 
-        public ArticlesController(DGNContext context)
+        public ArticlesController(DGNContext context, ImagesService service)
         {
             _context = context;
+            _service = service;
+            DEFAULT_IMAGE = _service.CLIENT_IMAGES_LOCATION + "DefaultArticleImage.jpg";
         }
 
         // GET: Articles
@@ -66,10 +72,28 @@ namespace DGN.Controllers
         [Authorize(Roles = "Author,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Body,ImageLocation,CategoryId")] Article article)
+        public async Task<IActionResult> Create(IFormFile ImageFile, [Bind("Id,Title,Body,CategoryId")] Article article)
         {
             if (ModelState.IsValid && !ArticleExists(article.Title))
             {
+                // If an image were sent to the server
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    string imageName = ImageFile.FileName;
+                    bool uploaded = await _service.UploadImage(ImageFile, imageName);
+                    if (uploaded)
+                    {
+                        article.ImageLocation = _service.CLIENT_IMAGES_LOCATION + imageName;
+                    }
+                    else
+                    {
+                        ViewData["Error"] = "can't upload this image";
+                    }
+                }
+                else
+                {
+                    article.ImageLocation = DEFAULT_IMAGE;
+                }
                 article.CreationTimestamp = DateTime.Now;
                 article.UserId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
                 _context.Add(article);
