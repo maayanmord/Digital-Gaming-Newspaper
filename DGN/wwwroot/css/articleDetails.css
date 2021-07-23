@@ -1,3 +1,13 @@
 ﻿.h-120px {
     height: 120px;
 }
+
+.article-image {
+    height: 500px;
+    border-radius: 100px 100px 100px 0;
+    overflow: hidden;
+}
+
+.article-title {
+    border-radius: 0 100px 100px 100px;
+}
