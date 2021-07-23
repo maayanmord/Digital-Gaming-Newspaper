@@ -11,21 +11,16 @@
                         <form class="form-horizontal" role="form">
                             <div class="form-group">
                                 <label for="filter">Choose a category</label>
-                                <select class="form-control">
-                                    <option value="0" selected>Action</option>
-                                    <option value="1">Horror</option>
-                                    <option value="2">....</option>
-                                    <option value="3">....</option>
-                                    <option value="4">....</option>
+                                <select id="categorySelect" class="form-control">
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="contain">Author</label>
-                                <input class="form-control" type="text" />
+                                <input id="authorInput" class="form-control" type="text" />
                             </div>
                             <div class="form-group">
                                 <label for="contain">Contains the words</label>
-                                <input class="form-control" type="text" />
+                                <input id="containsWordsInput" class="form-control" type="text" />
                             </div>
                             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                         </form>
@@ -60,8 +55,12 @@
     </div>
 </section>
 
+@section Scripts {
+    <script src="~/js/GetAll.js" asp-append-version="true"></script>
+}
+
 @section Styles {
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
     <link rel="stylesheet" href="~/css/index.css" />
     <link rel="stylesheet" href="~/css/getAll.css" />
 }
