@@ -4,61 +4,67 @@
     ViewData["Title"] = "Edit User";
 }
 
-<h1>Edit User</h1>
-
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="EditAsAdmin">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Firstname" class="control-label"></label>
-                <input asp-for="Firstname" class="form-control" />
-                <span asp-validation-for="Firstname" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lastname" class="control-label"></label>
-                <input asp-for="Lastname" class="form-control" />
-                <span asp-validation-for="Lastname" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Birthday" class="control-label"></label>
-                <input asp-for="Birthday" class="form-control" />
-                <span asp-validation-for="Birthday" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Role" class="control-label"></label>
-                <select asp-for="Role" class="form-control">
-                    <option value="Admin"> Admin </option>
-                    <option value="Author"> Author </option>
-                    <option value="Client" selected> Client </option>
-                </select>
-                <span asp-validation-for="Role" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="About" class="control-label"></label>
-                <textarea asp-for="About" class="form-control"></textarea>
-                <span asp-validation-for="About" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-        @if (ViewBag.Error != null)
-        {
-            <div class="text-danger">@ViewBag.Error</div>
-        }
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="container">
+    <section id="formSec" class="">
+        <div class="container d-flex align-items-center justify-content-center">
+            <aside>
+                <div class="inner">
+                    <div class="formTitle">
+                        <h2>Edit</h2>
+                    </div>
+                    <hr class="sep">
+                    <form asp-action="EditAsAdmin">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Firstname" class="control-label"></label>
+                            <input asp-for="Firstname" class="form-control" />
+                            <span asp-validation-for="Firstname" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Lastname" class="control-label"></label>
+                            <input asp-for="Lastname" class="form-control" />
+                            <span asp-validation-for="Lastname" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Birthday" class="control-label"></label>
+                            <input asp-for="Birthday" class="form-control" />
+                            <span asp-validation-for="Birthday" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Role" class="control-label"></label>
+                            <select asp-for="Role" class="form-control">
+                                <option value="Admin"> Admin </option>
+                                <option value="Author"> Author </option>
+                                <option value="Client" selected> Client </option>
+                            </select>
+                            <span asp-validation-for="Role" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="About" class="control-label"></label>
+                            <textarea asp-for="About" class="form-control"></textarea>
+                            <span asp-validation-for="About" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </form>
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="text-danger">@ViewBag.Error</div>
+                    }
+                </div>
+                <div>
+                    <a asp-action="Index">Back to List</a>
+                </div>
+            </aside>
+        </div>
+    </section>
 </div>
 
 @section Scripts {

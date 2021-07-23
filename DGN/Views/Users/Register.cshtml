@@ -13,7 +13,7 @@
                         <h2>Register</h2>
                     </div>
                     <hr class="sep">
-                    <form asp-action="Register">
+                    <form asp-action="Register" id="registerForm">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
                             <label asp-for="Email" class="control-label"></label>
@@ -47,18 +47,21 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label">Password</label>
-                            <input type="password" name="plainPass" class="form-control" />
+                            <input type="password" id="Password" name="plainPass" class="form-control" />
+                            <span id="passMessage"></span>
                         </div>
                         <div class="form-group">
                             <label class="control-label">Confirm Password</label>
-                            <input type="password" name="confirmPass" class="form-control" />
+                            <input type="password" id="confirmPassword" name="confirmPass" class="form-control" />
+                            <span id="confPassMessage"></span>
                         </div>
+                        <span id="notMatchPassMessage"></span>
                         @if (ViewBag.Error != null)
                         {
                             <div class="text-danger">@ViewBag.Error</div>
                         }
                         <div class="form-group">
-                            <input type="submit" value="Register" class="btn btn-primary" />
+                            <input id="submit" disabled type="submit" value="Register" class="btn btn-primary" />
                         </div>
                     </form>
                     <div>
@@ -70,10 +73,9 @@
     </section>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="~/js/register.js"></script>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-
-@section Styles {
-    <link rel="stylesheet" href="~/css/user.css" />
 }
