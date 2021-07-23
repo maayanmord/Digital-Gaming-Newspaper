@@ -1,6 +1,8 @@
-﻿// Load the map.
-function loadMapScenario() {
-    var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+﻿var serchReault, map, searchManager; 
+
+// Load the map.
+function loadMapScenario() { 
+    map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
         credentials: 'AoJqoJIUGkHJa_PyKKY6Bfmq8csIOizScrqoo53GElotN2XfQecO8ExsN4y2NJXV',
         mapTypeId: Microsoft.Maps.MapTypeId.road,
         zoom: 5
@@ -60,4 +62,54 @@ function loadMapScenario() {
     if (branchesList != null) {
         branchesList.forEach(item => addMarker(item.locationLatitude, item.locationLongitude, item.branchName, item.activityTime, item.email, item.id));
     }
+}
+
+function SearchAdress() {
+    if (!searchManager) {
+        //Create an instance of the search manager and perform the search.
+        Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+            searchManager = new Microsoft.Maps.Search.SearchManager(map);
+            SearchAdress()
+        });
+    } else {
+        //Remove any previous results from the map.
+        map.entities.clear();
+
+        //Get the users query and geocode it.
+        var query = document.getElementById('searchTbx').value;
+        geocodeQuery(query);
+    }
+}
+
+function geocodeQuery(query) {
+    var searchRequest = {
+        where: query,
+        callback: function (r) {
+            // If there is any results: 
+            if (r && r.results && r.results.length > 0) {
+                // Add the pin to the map
+                map.entities.push(new Microsoft.Maps.Pushpin(r.results[0].location, {
+                    text: r.results[0].name  + ''
+                }));
+        
+                // Get the Location Latitude
+                document.getElementById('LocationLatitude').value = r.results[0].location.latitude;
+
+                // Get the Location Longitude
+                document.getElementById('LocationLongitude').value = r.results[0].location.longitude;
+
+                //Determine a bounding box to best view the results.
+                var bounds = r.results[0].bestView;
+
+                map.setView({ bounds: bounds });
+            }
+        },
+        errorCallback: function (e) {
+            //If there is an error, alert the user about it.
+            alert("No results found.");
+        }
+    };
+
+    //Make the geocode request.
+    searchManager.geocode(searchRequest);
 }

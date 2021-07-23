@@ -31,14 +31,31 @@
                             <textarea asp-for="ActivityTime" class="form-control"></textarea>
                             <span asp-validation-for="ActivityTime" class="text-danger"></span>
                         </div>
+
+                        <div class="form-group">
+                            <p>
+                                Enter address
+                                <a class="btn btn-light" onclick='SearchAdress()' style="float: right;">
+                                    <i class="bi bi-search"></i>
+                                </a>
+                            </p>
+                            <input id='searchTbx' type='text' />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 map">
+                                <div id="myMap" style="width:100%; height:400px;"></div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label asp-for="LocationLatitude" class="control-label"></label>
-                            <input asp-for="LocationLatitude" class="form-control" />
+                            <input asp-for="LocationLatitude" class="form-control" id="LocationLatitude" />
                             <span asp-validation-for="LocationLatitude" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="LocationLongitude" class="control-label"></label>
-                            <input asp-for="LocationLongitude" class="form-control" />
+                            <input asp-for="LocationLongitude" class="form-control" id="LocationLongitude" />
                             <span asp-validation-for="LocationLongitude" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -56,6 +73,12 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        var branchesList = @Html.Raw(Html.Raw(Json.Serialize(Model)));
+    </script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario' async defer></script>
+    <script src="~/js/branches.js" asp-append-version="true"></script>
 }
 
 @section Styles {
