@@ -3,12 +3,19 @@ $(async function () {
 
     // Get all the categories from the db
     const getAllCategories = () => {
+        let categoriesArray = [];
         return new Promise((resolve, reject) => {
             $.ajax({
                 type: "GET",
                 url: "/Categories/GetAll",
                 success: function (data) {
-                    resolve(data.map((m => { return m.categoryName; })))
+                    data.map((m => {
+                        categoriesArray.push({
+                            categoryName: m.categoryName,
+                            id: m.id
+                        })
+                    }));
+                    resolve(categoriesArray)
                 },
                 error: function (err) {
                     resolve(null);
@@ -22,9 +29,10 @@ $(async function () {
 
     // Set the categories inside dropdown..
     $.each(allCategoriesArray, function (i, p) {
-        $('#categorySelect').append($('<option' + (i === 0 ? ' selected' : '') + '></option>').val(p).html(p));
+        $('#categorySelect').append($('<option value="' + p.id + '"' + (i === 0 ? ' selected' : '') + '></option>').html(p.categoryName));
     });
 
+    // Get the categories from db using the advanced search
     const advancedSearch = () => {
 
         let category = $('#categorySelect option[selected]').val();
@@ -33,15 +41,14 @@ $(async function () {
 
         return new Promise((resolve, reject) => {
             $.ajax({
-                type: "POST",
-                url: "/Categories/GetAll",
+                url: "/Articles/AdvancedSearch",
                 data: {
-                    Body: commentBody,
-                    RelatedArticleId: ArticleId,
-                    __RequestVerificationToken: gettoken()
+                    categoryId: category === undefined ? null : parseInt(category),
+                    author: (author === undefined || author.length === 0) ? null : author,
+                    title: (containsWordsInput === undefined || containsWordsInput.length === 0) ? null : containsWordsInput,
                 },
                 success: function (data) {
-                    resolve(data.map((m => { return m.categoryName; })))
+                    resolve(data)
                 },
                 error: function (err) {
                     resolve(null);
@@ -49,6 +56,13 @@ $(async function () {
             });
         })
     }
-  
+
+
+    $('#advancedSubmitButton').click(async (e) => {
+        e.preventDefault();
+        let advancedSearchResponse = await advancedSearch();
+        console.log(advancedSearchResponse);
+    });
+
 
 })
