@@ -497,12 +497,11 @@ namespace DGN.Controllers
                 }
                 return redirectPage;
             }
-            else
-            {
-                user.ArticleLikes = oldUser.ArticleLikes;
-                user.Articles = oldUser.Articles;
-                user.Comments = oldUser.Comments;
-            }
+
+            user.ArticleLikes = oldUser.ArticleLikes;
+            user.Articles = oldUser.Articles;
+            user.Comments = oldUser.Comments;
+            
             return View(user);
         }
 
