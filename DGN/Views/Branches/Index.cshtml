@@ -1,11 +1,10 @@
 ﻿@model IEnumerable<DGN.Models.Branch>
 
-@{
-    ViewData["Title"] = "Index";
-}
+@{ ViewData["Title"] = "Branches"; }
 
 <div class="container">
     <h2 class="text-center">Contact Us</h2><br />
+
     <div class="row">
         <div class="col-md-12 map">
             <div id="myMap" style="width:100%; height:610px;"></div>
@@ -13,7 +12,17 @@
     </div>
 
     <br />
-    <h2>Branches list</h2>
+    <h2>Branches list</h2>   
+    <form asp-action="Search" style="padding-bottom: 1%">
+        <div class="row">
+            <div class="col">
+                <input name="query" id="query" autocomplete="off" class="form-control" placeholder="Search" />
+            </div>
+            <div class="col">
+                <input type="submit" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
     <table class="table">
         <thead>
             <tr>
@@ -32,25 +41,24 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.BranchName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        <pre>
-                            @Html.DisplayFor(modelItem => item.ActivityTime)
-                        </pre>
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
-            }
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BranchName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    <pre>
+                        @Html.DisplayFor(modelItem => item.ActivityTime)
+                    </pre>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>}
         </tbody>
     </table>
 
@@ -65,6 +73,28 @@
     </script>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario' async defer></script>
     <script src="~/js/branches.js" asp-append-version="true"></script>
+
+    <script src="~/js/search.js"></script>
+    <script type="text/html" id="hidden-template">
+        <tr>
+            <td>
+                {branchName}
+            </td>
+            <td>
+                {email}
+            </td>
+            <td>
+                <pre>
+                    {activityTime}
+                </pre>
+            </td>
+            <td>
+                <a href="/Branches/Edit/{id}">Edit</a> |
+                <a href="/Branches/Details/{id}">Details</a> |
+                <a href="/Branches/Delete/{id}">Delete</a>
+            </td>
+        </tr>
+    </script>
 }
 
 

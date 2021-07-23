@@ -7,6 +7,7 @@
     padding: 10px;
     font-size: 12px;
     pointer-events: auto !important;
+    word-wrap: break-word;
 }
 
     .customInfobox .title {
@@ -14,3 +15,8 @@
         font-weight: bold;
         margin-bottom: 5px;
     }
+
+pre {
+    text-align: left;
+    white-space: pre-line;
+}

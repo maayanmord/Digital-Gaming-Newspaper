@@ -149,5 +149,10 @@ namespace DGN.Controllers
         {
             return _context.Branch.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> Search(string query)
+        {
+            return Json(await _context.Branch.Where( a => (a.BranchName.Contains(query) ||  query == null) || (a.Email.Contains(query) || query == null)).ToListAsync());
+        }
     }
 }

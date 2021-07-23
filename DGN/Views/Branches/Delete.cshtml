@@ -30,15 +30,15 @@
                             @Html.DisplayNameFor(model => model.ActivityTime)
                         </dt>
                         <dd class="col-sm-8">
-                            <pre>
-                            @Html.DisplayFor(model => model.ActivityTime)
-                        </pre>
+                            <pre style="text-align: left; white-space: pre-line;">
+                              @Html.DisplayFor(model => model.ActivityTime)
+                            </pre>
                         </dd>
                     </dl>
 
                     <form asp-action="Delete">
                         <input type="hidden" asp-for="Id" />
-                        <input type="submit" value="Delete" class="btn btn-danger" /> |
+                        <input type="submit" value="Delete" class="btn btn-danger" />
                         <a asp-action="Index">Back to List</a>
                     </form>
                 </div>
