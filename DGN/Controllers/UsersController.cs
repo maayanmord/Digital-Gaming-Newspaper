@@ -4,6 +4,7 @@ using DGN.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +47,12 @@ namespace DGN.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditAsAdmin(int? id)
         {
+            ViewData["Roles"] = new SelectList(new List<SelectListItem>
+                {
+                    new SelectListItem { Text = UserRole.Admin.ToString(), Value = UserRole.Admin.ToString()},
+                    new SelectListItem { Text = UserRole.Author.ToString(), Value = UserRole.Author.ToString()},
+                    new SelectListItem { Text = UserRole.Client.ToString(), Value = UserRole.Client.ToString()},
+                }, "Text", "Value");
             return await GetUserView(id);
         }
 
@@ -55,7 +62,7 @@ namespace DGN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditAsAdmin(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user)
         {
-            return await PostEditUser(id, ImageFile, user, true, RedirectToPage(nameof(Index)));
+            return await PostEditUser(id, ImageFile, user, true, RedirectToAction(nameof(Index)));
         }
 
         //
