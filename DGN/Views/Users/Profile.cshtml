@@ -170,10 +170,12 @@
                                     {
                                         <div class="text-danger">@ViewBag.Error</div>
                                     }
-                                    <div class="row" id="SaveChangesButton">
-                                        <div class="col-sm-3"></div>
-                                        <div class="col-sm-9 text-secondary">
+                                    <div class="row">
+                                        <div class="col-sm-9 text-secondary" id="SaveChangesButton">
                                             <input type="submit" class="btn btn-primary px-4" value="Save Changes">
+                                        </div>
+                                        <div class="col-sm-3 text-secondary" id="Cancel">
+                                            <input class="btn btn-primary px-4" value="Cancel">
                                         </div>
                                     </div>
                                 </div>
@@ -294,10 +296,12 @@
                     {
                         <div class="text-danger">@ViewBag.Error</div>
                     }
-                    <div class="row" id="SaveChangesButton">
-                        <div class="col-sm-3"></div>
-                        <div class="col-sm-9 text-secondary">
-                            <input type="submit" class="btn btn-primary px-4" value="Save Changes" id="SaveChanges">
+                    <div class="row">
+                        <div class="col-sm-9 text-secondary" id="SaveChangesButton">
+                            <input type="submit" class="btn btn-primary px-4" value="Save Changes">
+                        </div>
+                        <div class="col-sm-3 text-secondary" id="Cancel">
+                            <input class="btn btn-primary px-4" value="Cancel">
                         </div>
                     </div>
                 </div>

@@ -20,9 +20,18 @@ $(function () {
         });
     }
 
+    $('#SaveChangesButton').click(reloadCache);
+    $('#Cancel').click(function () {
+        window.location.replace(window.location.href);
+
+    });
+
     $("#EditButton").click(function () {
         viewEdit();
         $('#SaveChangesButton').click(reloadCache);
+        $('#Cancel').click(function () {
+            window.location.replace(window.location.href);
+        });
     });
     
     function getArticlePage(id, page, getUrl, sectionId) {
