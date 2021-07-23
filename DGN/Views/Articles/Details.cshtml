@@ -9,7 +9,7 @@
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
             <h1 class="display-4">@Html.DisplayFor(model => model.Title)</h1>
-            <p class="lead">By: @Html.DisplayFor(model => model.User.FullName)</p>
+            <p class="lead">By: <a style="color: black" asp-action="Profile" asp-controller="Users" asp-route-id="@Model.UserId">@Html.DisplayFor(model => model.User.FullName)</a></p>
             @if (User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()) ||
                   User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Author.ToString()))
             {
