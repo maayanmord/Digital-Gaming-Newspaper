@@ -225,7 +225,7 @@ namespace DGN.Controllers
                 user.Password = new Password(user.Id, newPassword, user);
                 _context.User.Update(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Profile), new { id = user.Id });
             }
             return View();
         }
