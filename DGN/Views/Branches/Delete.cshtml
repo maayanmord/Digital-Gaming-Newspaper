@@ -5,42 +5,48 @@
 }
 
 <div class="container">
-    <div class="d-flex align-items-center justify-content-center">
-        <aside>
-            <div class="inner">
-                <div class="formTitle">
-                    <h2>Delete</h2>
-                </div>
-                <hr class="sep">
-                <dl class="row">
-                    <dt class="col-sm-3">
-                        @Html.DisplayNameFor(model => model.BranchName)
-                    </dt>
-                    <dd class="col-sm-9">
-                        @Html.DisplayFor(model => model.BranchName)
-                    </dd>
-                    <dt class="col-sm-3">
-                        @Html.DisplayNameFor(model => model.Email)
-                    </dt>
-                    <dd class="col-sm-9">
-                        @Html.DisplayFor(model => model.Email)
-                    </dd>
-                    <dt class="col-sm-3">
-                        @Html.DisplayNameFor(model => model.ActivityTime)
-                    </dt>
-                    <dd class="col-sm-9">
-                        <pre style="text-align: left; white-space: pre-line;">
-                            @Html.DisplayFor(model => model.ActivityTime)
-                        </pre>
-                    </dd>
-                </dl>
+    <section id="formSec" class="">
+        <div class="container d-flex align-items-center justify-content-center">
+            <aside>
+                <div class="inner">
+                    <div class="formTitle">
+                        <h2>Delete</h2>
+                    </div>
+                    <hr class="sep">
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.BranchName)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.BranchName)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Email)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Email)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.ActivityTime)
+                        </dt>
+                        <dd class="col-sm-8">
+                            <pre>
+                              @Html.DisplayFor(model => model.ActivityTime)
+                            </pre>
+                        </dd>
+                    </dl>
 
-                <form asp-action="Delete">
-                    <input type="hidden" asp-for="Id" />
-                    <input type="submit" value="Delete" class="btn btn-danger" /> |
-                    <a asp-action="Index">Back to List</a>
-                </form>
-            </div>
-        </aside>
-    </div>
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="submit" value="Delete" class="btn btn-danger" /> |
+                        <a asp-action="Index">Back to List</a>
+                    </form>
+                </div>
+            </aside>
+        </div>
+    </section>
 </div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/branches.css" />
+}

@@ -1,84 +1,218 @@
 ﻿@model DGN.Models.Article
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="container">
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">@Html.DisplayFor(model => model.Title)</h1>
+            <p class="lead">By: @Html.DisplayFor(model => model.User.FullName)</p>
+            @if (User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()) ||
+                  User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Author.ToString()))
+            {
+                <p>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info btn-md" role="button">Edit</a>
+                    <button type="button" class="btn btn-danger btn-md"
+                            data-toggle="modal"
+                            data-target="#articleDeleteModal">
+                        Delete
+                    </button>
+                </p>
+            }
+        </div>
+    </div>
+    <div class="card text-center">
+        <div class="card-header">
+            <span class="text-white badge bg-secondary">@Html.DisplayFor(model => model.Category.CategoryName)</span>
+        </div>
+        <div class="card-body">
+            <p class="card-text">@Html.DisplayFor(model => model.Body)</p>
+        </div>
+        <div class="card-footer text-muted">
+            Creation Date @Html.DisplayFor(model => model.CreationTimestamp)
+        </div>
+    </div>
+</div>
 
-<div>
-    <h4>Article</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Body)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Body)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageLocation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageLocation)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.CategoryName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreationTimestamp)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreationTimestamp)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastUpdatedTimestamp)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastUpdatedTimestamp)
-        </dd>
-    </dl>
+<div class="container">
+    <br />
+    <p class="h4">Comments</p>
+    <br />
+    <form id="comment-form" method="post">
+        <div class="form-row">
+            <div class="col-md-4 mb-3">
+                <textarea class="form-control" id="comment-body" maxlength="200" minlength="5" required></textarea>
+                <div id="comment-validation"></div>
+            </div>
+            <div class="col-md-2 mb-3">
+                <button class="btn btn-outline-primary" type="submit" style="height: 60px">Send</button>
+            </div>
+            <input id="ArticleId" hidden type="text" value="@Html.DisplayFor(model => model.Id)" />
+        </div>
+    </form>
+    <div id="alert-body" class="alert alert-danger" role="alert" style="display: none;">
+        <strong>Holy guacamole!</strong> An error occurred while we were processing your request, try again or stop messing with our site! :)
+        <button id="alert-button" type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div id="comment-section">
+        @foreach (var item in Model.Comments.OrderByDescending(e => e.CreationTimestamp))
+        {
+            <div name="@Html.DisplayFor(modelItem => item.Id)" class="card text-dark bg-light mb-3" style="max-width: 100%;">
+                <div class="row h-120px">
+                    <div class="col-md-2 h-100">
+                        <img class="rounded card-img h-100" src="@Html.DisplayFor(modelItem => item.User.ImageLocation)" />
+                    </div>
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <a asp-controller="Users" asp-action="Profile" asp-route-id="@item.UserId" class="h5 card-title" style="color: black">@Html.DisplayFor(modelItem => item.User.FullName)</a>
+                            <p class="card-text">@Html.DisplayFor(modelItem => item.Body)</p>
+                        </div>
+                    </div>
+                </div>
+                @if (User.FindFirstValue(ClaimTypes.NameIdentifier).Equals(item.UserId.ToString()) ||
+                  User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()))
+                {
+                    <div class="card-footer bg-light">
+                        <button type="button" class="btn btn-link"
+                                data-toggle="modal"
+                                data-target="#commentEditModal"
+                                data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
+                                data-id="@Html.DisplayFor(modelItem => item.Id)">
+                            Edit
+                        </button> |
+                        <button type="button" class="btn btn-link"
+                                data-toggle="modal"
+                                data-target="#commentDeleteModal"
+                                data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
+                                data-id="@Html.DisplayFor(modelItem => item.Id)">
+                            Delete
+                        </button>
+                    </div>
+                }
+            </div>
+        }
+    </div>
 </div>
-<div>
-    <h4>Comments</h4>
-    <hr />
-    @foreach (var item in Model.Comments.OrderByDescending(e => e.CreationTimestamp))
-    {
-        <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayFor(modelItem => item.User.FullName)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(modelItem => item.Body)
-            </dd>
-        </dl>
-        <dl class="row">
-            <dd class="col-sm-4 offset-2">
-                @Html.DisplayFor(modelItem => item.CreationTimestamp)
-            </dd>
-            <dd class="col-sm-6">
-                <a asp-controller="Comments" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-controller="Comments" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </dd>
-        </dl>
-    }
+
+<div class="modal fade" id="commentDeleteModal" tabindex="-1" role="dialog" aria-labelledby="commentDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form id="comment-delete">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commentDeleteModalLabel">Are you sure you want to delete this comment?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h6></h6>
+                    <textarea class="form-control" disabled></textarea>
+                    <input id="comment-delete-id" hidden type="text" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="modal fade" id="articleDeleteModal" tabindex="-1" role="dialog" aria-labelledby="articleDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="articleDeleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this article?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="submit" value="Delete" class="btn btn-danger" />
+                    </form>
+                </div>
+        </div>
+    </div>
 </div>
+
+<div class="modal fade" id="commentEditModal" tabindex="-1" role="dialog" aria-labelledby="commentEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form id="comment-edit">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commentEditModalLabel">Edit</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="comment-edit-body" class="form-control" maxlength="200" minlength="5" required></textarea>
+                    <input id="comment-edit-id" hidden type="text" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-info">Edit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/articleDetails.css">
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        function gettoken() {
+            var token = '@Html.AntiForgeryToken()';
+            token = $(token).val();
+            return token;
+        }
+    </script>
+
+    <script id="commentTemplate" type="text/html">
+        <div name="{id}" class="card text-dark bg-light mb-3" style="max-width: 100%;">
+            <div class="row h-120px">
+                <div class="col-md-2 h-100">
+                    <img class="rounded card-img h-100" src="{imageLocation}" />
+                </div>
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <a href="/Users/Profile/{userId}" class="h5 card-title" style="color: black">{fullName}</a>
+                        <p class="card-text">{body}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-light">
+                <button type="button" class="btn btn-link"
+                        data-toggle="modal"
+                        data-target="#commentEditModal"
+                        data-fullname="{fullName}"
+                        data-id="{id}">
+                    Edit
+                </button> |
+                <button type="button" class="btn btn-link"
+                        data-toggle="modal"
+                        data-target="#commentDeleteModal"
+                        data-fullname="{fullName}"
+                        data-id="{id}">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </script>
+
+    <script src="~/js/ArticleDetails.js"></script>
+}

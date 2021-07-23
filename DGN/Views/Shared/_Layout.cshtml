@@ -1,11 +1,17 @@
-﻿<!DOCTYPE html>
+@using Microsoft.AspNetCore.Http;
+@using System.Security.Claims;
+@using DGN.Models;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - DGN</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @*<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">*@
     <link rel="stylesheet" href="~/css/layout.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
@@ -20,11 +26,23 @@
                         aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand d-none d-lg-block" style="margin: 0; float: none;" href="#home">
+                <a class="navbar-brand d-none d-lg-block" style="margin: 0; float: none;" asp-controller="Articles" asp-action="Index">
                     <img src="~/images/logo.png" />
                 </a>
                 <div class="collapse navbar-collapse" id="navbarToggler">
                     <ul class="navbar-nav nav-menu mr-auto mt-2 mt-lg-0">
+                        @if (User.Identity.Name != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Users" asp-action="Profile" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Hello @User.Identity.Name!</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Users" asp-action="Register">Hello Guest!</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link" href="#home">PC</a>
                         </li>
@@ -39,12 +57,36 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav nav-menu ml-auto">
+                        @if (User.Identity.Name != null)
+                        {
                         <li class="nav-item btn-item">
-                            <a href="#" class="nav-btn register-btn">Register</a>
+
+                            <div class="dropdown show">
+                                <a class="nav-btn login-btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bi-wrench"></i>
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" asp-controller="Users" asp-action="ChangePassword" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Change password</a>
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                            </div>
                         </li>
-                        <li class="nav-item last btn-item">
-                            <a href="#" class="nav-btn login-btn">Login</a>
-                        </li>
+                            <li class="nav-item last btn-item">
+                                <a asp-controller="Users" asp-action="Logout" class="nav-btn login-btn">Logout</a>
+                            </li>
+                        }
+                        @if (User.Identity.Name == null)
+                        {
+                            <li class="nav-item btn-item">
+                                <a asp-controller="Users" asp-action="Register" class="nav-btn register-btn">Register</a>
+                            </li>
+                            <li class="nav-item last btn-item">
+                                <a asp-controller="Users" asp-action="Login" class="nav-btn login-btn">Login</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </nav>
@@ -53,14 +95,15 @@
     <main role="main" class="main-body pb-3">
         @RenderBody()
     </main>
-   
+
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - DGN - <a asp-area="" asp-controller="Branches">Contact us</a>
+            &copy; 2021 - DGN - <a asp-action="Index" asp-controller="Branches">Contact us</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>*@
     <script src="~/js/layout.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

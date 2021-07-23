@@ -1,77 +1,80 @@
-﻿@model DGN.Models.User
+@model DGN.Models.User
 
 @{
     ViewData["Title"] = "Register";
 }
 
-<h1>Register</h1>
-
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Register">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Firstname" class="control-label"></label>
-                <input asp-for="Firstname" class="form-control" />
-                <span asp-validation-for="Firstname" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Lastname" class="control-label"></label>
-                <input asp-for="Lastname" class="form-control" />
-                <span asp-validation-for="Lastname" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Birthday" class="control-label"></label>
-                <input asp-for="Birthday" class="form-control" />
-                <span asp-validation-for="Birthday" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Role" class="control-label"></label>
-                <select asp-for="Role" class="form-control">
-                    <option value="Admin"> Admin </option>
-                    <option value="Author"> Author </option>
-                    <option value="Client" selected> Client </option>
-                </select>
-                <span asp-validation-for="Role" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="About" class="control-label"></label>
-                <textarea asp-for="About" class="form-control"></textarea>
-                <span asp-validation-for="About" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Password</label>
-                <input type="text" name="plainPass" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label class="control-label">Confirm Password</label>
-                <input type="text" name="confirmPass" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-primary" />
-            </div>
-        </form>
-        @if (ViewBag.Error != null)
-        {
-            <div class="text-danger">@ViewBag.Error</div>
-        }
-    </div>
+<div class="container">
+    <section id="formSec" class="">
+        <div class="container d-flex align-items-center justify-content-center">
+            <aside>
+                <div class="inner">
+                    <div class="formTitle">
+                        <h2>Register</h2>
+                    </div>
+                    <hr class="sep">
+                    <form asp-action="Register" id="registerForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Username" class="control-label"></label>
+                            <input asp-for="Username" class="form-control" />
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Firstname" class="control-label"></label>
+                            <input asp-for="Firstname" class="form-control" />
+                            <span asp-validation-for="Firstname" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Lastname" class="control-label"></label>
+                            <input asp-for="Lastname" class="form-control" />
+                            <span asp-validation-for="Lastname" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Birthday" class="control-label"></label>
+                            <input asp-for="Birthday" class="form-control" />
+                            <span asp-validation-for="Birthday" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="About" class="control-label"></label>
+                            <textarea asp-for="About" class="form-control"></textarea>
+                            <span asp-validation-for="About" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Password</label>
+                            <input type="password" id="Password" name="plainPass" class="form-control" />
+                            <span id="passMessage"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPass" class="form-control" />
+                            <span id="confPassMessage"></span>
+                        </div>
+                        <span id="notMatchPassMessage"></span>
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="text-danger">@ViewBag.Error</div>
+                        }
+                        <div class="form-group">
+                            <input id="submit" disabled type="submit" value="Register" class="btn btn-primary" />
+                        </div>
+                    </form>
+                    <div>
+                        Already registered? <a asp-action="Login">Click here</a> to login.
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </section>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="~/js/register.js"></script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
