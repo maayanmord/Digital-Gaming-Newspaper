@@ -1,3 +1,7 @@
 ﻿.h-120px {
     height: 120px;
 }
+
+#articleText {
+    white-space: pre-line;
+}
