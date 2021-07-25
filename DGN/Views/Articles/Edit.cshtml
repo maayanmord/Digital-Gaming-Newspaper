@@ -4,55 +4,63 @@
     ViewData["Title"] = "Edit";
 }
 
+
 <div class="container">
-    <h1>Edit</h1>
-
-    <h4>Article</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-12">
-            <form asp-action="Edit" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="Id" />
-                <div class="form-group">
-                    <label asp-for="Title" class="control-label"></label>
-                    <input asp-for="Title" class="form-control" />
-                    <span asp-validation-for="Title" class="text-danger"></span>
+    <section id="formSec" class="">
+        <div class="container d-flex align-items-center justify-content-center">
+            <aside>
+                <div class="inner">
+                    <div class="formTitle">
+                        <h2>Edit</h2>
+                    </div>
+                    <hr class="sep">
+                    <form asp-action="Edit" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group">
+                            <label asp-for="Title" class="control-label"></label>
+                            <input asp-for="Title" class="form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Body" class="control-label"></label>
+                            <textarea asp-for="Body" class="form-control"></textarea>
+                            <span asp-validation-for="Body" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CategoryId" class="control-label"></label>
+                            <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CreationTimestamp" class="control-label"></label>
+                            <input asp-for="CreationTimestamp" class="form-control" readonly />
+                            <span asp-validation-for="CreationTimestamp" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="LastUpdatedTimestamp" class="control-label"></label>
+                            <input asp-for="LastUpdatedTimestamp" class="form-control" readonly />
+                            <span asp-validation-for="LastUpdatedTimestamp" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Upload Article Image</label>
+                            <input type="file" name="ImageFile" id="ImageFile" class="form-control-file" accept="image/x-png,image/jpg,image/jpeg">
+                        </div>
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="text-danger">@ViewBag.Error</div>
+                        }
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </form>
+                    <div>
+                        <a asp-action="Details" asp-route-id="@Model.Id">Back to Article</a>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Body" class="control-label"></label>
-                    <textarea asp-for="Body" class="form-control"></textarea>
-                    <span asp-validation-for="Body" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="CategoryId" class="control-label"></label>
-                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                    <span asp-validation-for="CategoryId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="CreationTimestamp" class="control-label"></label>
-                    <input asp-for="CreationTimestamp" class="form-control" readonly />
-                    <span asp-validation-for="CreationTimestamp" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="LastUpdatedTimestamp" class="control-label"></label>
-                    <input asp-for="LastUpdatedTimestamp" class="form-control" readonly />
-                    <span asp-validation-for="LastUpdatedTimestamp" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label>Upload Article Image</label>
-                    <input type="file" name="ImageFile" id="ImageFile" class="form-control-file">
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </form>
+            </aside>
         </div>
-    </div>
-
-    <div>
-        <a asp-action="Details" asp-route-id="@Model.Id">Back to Article</a>
-    </div>
+    </section>
 </div>
 
 @section Scripts {

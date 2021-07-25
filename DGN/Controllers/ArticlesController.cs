@@ -74,10 +74,14 @@ namespace DGN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IFormFile ImageFile, [Bind("Id,Title,Body,CategoryId")] Article article)
         {
-            if (ModelState.IsValid && !ArticleExists(article.Title))
+            if (ArticleExists(article.Title))
+            {
+                ModelState.AddModelError("Title", "The title already exists");
+            }
+            else if (ModelState.IsValid)
             {
                 // If an image were sent to the server
-                if (ImageFile != null && ImageFile.Length > 0)
+                if (ImageFile != null)
                 {
                     string imageName = "Article" + article.Id + System.IO.Path.GetExtension(ImageFile.FileName);
                     bool uploaded = await _service.UploadImage(ImageFile, imageName);
@@ -88,6 +92,8 @@ namespace DGN.Controllers
                     else
                     {
                         ViewData["Error"] = "Can't upload this image, make sure its png,jpeg,jpg";
+                        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", article.CategoryId);
+                        return View(article);
                     }
                 }
                 else
@@ -131,6 +137,9 @@ namespace DGN.Controllers
         public async Task<IActionResult> Edit(int id, IFormFile ImageFile, [Bind("Id,Title,Body,ImageLocation,CategoryId")] Article newArticle)
         {
             var currArticle = await _context.Article.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+            newArticle.ImageLocation = currArticle.ImageLocation;
+            newArticle.CreationTimestamp = currArticle.CreationTimestamp;
+            newArticle.UserId = currArticle.UserId;
             if ((currArticle == null) || (id != newArticle.Id))
             {
                 return NotFound();
@@ -142,9 +151,12 @@ namespace DGN.Controllers
                 NotDuplicatedTitle = !ArticleExists(newArticle.Title);
             }
 
-            if ((ModelState.IsValid) && (NotDuplicatedTitle))
+            if (!NotDuplicatedTitle)
             {
-                newArticle.ImageLocation = currArticle.ImageLocation;
+                ModelState.AddModelError("Title", "The title already exists");
+            } 
+            else if (ModelState.IsValid)
+            {
                 if (ImageFile != null)
                 {
                     string imageName = "Article" + newArticle.Id + System.IO.Path.GetExtension(ImageFile.FileName);
@@ -162,13 +174,13 @@ namespace DGN.Controllers
                     else
                     {
                         ViewData["Error"] = "Can't upload this image, make sure its png,jpeg,jpg";
+                        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", newArticle.CategoryId);
+                        return View(newArticle);
                     }
                 }
                 try
                 {
                     _context.Update(newArticle);
-                    newArticle.CreationTimestamp = currArticle.CreationTimestamp;
-                    newArticle.UserId = currArticle.UserId;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
