@@ -101,7 +101,7 @@ namespace DGN.Controllers
                     }
                     else
                     {
-                        ViewData["Error"] = "can't upload this image";
+                        ViewData["Error"] = "Can't upload this image, make sure its png,jpeg,jpg";
                         return View(user);
                     }
                 }
@@ -474,7 +474,7 @@ namespace DGN.Controllers
                     }
                     else
                     {
-                        ViewData["Error"] = "can't upload the image file";
+                        ViewData["Error"] = "Can't upload this image, make sure its png,jpeg,jpg";
                     }
                 }
                 try
