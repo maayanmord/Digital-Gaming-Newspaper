@@ -106,10 +106,52 @@ function geocodeQuery(query) {
         },
         errorCallback: function (e) {
             //If there is an error, alert the user about it.
-            alert("No results found.");
+            $('#message').html('No results found.').css('color', 'red');
         }
     };
 
     //Make the geocode request.
     searchManager.geocode(searchRequest);
+}
+
+function GetBranchAddress() {
+    map = new Microsoft.Maps.Map('#myMap', {
+        credentials: 'AoJqoJIUGkHJa_PyKKY6Bfmq8csIOizScrqoo53GElotN2XfQecO8ExsN4y2NJXV',
+        center: new Microsoft.Maps.Location(locationLatitude, locationLongitude),
+        zoom: 11
+    });
+
+    //Make a request to reverse geocode the center of the map.
+    reverseGeocode();
+}
+
+function reverseGeocode() {
+    //If search manager is not defined, load the search module.
+    if (!searchManager) {
+        //Create an instance of the search manager and call the reverseGeocode function again.
+        Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+            searchManager = new Microsoft.Maps.Search.SearchManager(map);
+            reverseGeocode();
+        });
+    } else {
+        var searchRequest = {
+            location: map.getCenter(),
+            callback: function (r) {
+                //Print the branch address
+                $('#branchAddress').html(r.name);
+
+                //Determine a bounding box to best view the results.
+                map.entities.push(new Microsoft.Maps.Pushpin(map.getCenter(), {
+                    text: ''
+                }));
+            },
+            errorCallback: function (e) {
+                //If there is an error, alert the user about it.
+                $('#branchAddress').html('Unable to reverse geocode location.').css('color', 'red');
+            }
+        };
+
+        //Make the reverse geocode request.
+        searchManager.reverseGeocode(searchRequest);
+    }
 }

@@ -40,6 +40,7 @@
                                 </a>
                             </p>
                             <input id='searchTbx' type='text' />
+                            <span id='message'></span>
                         </div>
 
                         <div class="row">
@@ -75,7 +76,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-        var branchesList = @Html.Raw(Html.Raw(Json.Serialize(Model)));
+        var branchesList = null;
     </script>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario' async defer></script>
     <script src="~/js/branches.js" asp-append-version="true"></script>
