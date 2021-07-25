@@ -1,6 +1,9 @@
-﻿.h-120px {
+.h-120px {
     height: 120px;
 }
+
+#articleText {
+    white-space: pre-line;
 
 .article-image {
     height: 500px;

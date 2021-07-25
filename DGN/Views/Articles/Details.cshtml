@@ -34,7 +34,7 @@
             <span class="text-white badge bg-secondary">@Html.DisplayFor(model => model.Category.CategoryName)</span>
         </div>
         <div class="card-body">
-            <p class="card-text">@Html.DisplayFor(model => model.Body)</p>
+            <p class="card-text" id="articleText">@Html.DisplayFor(model => model.Body)</p>
         </div>
         <div class="card-footer text-muted">
             Creation Date @Html.DisplayFor(model => model.CreationTimestamp)
