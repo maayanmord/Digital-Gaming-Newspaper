@@ -81,7 +81,7 @@ namespace DGN.Controllers
             else if (ModelState.IsValid)
             {
                 // If an image were sent to the server
-                if (ImageFile != null && ImageFile.Length > 0)
+                if (ImageFile != null)
                 {
                     string imageName = "Article" + article.Id + System.IO.Path.GetExtension(ImageFile.FileName);
                     bool uploaded = await _service.UploadImage(ImageFile, imageName);
