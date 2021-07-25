@@ -194,10 +194,15 @@ namespace DGN.Controllers
 
         public async Task<IActionResult> AdvancedSearch(int? categoryId, string author, string title)
         {
+            if(categoryId == -1)
+            {
+                categoryId = null;
+            }
             return Json(await _context.Article.Include(a => a.User).Where(a => (a.CategoryId.Equals(categoryId) || categoryId == null) && 
             (a.Title.Contains(title) || title == null) && 
             ((a.User.Firstname + " " + a.User.Lastname).Contains(author) || author == null)).Select(a => new
             {
+                a.Id,
                 a.Title,
                 a.ImageLocation,
                 a.CreationTimestamp,

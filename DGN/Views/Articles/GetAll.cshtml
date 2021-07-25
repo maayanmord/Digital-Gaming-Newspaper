@@ -2,7 +2,7 @@
 
 <section class="all-articles">
     <div class="input-group" id="adv-search">
-        <input type="text" class="form-control" placeholder="Search for Articles" />
+        <input id="normalSearchInput" type="text" class="form-control" placeholder="Search for Articles" />
         <div class="input-group-btn">
             <div class="btn-group" role="group">
                 <div class="dropdown dropdown-lg">
@@ -19,19 +19,19 @@
                                 <input id="authorInput" class="form-control" type="text" />
                             </div>
                             <div class="form-group">
-                                <label for="contain">Contains the words</label>
+                                <label for="contain">Title</label>
                                 <input id="containsWordsInput" class="form-control" type="text" />
                             </div>
                             <button type="submit" id="advancedSubmitButton" class="btn btn-primary"><i class="fas fa-search"></i></button>
                         </form>
                     </div>
                 </div>
-                <button type="button" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                <button id="normalSubmitButton" type="button" class="btn btn-primary"><i class="fas fa-search"></i></button>
             </div>
         </div>
     </div>
     <h2>All Articles</h2>
-    <div class="tbl">
+    <div id="all-articles" class="tbl">
         @foreach (var item in Model)
         {
             <article class="article">
@@ -56,8 +56,24 @@
 </section>
 
 @section Scripts {
-    <script>
-        var articlesList = @Html.Raw(Html.Raw(Json.Serialize(Model)));
+    <script type="text/html" id="hidden-template">
+        <article class="article">
+            <div class="left">
+                <a href="/Articles/Details/{id}" class="thumb">
+                    <img src="{imageLocation}"
+                         alt="{title}" class="thumb" />
+                </a>
+            </div>
+            <div class="right">
+                <div class="info">
+                    <time datetime="{creationTimestamp"></time>
+                </div>
+                <h3>
+                    <a href="/Articles/Details/{id}">{title}</a>
+                </h3>
+                <p class="fifty-chars">{body}</p>
+            </div>
+        </article>
     </script>
     <script src="~/js/GetAllArticles.js" asp-append-version="true"></script>
 }
