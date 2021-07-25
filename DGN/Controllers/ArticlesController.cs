@@ -192,12 +192,17 @@ namespace DGN.Controllers
             return Json(await _context.Article.Where(a => (a.Title.Contains(queryTitle))).ToListAsync());
         }
 
-        public async Task<IActionResult> AdvancedSearch(string categoryId, string author, string title)
+        public async Task<IActionResult> AdvancedSearch(int? categoryId, string author, string title)
         {
-            return Json(await _context.Article.Include(a => a.User)
-            .Where(a => (a.CategoryId.Equals(categoryId) || categoryId == null) && 
+            return Json(await _context.Article.Include(a => a.User).Where(a => (a.CategoryId.Equals(categoryId) || categoryId == null) && 
             (a.Title.Contains(title) || title == null) && 
-            (a.User.Username.Contains(author) || author == null)).ToListAsync());
+            ((a.User.Firstname + " " + a.User.Lastname).Contains(author) || author == null)).Select(a => new
+            {
+                a.Title,
+                a.ImageLocation,
+                a.CreationTimestamp,
+                a.Body
+            }).ToListAsync());
         }
 
         public async Task<IActionResult> GetAll()

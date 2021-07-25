@@ -56,11 +56,14 @@
 </section>
 
 @section Scripts {
-    <script src="~/js/GetAll.js" asp-append-version="true"></script>
+    <script>
+        var articlesList = @Html.Raw(Html.Raw(Json.Serialize(Model)));
+    </script>
+    <script src="~/js/GetAllArticles.js" asp-append-version="true"></script>
 }
 
 @section Styles {
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
     <link rel="stylesheet" href="~/css/index.css" />
-    <link rel="stylesheet" href="~/css/getAll.css" />
+    <link rel="stylesheet" href="~/css/getAllArticles.css" />
 }
