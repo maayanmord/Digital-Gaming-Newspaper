@@ -78,7 +78,7 @@ namespace DGN.Controllers
         // POST: Users/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(IFormFile ImageFile, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,About")] User user, string plainPass, string confirmPass)
+        public async Task<IActionResult> Register(string confirmPass, IFormFile ImageFile, string plainPass, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,About")] User user)
         {
             if (UsernameExists(user.Username))
             {
@@ -91,7 +91,7 @@ namespace DGN.Controllers
             if (CanUsePassword(plainPass, confirmPass) && ModelState.IsValid)
             {
                 user.Password = new Password(user.Id, plainPass, user);
-                if (ImageFile != null && ImageFile.Length > 0)
+                if (ImageFile != null)
                 {
                     string imageName = user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
                     bool uploaded = await _service.UploadImage(ImageFile, imageName);
@@ -102,6 +102,7 @@ namespace DGN.Controllers
                     else
                     {
                         ViewData["Error"] = "can't upload this image";
+                        return View(user);
                     }
                 }
                 else
