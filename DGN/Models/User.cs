@@ -6,6 +6,33 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DGN.Models
 {
+    public class MinimumAgeAttribute : ValidationAttribute
+    {
+        private int minimumAge;
+        private string error;
+        public MinimumAgeAttribute(int minAge, string ErrorMessage)
+        {
+            minimumAge = minAge;
+            error = ErrorMessage;
+            
+        }
+
+        public override bool IsValid(object value)
+        {
+            DateTime date;
+            if (DateTime.TryParse(value.ToString(), out date))
+            {
+                return date.AddYears(minimumAge) < DateTime.Now;
+            }
+
+            return false;
+        }
+
+        public override string FormatErrorMessage(string name)
+        {
+            return error;
+        }
+    }
     public enum UserRole
     {
         Client, 
@@ -36,6 +63,7 @@ namespace DGN.Models
         public string Lastname { get; set; }
 
         [DataType(DataType.Date)]
+        [MinimumAgeAttribute(13, "User must be older than 13 to register")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime Birthday { get; set; }
 
