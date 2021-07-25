@@ -252,6 +252,30 @@ namespace DGN.Controllers
             return Json(await _context.Article.Where(a => (a.Title.Contains(queryTitle))).ToListAsync());
         }
 
+        public async Task<IActionResult> AdvancedSearch(int? categoryId, string author, string title)
+        {
+            if(categoryId == -1)
+            {
+                categoryId = null;
+            }
+            return Json(await _context.Article.Include(a => a.User).Where(a => (a.CategoryId.Equals(categoryId) || categoryId == null) && 
+            (a.Title.Contains(title) || title == null) && 
+            ((a.User.Firstname + " " + a.User.Lastname).Contains(author) || author == null)).Select(a => new
+            {
+                a.Id,
+                a.Title,
+                a.ImageLocation,
+                a.CreationTimestamp,
+                a.Body
+            }).ToListAsync());
+        }
+
+        public async Task<IActionResult> GetAll()
+        {
+            var dGNContext = _context.Article.Include(a => a.Category).Include(a => a.User).OrderByDescending(a => a.CreationTimestamp);
+            return View(await dGNContext.ToListAsync());
+        }
+
         public async Task<IActionResult> GetMostCommentedArticles(int count)
         {
             var query = from comment in _context.Comment

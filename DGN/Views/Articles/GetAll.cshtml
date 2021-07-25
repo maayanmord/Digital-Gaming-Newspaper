@@ -1,0 +1,85 @@
+﻿@model IEnumerable<DGN.Models.Article>
+
+<section class="all-articles">
+    <div class="input-group" id="adv-search">
+        <input id="normalSearchInput" type="text" class="form-control" placeholder="Search for Articles" />
+        <div class="input-group-btn">
+            <div class="btn-group" role="group">
+                <div class="dropdown dropdown-lg">
+                    <button type="button" class="drop-btn btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                    <div class="dropdown-menu dropdown-menu-right" role="menu">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="filter">Choose a category</label>
+                                <select id="categorySelect" class="form-control">
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="contain">Author</label>
+                                <input id="authorInput" class="form-control" type="text" />
+                            </div>
+                            <div class="form-group">
+                                <label for="contain">Title</label>
+                                <input id="containsWordsInput" class="form-control" type="text" />
+                            </div>
+                            <button type="submit" id="advancedSubmitButton" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+                <button id="normalSubmitButton" type="button" class="btn btn-primary"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </div>
+    <h2>All Articles</h2>
+    <div id="all-articles" class="tbl">
+        @foreach (var item in Model)
+        {
+            <article class="article">
+                <div class="left">
+                    <a asp-action="Details" asp-route-id="@item.Id" class="thumb">
+                        <img src="@Html.DisplayFor(modelItem => item.ImageLocation)"
+                             alt="@Html.DisplayFor(modelItem => item.Title)" class="thumb" />
+                    </a>
+                </div>
+                <div class="right">
+                    <div class="info">
+                        <time datetime="@Html.DisplayFor(modelItem => item.CreationTimestamp)"></time>
+                    </div>
+                    <h3>
+                        <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Title)</a>
+                    </h3>
+                    <p class="fifty-chars">@Html.DisplayFor(modelItem => item.Body)</p>
+                </div>
+            </article>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <script type="text/html" id="hidden-template">
+        <article class="article">
+            <div class="left">
+                <a href="/Articles/Details/{id}" class="thumb">
+                    <img src="{imageLocation}"
+                         alt="{title}" class="thumb" />
+                </a>
+            </div>
+            <div class="right">
+                <div class="info">
+                    <time datetime="{creationTimestamp"></time>
+                </div>
+                <h3>
+                    <a href="/Articles/Details/{id}">{title}</a>
+                </h3>
+                <p class="fifty-chars">{body}</p>
+            </div>
+        </article>
+    </script>
+    <script src="~/js/GetAllArticles.js" asp-append-version="true"></script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" />
+    <link rel="stylesheet" href="~/css/index.css" />
+    <link rel="stylesheet" href="~/css/getAllArticles.css" />
+}
