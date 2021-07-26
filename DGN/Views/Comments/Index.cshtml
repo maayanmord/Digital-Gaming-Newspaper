@@ -21,27 +21,33 @@
                 <div class="row h-120px">
                     <div class="col-md-10">
                         <div class="card-body">
-                            <a asp-controller="Users" asp-action="Profile" asp-route-id="@item.UserId" class="h5 card-title" style="color: black">@Html.DisplayFor(modelItem => item.User.FullName)</a>
+                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.User.FullName) (<a asp-controller="Users" asp-action="Profile" asp-route-id="@item.UserId">@Html.DisplayFor(modelItem => item.User.Username)</a>)</h5>
                             <p class="card-text">@Html.DisplayFor(modelItem => item.Body)</p>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer bg-light">
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>   |
-                    <button type="button" class="btn btn-link"
-                            data-toggle="modal"
-                            data-target="#commentEditModal"
-                            data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
-                            data-id="@Html.DisplayFor(modelItem => item.Id)">
-                        Edit
-                    </button> |
-                    <button type="button" class="btn btn-link"
-                            data-toggle="modal"
-                            data-target="#commentDeleteModal"
-                            data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
-                            data-id="@Html.DisplayFor(modelItem => item.Id)">
-                        Delete
-                    </button>
+                <div class="card-footer text-muted">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-link"
+                                    data-toggle="modal"
+                                    data-target="#commentEditModal"
+                                    data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
+                                    data-id="@Html.DisplayFor(modelItem => item.Id)">
+                                Edit
+                            </button> |
+                            <button type="button" class="btn btn-link"
+                                    data-toggle="modal"
+                                    data-target="#commentDeleteModal"
+                                    data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
+                                    data-id="@Html.DisplayFor(modelItem => item.Id)">
+                                Delete
+                            </button>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <p class="font-italic">Creation Date: @Html.DisplayFor(modelItem => item.CreationTimestamp)</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         }
@@ -107,31 +113,35 @@
     <script id="commentTemplate" type="text/html">
         <div name="{id}" class="card text-dark bg-light mb-3" style="max-width: 100%;">
             <div class="row h-120px">
-                <div class="col-md-2 h-100">
-                    <img class="rounded card-img h-100" src="{imageLocation}" />
-                </div>
                 <div class="col-md-10">
                     <div class="card-body">
-                        <a href="/Users/Profile/{userId}" class="h5 card-title" style="color: black">{fullName}</a>
+                        <h5 class="card-title">{fullName} (<a href="/Users/Profile/{userId}">{username}</a>)</h5>
                         <p class="card-text">{body}</p>
                     </div>
                 </div>
             </div>
-            <div class="card-footer bg-light">
-                <button type="button" class="btn btn-link"
-                        data-toggle="modal"
-                        data-target="#commentEditModal"
-                        data-fullname="{fullName}"
-                        data-id="{id}">
-                    Edit
-                </button> |
-                <button type="button" class="btn btn-link"
-                        data-toggle="modal"
-                        data-target="#commentDeleteModal"
-                        data-fullname="{fullName}"
-                        data-id="{id}">
-                    Delete
-                </button>
+            <div class="card-footer text-muted">
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-link"
+                                data-toggle="modal"
+                                data-target="#commentEditModal"
+                                data-fullname="{fullName}"
+                                data-id="{id}">
+                            Edit
+                        </button> |
+                        <button type="button" class="btn btn-link"
+                                data-toggle="modal"
+                                data-target="#commentDeleteModal"
+                                data-fullname="{fullName}"
+                                data-id="{id}">
+                            Delete
+                        </button>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <p class="font-italic">Creation Date: {creationTimestamp}</p>
+                    </div>
+                </div>
             </div>
         </div>
     </script>
