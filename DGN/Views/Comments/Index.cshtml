@@ -5,11 +5,8 @@
 }
 
 <div class="container">
+    <h2 class="text-center">Comments</h2>
     <br />
-    <p class="h1">All Comments</p>
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
     <div id="alert-body" class="alert alert-danger" role="alert" style="display: none;">
         <strong>Holy guacamole!</strong> An error occurred while we were processing your request, try again or stop messing with our site! :)
         <button id="alert-button" type="button" class="close" aria-label="Close">
@@ -30,7 +27,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-light">
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>   |
                     <button type="button" class="btn btn-link"
                             data-toggle="modal"
                             data-target="#commentEditModal"
