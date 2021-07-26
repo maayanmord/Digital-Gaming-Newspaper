@@ -506,5 +506,12 @@ namespace DGN.Controllers
             string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             return userId.Equals(id.ToString()) || userRole.Equals(UserRole.Admin.ToString());
         }
+
+
+        // GET: Users/Statistics
+        public IActionResult Statistics()
+        {
+            return View();
+        }
     }
 }

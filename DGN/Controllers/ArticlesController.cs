@@ -255,5 +255,15 @@ namespace DGN.Controllers
         {
             return Json(await _context.Article.Include(a => a.UserLikes).OrderByDescending(a => a.UserLikes.Count()).Take(count).ToListAsync());
         }
+
+        public async Task<IActionResult> GetArticlesByCategory()
+        {
+            var query = from article in _context.Article
+                        group article by new { article.CategoryId } into ArticleCategoryGroup
+                        orderby ArticleCategoryGroup.Count() descending
+                        select new { CategoryId = ArticleCategoryGroup.Key.CategoryId , count = ArticleCategoryGroup.Count() };
+
+            return Json(await query.ToListAsync());
+        }
     }
 }

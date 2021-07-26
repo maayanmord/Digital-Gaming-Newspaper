@@ -68,7 +68,7 @@
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" asp-controller="Users" asp-action="ChangePassword" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Change password</a>
-                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" asp-controller="Users" asp-action="Statistics">Statistics</a>
                                     <a class="dropdown-item" href="#">Another action</a>
                                     <a class="dropdown-item" href="#">Something else here</a>
                                 </div>
