@@ -5,8 +5,33 @@
 }
 
 <div class="container">
-    <h2 class="text-center">Comments</h2>
-    <br />
+    <div class="row">
+        <h2 class="text-left col-md-9">Comments</h2>
+        <div class="dropdown col-md-3">
+            <button class="w-100 btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Search
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div class="container">
+                    <form class="w-100 form-horizontal" role="form" method="post">
+                        <div class="form-group">
+                            <label for="filter">Full Name</label>
+                            <input id="fullnameInput" class="form-control" type="text" />
+                        </div>
+                        <div class="form-group">
+                            <label for="contain">User Name</label>
+                            <input id="usernameInput" class="form-control" type="text" />
+                        </div>
+                        <div class="form-group">
+                            <label for="contain">Comment Body</label>
+                            <input id="commentBodyInput" class="form-control" type="text" />
+                        </div>
+                        <button type="submit" id="searchSubmitButton" class="btn btn-primary">Search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="alert-body" class="alert alert-danger" role="alert" style="display: none;">
         <strong>Holy guacamole!</strong> An error occurred while we were processing your request, try again or stop messing with our site! :)
         <button id="alert-button" type="button" class="close" aria-label="Close">
@@ -147,4 +172,5 @@
     </script>
     
     <script src="~/js/ArticleDetails.js"></script>
+    <script src="~/js/CommentsIndex.js"></script>
 }

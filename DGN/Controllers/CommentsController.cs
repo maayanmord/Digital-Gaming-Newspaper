@@ -21,6 +21,7 @@ namespace DGN.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Comments
         public async Task<IActionResult> Index()
         {
@@ -136,6 +137,20 @@ namespace DGN.Controllers
         private bool CommentExists(int id)
         {
             return _context.Comment.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> Search(string body, string fullname, string username)
+        {
+            return Json(await _context.Comment.Include(c => c.User).Where(c => (c.Body.Contains(body) || body == null) &&
+                                                                         ((c.User.Firstname + " " + c.User.Lastname).Contains(fullname) || fullname == null) &&
+                                                                         (c.User.Username.Contains(username) || username == null)).Select(c => new
+                                                                         {
+                                                                             c.Id,
+                                                                             c.Body,
+                                                                             c.User.FullName,
+                                                                             c.User.Username,
+                                                                             CreationTimestamp = c.CreationTimestamp.ToString("g")
+                                                                         }).ToListAsync());
         }
     }
 }
