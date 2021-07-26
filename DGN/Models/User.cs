@@ -63,7 +63,7 @@ namespace DGN.Models
         public string Lastname { get; set; }
 
         [DataType(DataType.Date)]
-        [MinimumAgeAttribute(13, "User must be older than 13 to use our site")]
+        [MinimumAgeAttribute(9, "User must be older than 9 to use our site")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime Birthday { get; set; }
 
