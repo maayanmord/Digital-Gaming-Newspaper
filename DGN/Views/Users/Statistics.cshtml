@@ -1,9 +1,40 @@
-﻿
-<!DOCTYPE html>
-<meta charset="utf-8">
+﻿@model DGN.Models.User
 
-<!-- Create a div where the graph will take place -->
-<div id="my_dataviz"></div>
+@{
+    ViewData["Title"] = "Statistics";
+}
+
+<div class="container">
+    <section id="formSec" class="">
+        <div class="container d-flex align-items-center justify-content-center">
+            <aside style="margin-right: 5%">
+                <div class="inner">
+                    <div class="formTitle">
+                        <h2>Articles per Category</h2>
+                    </div>
+                    <meta charset="utf-8">
+
+                    <!-- Create a div where the graph will take place -->
+                    <div id="articles_per_category"></div>
+
+                </div>
+            </aside>
+            <aside>
+                <div class="inner">
+                    <div class="formTitle">
+                        <h2>Articles over time</h2>
+                    </div>
+                    <meta charset="utf-8">
+
+                    <!-- Create a div where the graph will take place -->
+                    <div id="articles_over_time"></div>
+
+                </div>
+            </aside>
+        </div>
+    </section>
+</div>
+<span id="alert-body"></span>
 
 @section Scripts {
     <script src="https://d3js.org/d3.v4.js"></script>

@@ -1,38 +1,42 @@
-﻿
-    // set the dimensions and margins of the graph
-    var width = 450
-    height = 450
-    margin = 40
+﻿// articles_per_category
+// set the dimensions and margins of the graph
+var width = 450
+height = 450
+margin = 40
 
-    // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-    var radius = Math.min(width, height) / 2 - margin
+// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+var radius = Math.min(width, height) / 2 - margin
 
-    // append the svg object to the div called 'my_dataviz'
-    var svg = d3.select("#my_dataviz")
+// append the svg object to the div called 'my_dataviz'
+var svg_articles_per_category = d3.select("#articles_per_category")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    // Create dummy data
-var data = {  }
+// Create dummy data
+var dataByCategorty = {}
+var ArticlesCount = 0;
 
 $.ajax({
     type: "GET",
     url: "/Articles/GetArticlesByCategory",
     success: function (dataJson) {
         dataJson.forEach(currCategory => {
-            data[currCategory.categoryId] = currCategory.count;
+            ArticlesCount += currCategory.articlesInCategory;
+            dataByCategorty[currCategory.categoryName] = currCategory.articlesInCategory;
         })
-        DrawGraph(data)
     },
-    error: function (data) {
-        $("#alert-body").show();
+    error: function () {
+        $("#alert-body").html('ERROR');
     }
+}).done(function() { 
+    console.log("Done");
+    DrawArticles_per_category(dataByCategorty)
 });
 
-function DrawGraph(data) {
+function DrawArticles_per_category(data) {
     // set the color scale
     var color = d3.scaleOrdinal()
         .domain(data)
@@ -50,7 +54,7 @@ function DrawGraph(data) {
         .outerRadius(radius)
 
     // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
-    svg
+    svg_articles_per_category
         .selectAll('mySlices')
         .data(data_ready)
         .enter()
@@ -62,14 +66,120 @@ function DrawGraph(data) {
         .style("opacity", 0.7)
 
     // Now add the annotation. Use the centroid method to get the best coordinates
-    svg
+    svg_articles_per_category
         .selectAll('mySlices')
         .data(data_ready)
         .enter()
         .append('text')
-        .text(function (d) { return "grp " + d.data.key + "  - " + d.data.value + " articles" })
+        .text(function (d) { return "\"" + d.data.key + "\": " + ((d.data.value * 100) / ArticlesCount).toFixed(2) + "%" })
         .attr("transform", function (d) { return "translate(" + arcGenerator.centroid(d) + ")"; })
         .style("text-anchor", "middle")
         .style("font-size", 17)
+};
 
-}
+
+// /////////////////////////////////////////////////////////
+// articles_over_time
+
+
+// Raw data 
+var dataByDate = []
+
+$.ajax({
+    type: "GET",
+    url: "/Articles/GetArticlesDates",
+    success: function (dataJson) {
+        dataJson.forEach(currDate => {
+            dataByDate.push(Date.parse(currDate));
+        });
+        
+        console.log(dataByDate)
+    },
+    error: function () {
+        $("#alert-body").html('ERROR');
+    }
+}).done(function () {
+    console.log("done");
+    DrawArticles_over_time(dataByDate);
+});
+
+function DrawArticles_over_time(data) {
+    var readableDates = [];
+
+    data.forEach(curr => {
+        date = new Date(curr)
+        date = date.toLocaleString('en-US')
+        console.log(date)
+        readableDates.push(date);
+    })
+
+    var min = d3.min(data);
+    var max = d3.max(data);
+    var domain = [min, max];
+
+    // set the dimensions and margins of the graph
+    var margin = { top: 10, right: 30, bottom: 30, left: 40 },
+        width = 450 - margin.left - margin.right,
+        height = 450 - margin.top - margin.bottom;
+
+    // The number of bins
+    Nbin = 10;
+
+    var x = d3
+        .scaleTime()
+        .domain(domain)
+        .range([0, width]);
+
+    // Build the histogram function and gets the bins
+    var histogram = d3
+        .histogram()
+        .domain(x.domain()) // then the domain of the graphic
+        .thresholds(x.ticks(Nbin)); // then the numbers of bins
+
+    // And apply this function to data to get the bins
+    var bins = histogram(data);
+
+    // Build the top element of the graphic
+    // Add the svg element to the body and set the dimensions and margins of the graph
+    var svg_articles_over_time = d3
+        .select("#articles_over_time")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg_articles_over_time
+        .append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    var y = d3
+        .scaleLinear()
+        .range([height, 0])
+        .domain([
+            0,
+            d3.max(bins, function (d) {
+                return d.length;
+            })
+        ]);
+
+    svg_articles_over_time.append("g").call(d3.axisLeft(y));
+
+    svg_articles_over_time
+        .selectAll("rect")
+        .data(bins)
+        .enter()
+        .append("rect")
+        .attr("x", 1)
+        .attr("transform", function (d) {
+            return "translate(" + x(d.x0) + "," + y(d.length) + ")";
+        })
+        .attr("width", function (d) {
+            return x(d.x1) - x(d.x0) - 1;
+        })
+        .attr("height", function (d) {
+            return height - y(d.length);
+        })
+        .style("fill", "#69b3a2");
+};
