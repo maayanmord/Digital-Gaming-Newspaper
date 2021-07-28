@@ -139,6 +139,7 @@ namespace DGN.Controllers
             return _context.Comment.Any(e => e.Id == id);
         }
 
+        [Authorize]
         public async Task<IActionResult> Search(string body, string fullname, string username)
         {
             return Json(await _context.Comment.Include(c => c.User).Where(c => (c.Body.Contains(body) || body == null) &&
@@ -149,7 +150,9 @@ namespace DGN.Controllers
                                                                              c.Body,
                                                                              c.User.FullName,
                                                                              c.User.Username,
-                                                                             CreationTimestamp = c.CreationTimestamp.ToString("g")
+                                                                             CreationTimestamp = c.CreationTimestamp.ToString("g"),
+                                                                             c.RelatedArticle.Title,
+                                                                             c.RelatedArticleId
                                                                          }).ToListAsync());
         }
     }

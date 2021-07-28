@@ -69,7 +69,10 @@
                                 Delete
                             </button>
                         </div>
-                        <div class="col-md-6 text-right">
+                        <div class="col-md-3">
+                            Article: <a asp-controller="Articles" asp-action="Details" asp-route-id="@item.RelatedArticleId">@Html.DisplayFor(modelItem => item.RelatedArticle.Title)</a>
+                        </div>
+                        <div class="col-md-3 text-right">
                             <p class="font-italic">Creation Date: @Html.DisplayFor(modelItem => item.CreationTimestamp)</p>
                         </div>
                     </div>
@@ -163,7 +166,10 @@
                             Delete
                         </button>
                     </div>
-                    <div class="col-md-6 text-right">
+                    <div class="col-md-3">
+                        Article: <a href="/Articles/Details/{relatedArticleId}">{title}</a>
+                    </div>
+                    <div class="col-md-3 text-right">
                         <p class="font-italic">Creation Date: {creationTimestamp}</p>
                     </div>
                 </div>
