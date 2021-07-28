@@ -59,9 +59,16 @@
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" asp-controller="Users" asp-action="ChangePassword" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Change password</a>
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
+                                    @if ((User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Author.ToString()) || (User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Admin.ToString()))
+                                    {
+                                        <a class="dropdown-item" asp-controller="Articles" asp-action="Create">Create new Article</a>
+                                    }
+                                    @if ((User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Admin.ToString()))
+                                    {
+                                        <a class="dropdown-item" asp-controller="Users" asp-action="Index">Manage Users</a>
+                                        <a class="dropdown-item" asp-controller="Categories" asp-action="Index">Manage Catagories</a>
+                                        <a class="dropdown-item" asp-controller="Comments" asp-action="Index">Manage Comments</a>
+                                    }
                                 </div>
                             </div>
                         </li>
