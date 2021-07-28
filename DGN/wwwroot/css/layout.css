@@ -11,7 +11,6 @@ body {
 }
 
 /* ----- Header ----- */
-
 #header {
     transition: all 0.5s;
     z-index: 997;
@@ -20,10 +19,6 @@ body {
 
     #header.header-scrolled {
         background: rgba(255, 255, 255, 0.9);
-    }
-
-    #header .logo img {
-        max-height: 50px;
     }
 
     #header .navbar {
