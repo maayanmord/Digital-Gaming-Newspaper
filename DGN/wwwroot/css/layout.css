@@ -1,7 +1,13 @@
 ﻿/* ----- Body ----- */
 
+@font-face {
+    font-family: SiteTextFont;
+    src: url(/fonts/OpenSans-Regular.ttf);
+}
+
 body {
     background: #f3f3f3e6;
+    font-family: SiteTextFont;
 }
 
 /* ----- Header ----- */
