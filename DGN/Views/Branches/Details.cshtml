@@ -50,7 +50,7 @@
                     {
                         @if ((User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Admin.ToString()))
                         {
-                            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> <div class="sameline"> |</div>
+                            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a><span> |</span>
                         }
                     }
                     <a asp-action="Index">Back to List</a>
@@ -69,9 +69,4 @@
     </script>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release&callback=GetBranchAddress' async defer></script>
     <script src="~/js/branches.js" asp-append-version="true"></script>
-}
-
-
-@section Styles {
-    <link rel="stylesheet" href="~/css/branches.css">
 }

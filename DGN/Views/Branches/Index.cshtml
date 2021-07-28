@@ -59,8 +59,8 @@
                         {
                             @if ((User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Admin.ToString()))
                             {
-                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a><div class="sameline"> |</div>
-                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a><div class="sameline"> |</div>
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a><span> |</span>
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a><span> |</span>
                             }
                         }
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a>
@@ -107,8 +107,8 @@
                 {
                     @if ((User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Admin.ToString()))
                     {
-                        <a href="/Branches/Edit/{id}">Edit</a><div class="sameline"> |</div>
-                        <a href="/Branches/Delete/{id}">Delete</a><div class="sameline"> |</div>
+                        <a href="/Branches/Edit/{id}">Edit</a><span> |</span>
+                        <a href="/Branches/Delete/{id}">Delete</a><span> |</span>
                     }
                 }
                 <a href="/Branches/Details/{id}">Details</a>
@@ -119,6 +119,5 @@
 
 @section Styles
 {
-    <link rel="stylesheet" href="~/css/branches.css">
     <link rel="stylesheet" href="~/css/map.css" />
 }
