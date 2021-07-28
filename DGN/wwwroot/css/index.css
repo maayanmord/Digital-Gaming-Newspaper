@@ -258,3 +258,9 @@ section.all-articles {
         display: block;
         margin: 0px;
     }
+
+video {
+    width: 100%;
+    height: auto;
+    margin-bottom: 50px;
+}
