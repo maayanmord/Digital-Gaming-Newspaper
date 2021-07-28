@@ -1,10 +1,13 @@
 ﻿"use strict";
 
 $(function () {
-    /*var c = document.getElementById("logoCanvas");*/
-    var ctx = $("#logoCanvas").get(0).getContext("2d");
-    var img = $("#logo").get(0);
-    ctx.drawImage(img, 50, 30, 170, 93);
+    var img = new Image();
+    img.onload = function () {
+        var ctx = $("#logoCanvas").get(0).getContext("2d");
+        ctx.drawImage(img, 50, 30, 170, 93);
+    }
+
+    img.src = '/images/logo.png'
 
     // Toggle .header-scrolled class to #header when page is scrolled
     $(window).scroll(() => {
