@@ -59,3 +59,7 @@
     #formSec {
 
     }
+
+.sameline {
+    display: inline;
+}
