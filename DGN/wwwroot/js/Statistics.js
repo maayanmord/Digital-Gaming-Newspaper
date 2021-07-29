@@ -1,13 +1,13 @@
-﻿// articles_per_category
+﻿// First statistic: articles_per_category
 // set the dimensions and margins of the graph
 var width = 450
 height = 450
 margin = 40
 
-// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+// The radius of the pieplot is half the width or half the height (smallest one), subtract a bit of margin.
 var radius = Math.min(width, height) / 2 - margin
 
-// append the svg object to the div called 'my_dataviz'
+// append the svg_articles_per_category object to the div called 'articles_per_category'
 var svg_articles_per_category = d3.select("#articles_per_category")
     .append("svg")
     .attr("width", width)
@@ -15,8 +15,8 @@ var svg_articles_per_category = d3.select("#articles_per_category")
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-// Create dummy data
-var dataByCategorty = {}
+// Get the data
+var ArticlesByCategorty = {}
 var ArticlesCount = 0;
 
 $.ajax({
@@ -25,18 +25,17 @@ $.ajax({
     success: function (dataJson) {
         dataJson.forEach(currCategory => {
             ArticlesCount += currCategory.articlesInCategory;
-            dataByCategorty[currCategory.categoryName] = currCategory.articlesInCategory;
+            ArticlesByCategorty[currCategory.categoryName] = currCategory.articlesInCategory;
         })
     },
     error: function () {
         $("#alert-body").html('ERROR');
     }
 }).done(function() { 
-    console.log("Done");
-    DrawArticles_per_category(dataByCategorty)
+    DrawPiechart(ArticlesByCategorty)
 });
 
-function DrawArticles_per_category(data) {
+function DrawPiechart(data) {
     // set the color scale
     var color = d3.scaleOrdinal()
         .domain(data)
@@ -46,7 +45,6 @@ function DrawArticles_per_category(data) {
     var pie = d3.pie()
         .value(function (d) { return d.value; })
     var data_ready = pie(d3.entries(data))
-    // Now I know that group A goes from 0 degrees to x degrees and so on.
 
     // shape helper to build arcs:
     var arcGenerator = d3.arc()
@@ -65,7 +63,7 @@ function DrawArticles_per_category(data) {
         .style("stroke-width", "2px")
         .style("opacity", 0.7)
 
-    // Now add the annotation. Use the centroid method to get the best coordinates
+    // Add the annotation. Use the centroid method to get the best coordinates
     svg_articles_per_category
         .selectAll('mySlices')
         .data(data_ready)
@@ -79,37 +77,31 @@ function DrawArticles_per_category(data) {
 
 
 // /////////////////////////////////////////////////////////
-// articles_over_time
+// Second statistic: articles_over_time
 
-
-// Raw data 
-var dataByDate = []
+var ArticlesByDate = []
 
 $.ajax({
     type: "GET",
     url: "/Articles/GetArticlesDates",
     success: function (dataJson) {
         dataJson.forEach(currDate => {
-            dataByDate.push(Date.parse(currDate));
-        });
-        
-        console.log(dataByDate)
+            ArticlesByDate.push(Date.parse(currDate));
+        });        
     },
     error: function () {
         $("#alert-body").html('ERROR');
     }
 }).done(function () {
-    console.log("done");
-    DrawArticles_over_time(dataByDate);
+    DrawTimeline(ArticlesByDate);
 });
 
-function DrawArticles_over_time(data) {
+function DrawTimeline(data) {
     var readableDates = [];
 
     data.forEach(curr => {
         date = new Date(curr)
         date = date.toLocaleString('en-US')
-        console.log(date)
         readableDates.push(date);
     })
 
@@ -140,7 +132,7 @@ function DrawArticles_over_time(data) {
     var bins = histogram(data);
 
     // Build the top element of the graphic
-    // Add the svg element to the body and set the dimensions and margins of the graph
+    // Add the svg_articles_over_time element to the body and set the dimensions and margins of the graph
     var svg_articles_over_time = d3
         .select("#articles_over_time")
         .append("svg")
