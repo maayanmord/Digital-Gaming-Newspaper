@@ -1,9 +1,17 @@
+@font-face {
+    font-family: articleTitleFont;
+    src: url(/fonts/BebasNeue-Regular.woff);
+}
+
 .h-120px {
     height: 120px;
 }
 
-#articleText {
+.article-text {
     white-space: pre-line;
+    column-width: 500px;
+    column-rule: 1px solid #e0e0e0;
+    text-align: left;
 }
 
 .article-image {
@@ -12,6 +20,11 @@
     overflow: hidden;
 }
 
-.article-title {
+.article-cover {
     border-radius: 0 100px 100px 100px;
+}
+
+.article-title {
+    font-family: articleTitleFont;
+
 }

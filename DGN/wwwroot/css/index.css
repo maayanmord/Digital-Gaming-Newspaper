@@ -89,6 +89,7 @@ section.best-articles {
         font-size: 18px;
         line-height: 1.21em;
         font-weight: 900;
+        text-shadow: 3px 3px #16232f;
     }
 
         section.best-articles .caption a {
@@ -257,3 +258,9 @@ section.all-articles {
         display: block;
         margin: 0px;
     }
+
+video {
+    width: 100%;
+    height: auto;
+    margin-bottom: 50px;
+}
