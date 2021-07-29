@@ -55,11 +55,11 @@ namespace DGN.Models
         public Password Password { get; set; }
 
         [Required]
-        [RegularExpression(@"^[A-Z][a-z]+$", ErrorMessage = "A name must begin with a capital letter.")]
+        [RegularExpression(@"^[A-Z][a-zA-Z]{1,}[a-zA-Z ]*$", ErrorMessage = "A name must begin with a capital letter and must have at least 2 letters on first word.")]
         public string Firstname { get; set; }
 
         [Required]
-        [RegularExpression(@"^[A-Z][a-z]+$", ErrorMessage = "A name must begin with a capital letter.")]
+        [RegularExpression(@"^[A-Z][a-zA-Z]{1,}[a-zA-Z ]*$", ErrorMessage = "A name must begin with a capital letter and must have at least 2 letters on first word.")]
         public string Lastname { get; set; }
 
         [DataType(DataType.Date)]
