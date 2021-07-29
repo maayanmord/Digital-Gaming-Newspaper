@@ -139,8 +139,10 @@
             success: function (data) {
                 if (data) {
                     $('like-button').addClass('liked');
+                    $('#likeButtonText').html('Unlike');
                 } else {
                     $('like-button').removeClass('liked');
+                    $('#likeButtonText').html('Like');
                 }
             },
             error: function (data) {

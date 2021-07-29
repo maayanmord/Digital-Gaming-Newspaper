@@ -54,7 +54,7 @@
         <like-button id="likeButton" class="@(Model.UserLikes.Any(ul => ul.Id == int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))) ? "liked" : "")">
             <span>
                 <i class="fa fa-thumbs-up"></i>
-                <span class="icon">Like</span>
+                <span id="likeButtonText" class="icon">@(Model.UserLikes.Any(ul => ul.Id == int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))) ? "Unlike" : "Like")</span>
             </span>
         </like-button>
     </span>
