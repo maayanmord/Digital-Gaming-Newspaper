@@ -48,6 +48,11 @@ like-button {
     padding: 5px 10px;
 }
 
+.twitter-share-button[style] {
+    vertical-align: text-bottom !important;
+}
+
+
 like-button.liked {
     color: #0571ed;
 }
