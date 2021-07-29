@@ -508,6 +508,7 @@ namespace DGN.Controllers
         }
 
 
+        [Authorize(Roles = "Author,Admin")]
         // GET: Users/Statistics
         public IActionResult Statistics()
         {
