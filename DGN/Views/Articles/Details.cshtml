@@ -77,33 +77,34 @@
                         </div>
                     </div>
                 </div>
-                @if (User.FindFirstValue(ClaimTypes.NameIdentifier).Equals(item.UserId.ToString()) ||
-                 User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()))
-                {
                     <div class="card-footer text-muted">
                         <div class="row">
                             <div class="col-md-6">
-                                <button type="button" class="btn btn-link"
-                                        data-toggle="modal"
-                                        data-target="#commentEditModal"
-                                        data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
-                                        data-id="@Html.DisplayFor(modelItem => item.Id)">
-                                    Edit
-                                </button> |
-                                <button type="button" class="btn btn-link"
-                                        data-toggle="modal"
-                                        data-target="#commentDeleteModal"
-                                        data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
-                                        data-id="@Html.DisplayFor(modelItem => item.Id)">
-                                    Delete
-                                </button>
-                            </div>
+                                @if (User.FindFirstValue(ClaimTypes.NameIdentifier).Equals(item.UserId.ToString()) ||
+                                     User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()))
+                                {
+                                    <button type="button" class="btn btn-link"
+                                            data-toggle="modal"
+                                            data-target="#commentEditModal"
+                                            data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
+                                            data-id="@Html.DisplayFor(modelItem => item.Id)">
+                                        Edit
+                                    </button> 
+                                    <span>|</span>
+                                    <button type="button" class="btn btn-link"
+                                            data-toggle="modal"
+                                            data-target="#commentDeleteModal"
+                                            data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
+                                            data-id="@Html.DisplayFor(modelItem => item.Id)">
+                                        Delete
+                                    </button>
+                                }
+                                </div>
                             <div class="col-md-6 text-right">
                                 <p class="font-italic">Creation Date: @Html.DisplayFor(modelItem => item.CreationTimestamp)</p>
                             </div>
                         </div>
                     </div>
-                }
             </div>
         }
     </div>
