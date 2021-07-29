@@ -21,6 +21,7 @@ namespace DGN.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Comments
         public async Task<IActionResult> Index()
         {
@@ -64,7 +65,8 @@ namespace DGN.Controllers
                 var user = await _context.User.FirstOrDefaultAsync(u => u.Id == comment.UserId);
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return Json(new { comment.Id, comment.UserId, comment.Body, user.FullName, user.ImageLocation });
+                var CreationTimestamp = comment.CreationTimestamp.ToString("g"); // Send date with correct format
+                return Json(new { comment.Id, comment.UserId, comment.Body, CreationTimestamp, user.FullName, user.ImageLocation, user.Username});
             }
             ViewData["RelatedArticleId"] = new SelectList(_context.Article, "Id", "Title", comment.RelatedArticleId);
             return BadRequest();
@@ -135,6 +137,23 @@ namespace DGN.Controllers
         private bool CommentExists(int id)
         {
             return _context.Comment.Any(e => e.Id == id);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Search(string body, string fullname, string username)
+        {
+            return Json(await _context.Comment.Include(c => c.User).Where(c => (c.Body.Contains(body) || body == null) &&
+                                                                         ((c.User.Firstname + " " + c.User.Lastname).Contains(fullname) || fullname == null) &&
+                                                                         (c.User.Username.Contains(username) || username == null)).Select(c => new
+                                                                         {
+                                                                             c.Id,
+                                                                             c.Body,
+                                                                             c.User.FullName,
+                                                                             c.User.Username,
+                                                                             CreationTimestamp = c.CreationTimestamp.ToString("g"),
+                                                                             c.RelatedArticle.Title,
+                                                                             c.RelatedArticleId
+                                                                         }).ToListAsync());
         }
     }
 }
