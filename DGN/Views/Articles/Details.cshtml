@@ -9,24 +9,22 @@
     <div class="article-image">
         <img src="@Model.ImageLocation">
     </div>
-    <div class="jumbotron jumbotron-fluid article-title">
-        <div class="container">
-            <div>
-                <h1 class="display-4">@Html.DisplayFor(model => model.Title)</h1>
-                <p class="lead">By: <a style="color: black" asp-action="Profile" asp-controller="Users" asp-route-id="@Model.UserId">@Html.DisplayFor(model => model.User.FullName)</a></p>
-                @if (User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()) ||
-                   User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Author.ToString()))
-                {
-                    <p>
-                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info btn-md" role="button">Edit</a>
-                        <button type="button" class="btn btn-danger btn-md"
-                                data-toggle="modal"
-                                data-target="#articleDeleteModal">
-                            Delete
-                        </button>
-                    </p>
-                }
-            </div>
+    <div class="jumbotron jumbotron-fluid article-cover">
+        <div class="container text-center">
+            <h1 class="display-2 article-title">@Html.DisplayFor(model => model.Title)</h1>
+            <p class="lead">By: <a style="color: black" asp-action="Profile" asp-controller="Users" asp-route-id="@Model.UserId">@Html.DisplayFor(model => model.User.FullName)</a></p>
+            @if (User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()) ||
+               User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Author.ToString()))
+            {
+                <p>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info btn-md" role="button">Edit</a>
+                    <button type="button" class="btn btn-danger btn-md"
+                            data-toggle="modal"
+                            data-target="#articleDeleteModal">
+                        Delete
+                    </button>
+                </p>
+            }
         </div>
     </div>
     <div class="card text-center">
@@ -34,7 +32,7 @@
             <span class="text-white badge bg-secondary">@Html.DisplayFor(model => model.Category.CategoryName)</span>
         </div>
         <div class="card-body">
-            <p class="card-text" id="articleText">@Html.DisplayFor(model => model.Body)</p>
+            <p class="card-text article-text">@Html.DisplayFor(model => model.Body)</p>
         </div>
         <div class="card-footer text-muted">
             Creation Date @Html.DisplayFor(model => model.CreationTimestamp)
