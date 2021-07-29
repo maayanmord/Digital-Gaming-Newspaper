@@ -15,7 +15,6 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-    <!-- ======= Header ======= -->
     <header id="header" class="fixed-top">
         <div class="container">
             <nav class=" navbar navbar-expand-lg navbar-light bg-light">
@@ -59,11 +58,19 @@
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" asp-controller="Users" asp-action="ChangePassword" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Change password</a>
-                                    <a class="dropdown-item" asp-controller="Users" asp-action="Statistics">Statistics</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
+                                    @if ((User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Author.ToString()) || (User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Admin.ToString()))
+                                    {
+                                        <a class="dropdown-item" asp-controller="Articles" asp-action="Create">Create new Article</a>
+                                    }
+                                    @if ((User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Admin.ToString()))
+                                    {
+                                        <a class="dropdown-item" asp-controller="Users" asp-action="Index">Manage Users</a>
+                                        <a class="dropdown-item" asp-controller="Categories" asp-action="Index">Manage Catagories</a>
+                                        <a class="dropdown-item" asp-controller="Comments" asp-action="Index">Manage Comments</a>
+                                    }
                                 </div>
-                            </li>
+                            </div>
+                        </li>
                             <li class="nav-item last btn-item">
                                 <a asp-controller="Users" asp-action="Logout" class="nav-btn login-btn">Logout</a>
                             </li>
