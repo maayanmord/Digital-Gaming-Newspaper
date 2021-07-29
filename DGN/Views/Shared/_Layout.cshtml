@@ -56,19 +56,21 @@
                                         <i class="bi-wrench"></i>
                                     </a>
 
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" asp-controller="Users" asp-action="ChangePassword" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Change password</a>
-                                    @if ((User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Author.ToString()) || (User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Admin.ToString()))
-                                    {
-                                        <a class="dropdown-item" asp-controller="Articles" asp-action="Create">Create new Article</a>
-                                    }
-                                    @if ((User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Admin.ToString()))
-                                    {
-                                        <a class="dropdown-item" asp-controller="Users" asp-action="Index">Manage Users</a>
-                                        <a class="dropdown-item" asp-controller="Categories" asp-action="Index">Manage Catagories</a>
-                                        <a class="dropdown-item" asp-controller="Comments" asp-action="Index">Manage Comments</a>
-                                    }
-                                </div>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" asp-controller="Users" asp-action="ChangePassword" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Change password</a>
+                                        @if ((User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Author.ToString()) || (User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Admin.ToString()))
+                                        {
+                                            <a class="dropdown-item" asp-controller="Articles" asp-action="Create">Create new Article</a>
+                                            <a class="dropdown-item" asp-controller="Users" asp-action="Statistics">Statistics</a>
+
+                                        }
+                                        @if ((User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Admin.ToString()))
+                                        {
+                                            <a class="dropdown-item" asp-controller="Users" asp-action="Index">Manage Users</a>
+                                            <a class="dropdown-item" asp-controller="Categories" asp-action="Index">Manage Catagories</a>
+                                            <a class="dropdown-item" asp-controller="Comments" asp-action="Index">Manage Comments</a>
+                                        }
+                                    </div>
                             </div>
                         </li>
                             <li class="nav-item last btn-item">
