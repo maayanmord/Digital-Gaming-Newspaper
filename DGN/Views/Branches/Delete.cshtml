@@ -34,6 +34,14 @@
                               @Html.DisplayFor(model => model.ActivityTime)
                             </pre>
                         </dd>
+                        <dt class="col-sm-4">
+                            Branch Address
+                        </dt>
+                        <dd class="col-sm-8">
+                            <a id="branchAddress"></a>
+                        </dd>
+
+                        <div id="myMap" style="position:relative;width:600px;height:400px;"></div>
                     </dl>
 
                     <form asp-action="Delete">
@@ -47,6 +55,13 @@
     </section>
 </div>
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/branches.css" />
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        var locationLatitude = @Html.DisplayFor(model => model.LocationLatitude)
+        var locationLongitude = @Html.DisplayFor(model => model.LocationLongitude)
+    </script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release&callback=GetBranchAddress' async defer></script>
+    <script src="~/js/branches.js" asp-append-version="true"></script>
 }

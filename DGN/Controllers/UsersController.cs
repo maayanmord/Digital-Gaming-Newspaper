@@ -4,6 +4,7 @@ using DGN.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +47,12 @@ namespace DGN.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditAsAdmin(int? id)
         {
+            ViewData["Roles"] = new SelectList(new List<SelectListItem>
+                {
+                    new SelectListItem { Text = UserRole.Admin.ToString(), Value = UserRole.Admin.ToString()},
+                    new SelectListItem { Text = UserRole.Author.ToString(), Value = UserRole.Author.ToString()},
+                    new SelectListItem { Text = UserRole.Client.ToString(), Value = UserRole.Client.ToString()},
+                }, "Text", "Value");
             return await GetUserView(id);
         }
 
@@ -55,7 +62,7 @@ namespace DGN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditAsAdmin(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user)
         {
-            return await PostEditUser(id, ImageFile, user, true, RedirectToPage(nameof(Index)));
+            return await PostEditUser(id, ImageFile, user, true, RedirectToAction(nameof(Index)));
         }
 
         //
@@ -71,7 +78,7 @@ namespace DGN.Controllers
         // POST: Users/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(IFormFile ImageFile, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,About")] User user, string plainPass, string confirmPass)
+        public async Task<IActionResult> Register(string confirmPass, IFormFile ImageFile, string plainPass, [Bind("Id,Email,Username,Firstname,Lastname,Birthday,About")] User user)
         {
             if (UsernameExists(user.Username))
             {
@@ -84,7 +91,7 @@ namespace DGN.Controllers
             if (CanUsePassword(plainPass, confirmPass) && ModelState.IsValid)
             {
                 user.Password = new Password(user.Id, plainPass, user);
-                if (ImageFile != null && ImageFile.Length > 0)
+                if (ImageFile != null)
                 {
                     string imageName = user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
                     bool uploaded = await _service.UploadImage(ImageFile, imageName);
@@ -94,7 +101,8 @@ namespace DGN.Controllers
                     }
                     else
                     {
-                        ViewData["Error"] = "can't upload this image";
+                        ViewData["Error"] = "Can't upload this image, make sure its png,jpeg,jpg";
+                        return View(user);
                     }
                 }
                 else
@@ -218,7 +226,7 @@ namespace DGN.Controllers
                 user.Password = new Password(user.Id, newPassword, user);
                 _context.User.Update(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Profile), new { id = user.Id });
             }
             return View();
         }
@@ -466,7 +474,7 @@ namespace DGN.Controllers
                     }
                     else
                     {
-                        ViewData["Error"] = "can't upload the image file";
+                        ViewData["Error"] = "Can't upload this image, make sure its png,jpeg,jpg";
                     }
                 }
                 try
@@ -490,12 +498,11 @@ namespace DGN.Controllers
                 }
                 return redirectPage;
             }
-            else
-            {
-                user.ArticleLikes = oldUser.ArticleLikes;
-                user.Articles = oldUser.Articles;
-                user.Comments = oldUser.Comments;
-            }
+
+            user.ArticleLikes = oldUser.ArticleLikes;
+            user.Articles = oldUser.Articles;
+            user.Comments = oldUser.Comments;
+            
             return View(user);
         }
 

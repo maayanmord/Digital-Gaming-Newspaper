@@ -20,54 +20,17 @@ $(function () {
         });
     }
 
-    firstNameValid = true
-    lastNameValid = true
-    emailValid = true
+    $('#SaveChangesButton').click(reloadCache);
+    $('#Cancel').click(function () {
+        window.location.replace(window.location.href);
 
-    function updateButtonState() {
-        if (firstNameValid && lastNameValid && emailValid) {
-            $('#SaveChanges').prop('disabled', false);
-        }
-    }
+    });
 
     $("#EditButton").click(function () {
         viewEdit();
         $('#SaveChangesButton').click(reloadCache);
-
-        $('#firstName').on('keyup', function () {
-            if (!$('#firstName').val().match('^[A-Z][a-z]+$')) {
-                firstNameValid = false;
-                $('#firstNameMessage').html('First name must begin with capital letter and be only letters');
-                $('#SaveChanges').prop('disabled', true);
-            } else {
-                firstNameValid = true;
-                $('#firstNameMessage').html('');
-                updateButtonState()
-            }
-        });
-
-        $('#lastName').on('keyup', function () {
-            if (!$('#lastName').val().match('^[A-Z][a-z]+$')) {
-                lastNameValid = false;
-                $('#lastNameMessage').html('Last name must begin with capital letter and be only letters');
-                $('#SaveChanges').prop('disabled', true);
-            } else {
-                lastNameValid = true;
-                $('#lastNameMessage').html('');
-                updateButtonState()
-            }
-        });
-
-        $('#email').on('keyup', function () {
-            if (!$('#email').val().match('^[a-zA-Z0-9.!#$,;%&\' *"+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$')) {
-                emailValid = false;
-                $('#emailMessage').html('must be valid email');
-                $('#SaveChanges').prop('disabled', true);
-            } else {
-                emailValid = true;
-                $('#emailMessage').html('');
-                updateButtonState()
-            }
+        $('#Cancel').click(function () {
+            window.location.replace(window.location.href);
         });
     });
     

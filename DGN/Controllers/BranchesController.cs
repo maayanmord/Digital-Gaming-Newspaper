@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DGN.Data;
 using DGN.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DGN.Controllers
 {
@@ -43,6 +44,7 @@ namespace DGN.Controllers
             return View(branch);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Branches/Create
         public IActionResult Create()
         {
@@ -54,6 +56,7 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,BranchName,Email,ActivityTime,LocationLatitude,LocationLongitude")] Branch branch)
         {
             if (ModelState.IsValid)
@@ -66,6 +69,7 @@ namespace DGN.Controllers
         }
 
         // GET: Branches/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +90,7 @@ namespace DGN.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,BranchName,Email,ActivityTime,LocationLatitude,LocationLongitude")] Branch branch)
         {
             if (id != branch.Id)
@@ -117,6 +122,7 @@ namespace DGN.Controllers
         }
 
         // GET: Branches/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,6 +143,7 @@ namespace DGN.Controllers
         // POST: Branches/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var branch = await _context.Branch.FindAsync(id);

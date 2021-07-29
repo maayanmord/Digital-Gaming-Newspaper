@@ -6,6 +6,33 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DGN.Models
 {
+    public class MinimumAgeAttribute : ValidationAttribute
+    {
+        private int minimumAge;
+        private string error;
+        public MinimumAgeAttribute(int minAge, string ErrorMessage)
+        {
+            minimumAge = minAge;
+            error = ErrorMessage;
+            
+        }
+
+        public override bool IsValid(object value)
+        {
+            DateTime date;
+            if (DateTime.TryParse(value.ToString(), out date))
+            {
+                return date.AddYears(minimumAge) < DateTime.Now;
+            }
+
+            return false;
+        }
+
+        public override string FormatErrorMessage(string name)
+        {
+            return error;
+        }
+    }
     public enum UserRole
     {
         Client, 
@@ -28,14 +55,15 @@ namespace DGN.Models
         public Password Password { get; set; }
 
         [Required]
-        [RegularExpression(@"^[A-Z][a-z]+$", ErrorMessage = "A name must begin with a capital letter.")]
+        [RegularExpression(@"^[A-Z][a-zA-Z]{1,}[a-zA-Z ]*$", ErrorMessage = "A name must begin with a capital letter and must have at least 2 letters on first word.")]
         public string Firstname { get; set; }
 
         [Required]
-        [RegularExpression(@"^[A-Z][a-z]+$", ErrorMessage = "A name must begin with a capital letter.")]
+        [RegularExpression(@"^[A-Z][a-zA-Z]{1,}[a-zA-Z ]*$", ErrorMessage = "A name must begin with a capital letter and must have at least 2 letters on first word.")]
         public string Lastname { get; set; }
 
         [DataType(DataType.Date)]
+        [MinimumAgeAttribute(9, "User must be older than 9 to use our site")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime Birthday { get; set; }
 

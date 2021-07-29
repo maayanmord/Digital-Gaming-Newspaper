@@ -1,11 +1,13 @@
 ﻿@model DGN.Models.Branch
+@using System.Security.Claims;
 
 @{
     ViewData["Title"] = "Details";
 }
 
 <div class="container">
-        <div class="d-flex align-items-center justify-content-center">
+    <section id="formSec" class="">
+        <div class="container d-flex align-items-center justify-content-center">
             <aside>
                 <div class="inner">
                     <div class="formTitle">
@@ -13,32 +15,58 @@
                     </div>
                     <hr class="sep">
                     <dl class="row">
-                        <dt class="col-sm-3">
+                        <dt class="col-sm-4">
                             @Html.DisplayNameFor(model => model.BranchName)
                         </dt>
-                        <dd class="col-sm-9">
+                        <dd class="col-sm-8">
                             @Html.DisplayFor(model => model.BranchName)
                         </dd>
-                        <dt class="col-sm-3">
+                        <dt class="col-sm-4">
                             @Html.DisplayNameFor(model => model.Email)
                         </dt>
-                        <dd class="col-sm-9">
+                        <dd class="col-sm-8">
                             @Html.DisplayFor(model => model.Email)
                         </dd>
-                        <dt class="col-sm-3">
-                                @Html.DisplayNameFor(model => model.ActivityTime)
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.ActivityTime)
                         </dt>
-                        <dd class="col-sm-9">
+                        <dd class="col-sm-8">
                             <pre style="text-align: left; white-space: pre-line;">
                                 @Html.DisplayFor(model => model.ActivityTime)
                             </pre>
                         </dd>
+                        <dt class="col-sm-4">
+                            Branch Address
+                        </dt>
+                        <dd class="col-sm-8">
+                            <a id="branchAddress"></a>
+                        </dd>
+
+                        <div id="myMap" style="position:relative;width:600px;height:400px;"></div>
                     </dl>
                 </div>
                 <div>
-                    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if ((User.FindFirst(ClaimTypes.Role)?.Value).Equals(UserRole.Admin.ToString()))
+                        {
+                            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a><span> |</span>
+                        }
+                    }
                     <a asp-action="Index">Back to List</a>
                 </div>
             </aside>
         </div>
+    </section>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        var locationLatitude = @Html.DisplayFor(model => model.LocationLatitude)
+        var locationLongitude = @Html.DisplayFor(model => model.LocationLongitude)
+    </script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release&callback=GetBranchAddress' async defer></script>
+    <script src="~/js/branches.js" asp-append-version="true"></script>
+}
