@@ -13,7 +13,7 @@
                         <h2>Register</h2>
                     </div>
                     <hr class="sep">
-                    <form asp-action="Register" id="registerForm">
+                    <form asp-action="Register" id="registerForm" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
                             <label asp-for="Email" class="control-label"></label>
@@ -44,6 +44,10 @@
                             <label asp-for="About" class="control-label"></label>
                             <textarea asp-for="About" class="form-control"></textarea>
                             <span asp-validation-for="About" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Profile Image</label>
+                            <input type="file" name="ImageFile" id="ImageFile" accept="image/x-png,image/jpg,image/jpeg" />
                         </div>
                         <div class="form-group">
                             <label class="control-label">Password</label>
