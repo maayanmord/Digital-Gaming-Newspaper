@@ -20,6 +20,11 @@
     overflow: hidden;
 }
 
+.article-image img {
+    width: 100%;
+}
+
+
 .article-cover {
     border-radius: 0 100px 100px 100px;
 }
