@@ -46,6 +46,7 @@ namespace DGN.Controllers
             var article = await _context.Article
                 .Include(a => a.Category)
                 .Include(a => a.User)
+                .Include(a => a.UserLikes)
                 .Include(a => a.Comments)
                 .ThenInclude(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -290,6 +291,39 @@ namespace DGN.Controllers
         public async Task<IActionResult> GetMostLikedArticles(int count)
         {
             return Json(await _context.Article.Include(a => a.UserLikes).OrderByDescending(a => a.UserLikes.Count()).Take(count).ToListAsync());
+        }
+
+        [Authorize]
+        public async Task<IActionResult> LikeArticle(int? articleId)
+        {
+            if (articleId == null)
+            {
+                return NotFound();
+            }
+
+            var article = await _context.Article.Include(a => a.UserLikes).FirstOrDefaultAsync(a => a.Id == articleId);
+            if (article == null)
+            {
+                return NotFound();
+            }
+
+            // Get the user from the UserId
+            int userId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var user = await _context.User.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
+
+            var isLiked = article.UserLikes.Any(ul => ul.Id == userId);
+
+            if (isLiked)
+            {
+                article.UserLikes.Remove(article.UserLikes.Where(u => u.Id == userId).FirstOrDefault());
+            } else {
+                article.UserLikes.Add(user);
+            }
+
+            _context.Update(article);
+            await _context.SaveChangesAsync();
+
+            return Json(!isLiked);
         }
     }
 }

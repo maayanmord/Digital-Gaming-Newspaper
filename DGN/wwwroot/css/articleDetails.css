@@ -33,3 +33,42 @@
     font-family: articleTitleFont;
 
 }
+
+.article-buttons {
+    text-align: right;
+    padding-top: 10px;
+}
+
+like-button {
+    border: unset;
+    outline: 0;
+    font-size: 18px;
+    cursor: pointer;
+    color: #65676b;
+    padding: 5px 10px;
+}
+
+like-button.liked {
+    color: #0571ed;
+}
+
+like-button.liked i {
+    animation: anim 0.5s ease-in-out;
+    -webkit-animation: anim 0.5s ease-in-out;
+}
+
+@keyframes anim {
+    100% {
+        transform: rotate(-15deg) scale(1.3);
+        -webkit-transform: rotate(-15deg) scale(1.3);
+        -moz-transform: rotate(-15deg) scale(1.3);
+        -ms-transform: rotate(-15deg) scale(1.3);
+        -o-transform: rotate(-15deg) scale(1.3);
+        filter: blur(0.5px);
+        -webkit-filter: blur(0.5px);
+    }
+}
+
+.twitter-share-button {
+    height: 100%;
+}
