@@ -15,11 +15,10 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-    <!-- ======= Header ======= -->
     <header id="header" class="fixed-top">
         <div class="container">
             <nav class=" navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand-left mr-auto d-sm-block d-xs-block d-lg-none" href="#home">
+                <a class="navbar-brand-left mr-auto d-sm-block d-xs-block d-lg-none" asp-controller="Articles" asp-action="Index">
                     <img src="~/images/logo.png" />
                 </a>
                 <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarToggler"
@@ -27,7 +26,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <a class="navbar-brand d-none d-lg-block" style="margin: 0; float: none;" asp-controller="Articles" asp-action="Index">
-                    <img src="~/images/logo.png" />
+                    <canvas id="logoCanvas">Your browser does not support the HTML canvas tag.</canvas>
                 </a>
                 <div class="collapse navbar-collapse" id="navbarToggler">
                     <ul class="navbar-nav nav-menu mr-auto mt-2 mt-lg-0">
@@ -50,12 +49,12 @@
                     <ul class="navbar-nav nav-menu ml-auto">
                         @if (User.Identity.Name != null)
                         {
-                        <li class="nav-item btn-item">
+                            <li class="nav-item btn-item">
 
-                            <div class="dropdown show">
-                                <a class="nav-btn login-btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="bi-wrench"></i>
-                                </a>
+                                <div class="dropdown show">
+                                    <a class="nav-btn login-btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="bi-wrench"></i>
+                                    </a>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" asp-controller="Users" asp-action="ChangePassword" asp-route-id="@User.FindFirst(ClaimTypes.NameIdentifier)?.Value">Change password</a>
