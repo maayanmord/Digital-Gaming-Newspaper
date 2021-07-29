@@ -290,7 +290,12 @@ namespace DGN.Controllers
 
         public async Task<IActionResult> GetMostLikedArticles(int count)
         {
-            return Json(await _context.Article.Include(a => a.UserLikes).OrderByDescending(a => a.UserLikes.Count()).Take(count).ToListAsync());
+            return Json(await _context.Article.Include(a => a.UserLikes).OrderByDescending(a => a.UserLikes.Count()).Take(count).Select(a => new
+            {
+                a.Id,
+                a.ImageLocation,
+                a.Title
+            }).ToListAsync());
         }
 
         [Authorize]
