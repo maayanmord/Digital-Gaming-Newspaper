@@ -342,9 +342,12 @@ namespace DGN.Controllers
         // 
 
         [Authorize]
-        public async Task<IActionResult> GetUserLikedArticles(int? id, int page, int count)
-        {          
-            return Json(await _context.User.Include(u => u.ArticleLikes).Where(u => u.Id == id).Select(u => u.ArticleLikes).Skip(page * count).Take(count).FirstOrDefaultAsync());
+        public async Task<IActionResult> GetUserLikedArticles(int id, int page, int count)
+        {
+            var query = from article in _context.Article
+                        where article.UserLikes.Any(u => u.Id == id)
+                        select article;
+            return Json(await query.Skip(page * count).Take(count).ToListAsync());
         }
 
         [Authorize]
@@ -512,6 +515,14 @@ namespace DGN.Controllers
             string userRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
             string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             return userId.Equals(id.ToString()) || userRole.Equals(UserRole.Admin.ToString());
+        }
+
+
+        [Authorize(Roles = "Author,Admin")]
+        // GET: Users/Statistics
+        public IActionResult Statistics()
+        {
+            return View();
         }
     }
 }
