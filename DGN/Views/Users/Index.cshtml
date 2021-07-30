@@ -7,6 +7,17 @@
 <div class="container">
     <h2 class="text-center">Users</h2><br />
 
+    <form asp-action="Search" style="padding-bottom: 1%">
+        <div class="row">
+            <div class="col">
+                <input name="query" id="query" autocomplete="off" class="form-control" placeholder="Search" />
+            </div>
+            <div class="col">
+                <input type="submit" class="btn btn-primary" value="search" />
+            </div>
+        </div>
+    </form>
+
     <table class="table table-striped">
         <thead>
             <tr>
@@ -63,3 +74,36 @@
         </tbody>
     </table>
 </div>
+
+@section Scripts {
+    <script src="~/js/UserSearch.js"></script>
+    <script type="text/html" id="hidden-template">
+        <tr>
+            <td>
+                <a href="{email}">
+                    {email}
+                </a>
+            </td>
+            <td>
+                {username}
+            </td>
+            <td>
+                {firstname}
+            </td>
+            <td>
+                {lastname}
+            </td>
+            <td>
+                {birthday}
+            </td>
+            <td>
+                {role}
+            </td>
+            <td>
+                <a href="Users/Edit/{id}">Edit</a> |
+                <a href="Users/Profile/{id}">Profile</a> |
+                <a href="Users/Delete/{id}">Delete</a>
+            </td>
+        </tr>
+    </script>
+}

@@ -524,5 +524,10 @@ namespace DGN.Controllers
         {
             return View();
         }
+
+        public async Task<IActionResult> Search(string query)
+        {
+            return Json(await _context.User.Where(a => (a.Firstname.Contains(query) || a.Lastname.Contains(query) || a.Username.Contains(query) || a.Email.Contains(query) || query == null)).ToListAsync());
+        }
     }
 }
