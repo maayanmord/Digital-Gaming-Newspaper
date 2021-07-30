@@ -14,7 +14,7 @@
             <h1 class="display-2 article-title">@Html.DisplayFor(model => model.Title)</h1>
             <p class="lead">By: <a style="color: black" asp-action="Profile" asp-controller="Users" asp-route-id="@Model.UserId">@Html.DisplayFor(model => model.User.FullName)</a></p>
             @if (User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()) ||
-               User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Author.ToString()))
+              User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Author.ToString()))
             {
                 <p>
                     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info btn-md" role="button">Edit</a>
@@ -77,19 +77,20 @@
                         </div>
                     </div>
                 </div>
-                @if (User.FindFirstValue(ClaimTypes.NameIdentifier).Equals(item.UserId.ToString()) ||
-                 User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()))
-                {
-                    <div class="card-footer text-muted">
-                        <div class="row">
-                            <div class="col-md-6">
+                <div class="card-footer text-muted">
+                    <div class="row">
+                        <div class="col-md-6">
+                            @if (User.FindFirstValue(ClaimTypes.NameIdentifier).Equals(item.UserId.ToString()) ||
+                                   User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()))
+                            {
                                 <button type="button" class="btn btn-link"
                                         data-toggle="modal"
                                         data-target="#commentEditModal"
                                         data-fullname="@Html.DisplayFor(modelItem => item.User.FullName)"
                                         data-id="@Html.DisplayFor(modelItem => item.Id)">
                                     Edit
-                                </button> |
+                                </button>
+                                <span>|</span>
                                 <button type="button" class="btn btn-link"
                                         data-toggle="modal"
                                         data-target="#commentDeleteModal"
@@ -97,13 +98,13 @@
                                         data-id="@Html.DisplayFor(modelItem => item.Id)">
                                     Delete
                                 </button>
-                            </div>
-                            <div class="col-md-6 text-right">
-                                <p class="font-italic">Creation Date: @Html.DisplayFor(modelItem => item.CreationTimestamp)</p>
-                            </div>
+                            }
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <p class="font-italic">Creation Date: @Html.DisplayFor(modelItem => item.CreationTimestamp)</p>
                         </div>
                     </div>
-                }
+                </div>
             </div>
         }
     </div>
