@@ -444,6 +444,7 @@ namespace DGN.Controllers
         }
         private async Task<IActionResult> PostEditUser(int? id, IFormFile ImageFile, User user, bool RoleChanged, IActionResult redirectPage)
         {
+            string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (id == null || user == null || id != user.Id)
             {
                 return NotFound();
@@ -461,7 +462,7 @@ namespace DGN.Controllers
             {
                 user.Role = oldUser.Role;
             }
-            else if (oldUser.Role == UserRole.Admin && user.Role != UserRole.Admin) 
+            else if (oldUser.Role == UserRole.Admin && user.Role != UserRole.Admin && !(userId.Equals(user.Id.ToString()))) 
             {
                 ModelState.AddModelError("Role", "Can't change role for Admin");    
             }
