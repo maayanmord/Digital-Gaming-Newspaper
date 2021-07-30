@@ -55,8 +55,13 @@
                     </td>
                     <td>
                         <a asp-action="EditAsAdmin" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Profile" asp-route-id="@item.Id">Profile</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a asp-action="Profile" asp-route-id="@item.Id">Profile</a> 
+                        @if (item.Role != UserRole.Admin) 
+                        { 
+                            <span>|</span>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                        
                     </td>
                 </tr>
             }

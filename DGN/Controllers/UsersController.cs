@@ -62,6 +62,12 @@ namespace DGN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditAsAdmin(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user)
         {
+            ViewData["Roles"] = new SelectList(new List<SelectListItem>
+                {
+                    new SelectListItem { Text = UserRole.Admin.ToString(), Value = UserRole.Admin.ToString()},
+                    new SelectListItem { Text = UserRole.Author.ToString(), Value = UserRole.Author.ToString()},
+                    new SelectListItem { Text = UserRole.Client.ToString(), Value = UserRole.Client.ToString()},
+                }, "Text", "Value");
             return await PostEditUser(id, ImageFile, user, true, RedirectToAction(nameof(Index)));
         }
 
@@ -454,6 +460,10 @@ namespace DGN.Controllers
             if (!RoleChanged)
             {
                 user.Role = oldUser.Role;
+            }
+            else if (oldUser.Role == UserRole.Admin && user.Role != UserRole.Admin) 
+            {
+                ModelState.AddModelError("Role", "Can't change role for Admin");    
             }
             if (oldUser.Email != user.Email)
             {
