@@ -51,8 +51,8 @@
                     </td>
                     <td>
                         <pre>
-                        @Html.DisplayFor(modelItem => item.ActivityTime)
-                    </pre>
+                           @Html.DisplayFor(modelItem => item.ActivityTime)
+                        </pre>
                     </td>
                     <td>
                         @if (User.Identity.IsAuthenticated)
@@ -88,18 +88,17 @@
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario' async defer></script>
     <script src="~/js/branches.js" asp-append-version="true"></script>
 
-    <script src="~/js/search.js"></script>
     <script type="text/html" id="hidden-template">
         <tr>
             <td>
                 {branchName}
             </td>
             <td>
-                {email}
+                <a href={email}>{email}</a>
             </td>
             <td>
                 <pre>
-                    {activityTime}
+                    {activityTime} 
                 </pre>
             </td>
             <td>
