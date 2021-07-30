@@ -296,5 +296,24 @@ namespace DGN.Controllers
                 a.Title
             }).ToListAsync());
         }
+
+        public async Task<IActionResult> GetArticlesByCategory()
+        {
+            var query = from article in _context.Article
+                        join category in _context.Category on article.CategoryId equals category.Id
+                        group article by new { category.Id, category.CategoryName } into ArticleCategoryGroup
+                        orderby ArticleCategoryGroup.Count() descending
+                        select new { CategoryId = ArticleCategoryGroup.Key.Id, CategoryName = ArticleCategoryGroup.Key.CategoryName, ArticlesInCategory = ArticleCategoryGroup.Count() };
+
+            return Json(await query.ToListAsync());
+        }
+
+        public async Task<IActionResult> GetArticlesDates()
+        {
+            var query = from article in _context.Article
+                        select article.CreationTimestamp;
+
+            return Json(await query.ToListAsync());
+        }
     }
 }
