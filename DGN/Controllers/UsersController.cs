@@ -342,9 +342,12 @@ namespace DGN.Controllers
         // 
 
         [Authorize]
-        public async Task<IActionResult> GetUserLikedArticles(int? id, int page, int count)
-        {          
-            return Json(await _context.User.Include(u => u.ArticleLikes).Where(u => u.Id == id).Select(u => u.ArticleLikes).Skip(page * count).Take(count).FirstOrDefaultAsync());
+        public async Task<IActionResult> GetUserLikedArticles(int id, int page, int count)
+        {
+            var query = from article in _context.Article
+                        where article.UserLikes.Any(u => u.Id == id)
+                        select article;
+            return Json(await query.Skip(page * count).Take(count).ToListAsync());
         }
 
         [Authorize]
