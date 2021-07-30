@@ -15,7 +15,7 @@ namespace DGN.Models
         public string Body { get; set; }
 
         [DisplayName("User")]
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
 
         public User User { get; set; }
 

@@ -286,7 +286,7 @@ namespace DGN.Controllers
             string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             bool logout = false;
 
-            User user = await _context.User.Include(u => u.Password).FirstOrDefaultAsync(u => u.Id == id);
+            User user = await _context.User.Include(u => u.Password).Include(u => u.Comments).Include(u => u.Articles).FirstOrDefaultAsync(u => u.Id == id);
 
             if (plainPass == null)
             {
