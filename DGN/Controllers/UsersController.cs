@@ -293,9 +293,10 @@ namespace DGN.Controllers
                 ViewData["Error"] = "Your password is required";
                 return View(user);
             }
-
+            IActionResult redirect;
             if (!userId.Equals(id.ToString()))
             {
+                redirect = RedirectToAction(nameof(Index));
                 if (userRole.Equals(UserRole.Admin.ToString()))
                 {
                     User currentUser = await _context.User.Include(u => u.Password).FirstOrDefaultAsync(u => u.Id.ToString() == userId);
@@ -317,6 +318,7 @@ namespace DGN.Controllers
             }
             else
             {
+                redirect = Redirect("/");
                 if (!user.Password.Check(plainPass))
                 {
                     ViewData["Error"] = "password is not correct";
@@ -334,7 +336,7 @@ namespace DGN.Controllers
             {
                 await Logout();
             }
-            return Redirect("/");
+            return redirect;
         }
 
         //
