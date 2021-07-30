@@ -444,6 +444,7 @@ namespace DGN.Controllers
         }
         private async Task<IActionResult> PostEditUser(int? id, IFormFile ImageFile, User user, bool RoleChanged, IActionResult redirectPage)
         {
+            bool logout = false;
             string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (id == null || user == null || id != user.Id)
             {
@@ -462,9 +463,15 @@ namespace DGN.Controllers
             {
                 user.Role = oldUser.Role;
             }
-            else if (oldUser.Role == UserRole.Admin && user.Role != UserRole.Admin && !(userId.Equals(user.Id.ToString()))) 
+            else if (oldUser.Role == UserRole.Admin && user.Role != UserRole.Admin) 
             {
-                ModelState.AddModelError("Role", "Can't change role for Admin");    
+                if (userId.Equals(user.Id.ToString()))
+                {
+                    logout = true;
+                }
+                else {
+                    ModelState.AddModelError("Role", "Can't change role for Admin");
+                }
             }
             if (oldUser.Email != user.Email)
             {
@@ -511,6 +518,9 @@ namespace DGN.Controllers
                     {
                         throw;
                     }
+                }
+                if (logout) {
+                    return await Logout();
                 }
                 return redirectPage;
             }
