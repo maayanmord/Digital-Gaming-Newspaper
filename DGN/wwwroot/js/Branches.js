@@ -114,6 +114,8 @@ function geocodeQuery(query) {
     var searchRequest = {
         where: query,
         callback: function (r) {
+            $('#message').html('');
+
             // If there is any results: 
             if (r && r.results && r.results.length > 0) {
                 // Add the pin to the map
