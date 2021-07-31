@@ -73,7 +73,6 @@
                             <span>|</span>
                             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                         }
-
                     </td>
                 </tr>
             }
@@ -107,9 +106,9 @@
             </td>
             <td>
                 <a href="Users/EditAsAdmin/{id}">Edit</a> |
-                <a href="Users/Profile/{id}">Profile</a> |
-                <a href="Users/Delete/{id}">Delete</a>
+                <a href="Users/Profile/{id}">Profile</a>
+                {delete}
             </td>
-        </tr>
-    </script>
+</tr>
+</script>
 }

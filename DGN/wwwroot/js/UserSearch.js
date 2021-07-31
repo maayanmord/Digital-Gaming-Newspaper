@@ -21,6 +21,12 @@
                     temp = temp.replaceAll('{' + key + '}', value);
                 });
 
+                if (val.canDelete) {
+                    temp = temp.replaceAll('{delete}', " <span>|</span> <a href ='Users/Delete/" + val.id + "'>Delete</a>");
+                } else {
+                    temp = temp.replaceAll('{delete}', "");
+                }
+
                 $('tbody').append(temp);
             });
         });
