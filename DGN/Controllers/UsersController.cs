@@ -529,6 +529,7 @@ namespace DGN.Controllers
         {
             return Json(await _context.User.Where(a => (a.Firstname.Contains(query) || a.Lastname.Contains(query) || a.Username.Contains(query) || a.Email.Contains(query) || query == null)).Select(a => new
             {
+                a.Id,
                 a.Email,
                 a.Username,
                 a.Firstname,
