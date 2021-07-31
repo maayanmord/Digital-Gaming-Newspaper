@@ -31,4 +31,18 @@
         // The submit button is enable only when the passwords match AND both of the passwords fields are not empty.
         $('#submit').prop('disabled', (!(passwordsMatch && passwordNOTEmpty && confPasswordNOTEmpty)));
     });
+
+    $("#GenerateUsernameButton").click(function () {
+        $.ajax({
+            method: "GET",
+            url: "https://randomuser.me/api/",
+            success: function (data) {
+                $("#generateUsernameError").html('');
+                $("#Username").val(data.results.at(0).login.username);
+            },
+            error: function (data) {
+                $("#generateUsernameError").html('Error occured while retrieving generated username').css('color','red');
+            }
+        });
+    });
 })
