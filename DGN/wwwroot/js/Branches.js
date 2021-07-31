@@ -1,5 +1,5 @@
 ﻿$(function () {
-    $('form').submit(function (e) {
+    $('#searchForm').submit(function (e) {
         e.preventDefault();
 
         var query = $('#query').val();
