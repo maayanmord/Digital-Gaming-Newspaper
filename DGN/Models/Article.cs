@@ -32,7 +32,7 @@ namespace DGN.Models
 
         public Category Category { get; set; }
 
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
 
         public User User { get; set; }
 
