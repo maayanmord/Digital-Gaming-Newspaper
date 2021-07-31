@@ -172,6 +172,7 @@ namespace DGN.Controllers
                     ViewData["Error"] = "The email or password is incorrect";
                 }
             }
+            ViewData["ReturnUrl"] = ReturnUrl;
             return View();
         }
 
