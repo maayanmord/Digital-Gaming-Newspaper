@@ -14,6 +14,7 @@
                     </div>
                     <hr class="sep">
                     <form asp-action="Login" id="login_form">
+                        <input type="text" id="ReturnUrl" name="ReturnUrl" value="@ViewData["ReturnUrl"]" hidden>
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <h4>E-mail</h4>
                         <input type="email" name="Email" id="input_mail" placeholder="E-mail address" required="">

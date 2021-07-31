@@ -126,19 +126,20 @@ namespace DGN.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login");
+            return RedirectToAction(nameof(Login));
         }
 
         // GET: Users/Login
-        public IActionResult Login()
+        public IActionResult Login(string ReturnUrl)
         {
+            ViewData["ReturnUrl"] = ReturnUrl;
             return View();
         }
 
         // POST: Users/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(string Email, string password)
+        public async Task<IActionResult> Login(string Email, string password, string ReturnUrl)
         {
             if (!EmailExists(Email))
             {
@@ -167,13 +168,17 @@ namespace DGN.Controllers
                         new ClaimsPrincipal(claimIdentity),
                         authProperties);
 
-                    return Redirect("/");
+                    if (Url.IsLocalUrl(ReturnUrl))
+                        return Redirect(ReturnUrl);
+                    else
+                        return RedirectToAction(nameof(Index), "Articles");
                 }
                 else
                 {
                     ViewData["Error"] = "The email or password is incorrect";
                 }
             }
+            ViewData["ReturnUrl"] = ReturnUrl;
             return View();
         }
 
