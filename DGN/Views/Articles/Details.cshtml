@@ -3,7 +3,16 @@
 
 @{
     ViewData["Title"] = "Details";
+    string absoluteUri = string.Concat(
+                       ViewContext.HttpContext.Request.Scheme,
+                       "://",
+                       ViewContext.HttpContext.Request.Host.ToUriComponent(),
+                       ViewContext.HttpContext.Request.PathBase.ToUriComponent(),
+                       ViewContext.HttpContext.Request.Path.ToUriComponent(),
+                       ViewContext.HttpContext.Request.QueryString.ToUriComponent()); }
 }
+
+
 
 <div class="container">
     <div class="article-image">
@@ -14,7 +23,7 @@
             <h1 class="display-2 article-title">@Html.DisplayFor(model => model.Title)</h1>
             <p class="lead">By: <a style="color: black" asp-action="Profile" asp-controller="Users" asp-route-id="@Model.UserId">@Html.DisplayFor(model => model.User.FullName)</a></p>
             @if (User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()) ||
-              User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Author.ToString()))
+                 User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Author.ToString()))
             {
                 <p>
                     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info btn-md" role="button">Edit</a>
@@ -40,7 +49,26 @@
     </div>
 </div>
 
+<div class="container article-buttons">
+    <span>
+        Likes: <span id="numberOfLikes">@(Model.UserLikes.Count())</span>
+        <like-button id="likeButton" class="@(Model.UserLikes.Any(ul => ul.Id == int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))) ? "liked" : "")">
+            <span>
+                <i class="fa fa-thumbs-up"></i>
+                <span id="likeButtonText" class="icon">@(Model.UserLikes.Any(ul => ul.Id == int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))) ? "Unlike" : "Like")</span>
+            </span>
+        </like-button>
+    </span>
+    <a href="http://twitter.com/share?text=@Html.DisplayFor(model => model.Title) - &url=@absoluteUri" class="twitter-share-button" data-show-count="false"></a>
+</div>
+
 <div class="container">
+    <div id="alert-body" class="alert alert-danger" role="alert" style="display: none;">
+        <strong>Holy guacamole!</strong> An error occurred while we were processing your request, try again or stop messing with our site! :)
+        <button id="alert-button" type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <br />
     <p class="h4">Comments</p>
     <br />
@@ -56,12 +84,6 @@
             <input id="ArticleId" hidden type="text" value="@Html.DisplayFor(model => model.Id)" />
         </div>
     </form>
-    <div id="alert-body" class="alert alert-danger" role="alert" style="display: none;">
-        <strong>Holy guacamole!</strong> An error occurred while we were processing your request, try again or stop messing with our site! :)
-        <button id="alert-button" type="button" class="close" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
     <div id="comment-section">
         @foreach (var item in Model.Comments.OrderByDescending(e => e.CreationTimestamp))
         {
@@ -81,7 +103,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             @if (User.FindFirstValue(ClaimTypes.NameIdentifier).Equals(item.UserId.ToString()) ||
-                                   User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()))
+                                 User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()))
                             {
                                 <button type="button" class="btn btn-link"
                                         data-toggle="modal"
@@ -181,10 +203,12 @@
 </div>
 
 @section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/css/articleDetails.css">
 }
 
 @section Scripts {
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <script type="text/javascript">
         function gettoken() {
             var token = '@Html.AntiForgeryToken()';

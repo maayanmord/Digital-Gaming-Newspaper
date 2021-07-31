@@ -125,4 +125,31 @@
     $('#alert-button').click(function () {
         $("#alert-body").hide();
     });
+
+    $('#likeButton').click(() => {
+        articleId = $("#ArticleId").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/Articles/LikeArticle",
+            data: {
+                articleId,
+                __RequestVerificationToken: gettoken()
+            },
+            success: function (data) {
+                if (data.isLiked) {
+                    $('like-button').addClass('liked');
+                    $('#likeButtonText').html('Unlike');
+                } else {
+                    $('like-button').removeClass('liked');
+                    $('#likeButtonText').html('Like');
+                }
+            },
+            error: function (data) {
+                $("#alert-body").show();
+            }
+        }).done(function (data) {
+            $('#numberOfLikes').html(data.count)
+        });
+    }); 
 });
