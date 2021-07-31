@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<DGN.Models.User>
+@using System.Security.Claims;
 
 @{
     ViewData["Title"] = "Index";
@@ -55,8 +56,13 @@
                     </td>
                     <td>
                         <a asp-action="EditAsAdmin" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Profile" asp-route-id="@item.Id">Profile</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a asp-action="Profile" asp-route-id="@item.Id">Profile</a>
+                        @if (item.Role != UserRole.Admin || (User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Equals(item.Id.ToString()))
+                        {
+                            <span>|</span>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+
                     </td>
                 </tr>
             }
