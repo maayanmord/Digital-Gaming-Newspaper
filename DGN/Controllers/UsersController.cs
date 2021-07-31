@@ -62,6 +62,12 @@ namespace DGN.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditAsAdmin(int? id, IFormFile ImageFile, [Bind("Id,Email,Firstname,Lastname,Birthday,Role,About")] User user)
         {
+            ViewData["Roles"] = new SelectList(new List<SelectListItem>
+                {
+                    new SelectListItem { Text = UserRole.Admin.ToString(), Value = UserRole.Admin.ToString()},
+                    new SelectListItem { Text = UserRole.Author.ToString(), Value = UserRole.Author.ToString()},
+                    new SelectListItem { Text = UserRole.Client.ToString(), Value = UserRole.Client.ToString()},
+                }, "Text", "Value");
             return await PostEditUser(id, ImageFile, user, true, RedirectToAction(nameof(Index)));
         }
 
@@ -293,9 +299,10 @@ namespace DGN.Controllers
                 ViewData["Error"] = "Your password is required";
                 return View(user);
             }
-
+            IActionResult redirect;
             if (!userId.Equals(id.ToString()))
             {
+                redirect = RedirectToAction(nameof(Index));
                 if (userRole.Equals(UserRole.Admin.ToString()))
                 {
                     User currentUser = await _context.User.Include(u => u.Password).FirstOrDefaultAsync(u => u.Id.ToString() == userId);
@@ -317,6 +324,7 @@ namespace DGN.Controllers
             }
             else
             {
+                redirect = Redirect("/");
                 if (!user.Password.Check(plainPass))
                 {
                     ViewData["Error"] = "password is not correct";
@@ -334,7 +342,7 @@ namespace DGN.Controllers
             {
                 await Logout();
             }
-            return Redirect("/");
+            return redirect;
         }
 
         //
@@ -436,6 +444,8 @@ namespace DGN.Controllers
         }
         private async Task<IActionResult> PostEditUser(int? id, IFormFile ImageFile, User user, bool RoleChanged, IActionResult redirectPage)
         {
+            bool logout = false;
+            string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (id == null || user == null || id != user.Id)
             {
                 return NotFound();
@@ -452,6 +462,16 @@ namespace DGN.Controllers
             if (!RoleChanged)
             {
                 user.Role = oldUser.Role;
+            }
+            else if (oldUser.Role == UserRole.Admin && user.Role != UserRole.Admin) 
+            {
+                if (userId.Equals(user.Id.ToString()))
+                {
+                    logout = true;
+                }
+                else {
+                    ModelState.AddModelError("Role", "Can't change role for Admin");
+                }
             }
             if (oldUser.Email != user.Email)
             {
@@ -498,6 +518,9 @@ namespace DGN.Controllers
                     {
                         throw;
                     }
+                }
+                if (logout) {
+                    return await Logout();
                 }
                 return redirectPage;
             }
