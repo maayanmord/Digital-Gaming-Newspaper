@@ -18,8 +18,6 @@
                 var temp = template;
 
                 $.each(val, function (key, value) {
-                    if (key == "role")
-                        temp = temp.replaceAll('{' + key + '}', (value == 0 ? "Client" : (value == 1 ? "Author" : "Admin")));
                     temp = temp.replaceAll('{' + key + '}', value);
                 });
 
