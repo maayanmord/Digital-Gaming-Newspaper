@@ -137,7 +137,7 @@
                 __RequestVerificationToken: gettoken()
             },
             success: function (data) {
-                if (data) {
+                if (data.isLiked) {
                     $('like-button').addClass('liked');
                     $('#likeButtonText').html('Unlike');
                 } else {
@@ -148,6 +148,8 @@
             error: function (data) {
                 $("#alert-body").show();
             }
+        }).done(function (data) {
+            $('#numberOfLikes').html(data.count)
         });
     }); 
 });

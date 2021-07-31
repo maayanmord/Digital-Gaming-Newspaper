@@ -328,9 +328,9 @@ namespace DGN.Controllers
             _context.Update(article);
             await _context.SaveChangesAsync();
 
-            return Json(!isLiked);
+            return Json(new { isLiked = !isLiked, count = article.UserLikes.Count()});
         }
-        
+
         public async Task<IActionResult> GetArticlesByCategory()
         {
             var query = from article in _context.Article

@@ -51,6 +51,7 @@
 
 <div class="container article-buttons">
     <span>
+        Likes: <span id="numberOfLikes">@(Model.UserLikes.Count())</span>
         <like-button id="likeButton" class="@(Model.UserLikes.Any(ul => ul.Id == int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))) ? "liked" : "")">
             <span>
                 <i class="fa fa-thumbs-up"></i>
