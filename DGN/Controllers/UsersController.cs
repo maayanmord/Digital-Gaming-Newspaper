@@ -552,5 +552,23 @@ namespace DGN.Controllers
         {
             return View();
         }
+
+        public async Task<IActionResult> Search(string query)
+        {
+            string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            return Json(await _context.User.Where(a => (a.Firstname.Contains(query) || a.Lastname.Contains(query) || a.Username.Contains(query) || a.Email.Contains(query) || query == null)).Select(a => new
+            {
+                a.Id,
+                a.Email,
+                a.Username,
+                a.Firstname,
+                a.Lastname,
+                birthday = a.Birthday.ToString("dd-MM-yyyy"),
+                role = a.Role.ToString(),
+                canDelete = (a.Role.ToString() != UserRole.Admin.ToString() || userId.Equals(a.Id.ToString()))
+            }
+            ).ToListAsync()); ;
+        }
     }
 }

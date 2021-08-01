@@ -14,7 +14,7 @@ namespace DGN.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength = 5)]
+        [StringLength(200, MinimumLength = 5)]
         [RegularExpression(@"^[A-Z\d].*$", ErrorMessage = "The title must begin with a capital letter or a number")]
         public string Title { get; set; }
 
