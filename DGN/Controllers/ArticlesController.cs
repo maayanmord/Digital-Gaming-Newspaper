@@ -345,6 +345,7 @@ namespace DGN.Controllers
         public async Task<IActionResult> GetArticlesDates()
         {
             var query = from article in _context.Article
+                        orderby article.CreationTimestamp
                         select article.CreationTimestamp;
 
             return Json(await query.ToListAsync());
