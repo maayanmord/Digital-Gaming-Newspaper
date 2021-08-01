@@ -20,7 +20,7 @@
     </div>
     <div class="jumbotron jumbotron-fluid article-cover">
         <div class="container text-center">
-            <h1 class="display-2 article-title">@Html.DisplayFor(model => model.Title)</h1>
+            <h1 class="display-3 article-title">@Html.DisplayFor(model => model.Title)</h1>
             <p class="lead">By: <a style="color: black" asp-action="Profile" asp-controller="Users" asp-route-id="@Model.UserId">@Html.DisplayFor(model => model.User.FullName)</a></p>
             @if (User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Admin.ToString()) ||
                  User.FindFirstValue(ClaimTypes.Role).Equals(UserRole.Author.ToString()))
