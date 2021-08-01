@@ -5,9 +5,24 @@
 }
 
 <div class="container">
-    <h2 class="text-center">Categories</h2><br />
-
-    <table class="table">
+  <h2 class="text-center">Categories</h2>
+</div>
+<br/>
+<div class="container">
+    <form asp-action="Search" id="searchForm">
+        <div class="row">
+            <div class="col-md-6">
+                <input name="categoryName" id="categoryName" autocomplete="off" class="form-control" placeholder="Search" />
+            </div>
+            <div class="col-md-6">
+                <input type="submit" class="btn btn-primary" value="Search" />
+            </div>
+        </div>
+    </form>
+    <span id="searchFormError"></span>
+</div>
+<div class="container">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>
@@ -35,3 +50,28 @@
 
     <a asp-action="Create" class="btn btn-primary">Add new category</a>
 </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function gettoken() {
+            var token = '@Html.AntiForgeryToken()';
+            token = $(token).val();
+            return token;
+        }
+    </script>
+
+    <script id="categoryTemplate" type="text/html">
+        <tr>
+            <td>
+                {categoryName}
+            </td>
+            <td>
+                <a href="/Categories/Edit/{id}">Edit</a> |
+                <a href="/Categories/Details/{id}">Details</a> |
+                <a href="/Categories/Delete/{id}">Delete</a>
+            </td>
+        </tr>
+    </script>
+
+    <script src="~/js/Categories.js"></script>
+}

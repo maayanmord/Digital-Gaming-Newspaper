@@ -167,5 +167,10 @@ namespace DGN.Controllers
         {
             return _context.Category.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> Search(string categoryName)
+        {
+            return Json(await _context.Category.Where(c => (c.CategoryName.Contains(categoryName) || categoryName == null)).ToListAsync());
+        }
     }
 }
