@@ -5,21 +5,24 @@
 }
 
 <div class="container">
-    <h2 class="text-center">Categories</h2><br />
-    <div class="container">
-        <form asp-action="Search" id="searchForm">
-            <div class="row">
-                <div class="col">
-                    <input name="categoryName" id="categoryName" autocomplete="off" class="form-control" placeholder="Search" />
-                </div>
-                <div class="col">
-                    <input type="submit" class="btn btn-primary" value="Search" />
-                </div>
+  <h2 class="text-center">Categories</h2>
+</div>
+<br/>
+<div class="container">
+    <form asp-action="Search" id="searchForm">
+        <div class="row">
+            <div class="col-md-6">
+                <input name="categoryName" id="categoryName" autocomplete="off" class="form-control" placeholder="Search" />
             </div>
-        </form>
-        <span id="searchFormError"></span>
-    </div>
-    <table class="table">
+            <div class="col-md-6">
+                <input type="submit" class="btn btn-primary" value="Search" />
+            </div>
+        </div>
+    </form>
+    <span id="searchFormError"></span>
+</div>
+<div class="container">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>
