@@ -38,7 +38,7 @@
             url: "https://randomuser.me/api/",
             success: function (data) {
                 $("#generateUsernameError").html('');
-                $("#Username").val(data.results.at(0).login.username);
+                $("#Username").val(data.results[0].login.username);
             },
             error: function (data) {
                 $("#generateUsernameError").html('Error occured while retrieving generated username').css('color','red');
