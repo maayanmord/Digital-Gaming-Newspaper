@@ -154,7 +154,7 @@
                                             <h6 class="mb-0">@Html.DisplayNameFor(model => model.Birthday)</h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary">
-                                            <input class="form-control" asp-for="Birthday">
+                                            <input class="form-control" type="date" max="@DateTime.Now.Date.AddYears(-9)" asp-for="Birthday">
                                             <span asp-validation-for="Birthday" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -278,7 +278,7 @@
                             <h6 class="mb-0">@Html.DisplayNameFor(model => model.Birthday)</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            <input class="form-control" asp-for="Birthday">
+                            <input class="form-control" type="date" max="@DateTime.Now.Date.AddYears(-9)" asp-for="Birthday">
                             <span asp-validation-for="Birthday" class="text-danger"></span>
                         </div>
                     </div>
