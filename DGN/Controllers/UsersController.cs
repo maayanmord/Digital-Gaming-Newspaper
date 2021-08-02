@@ -40,7 +40,7 @@ namespace DGN.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.User.OrderBy(u => u.Username).ToListAsync());
+            return View(await _context.User.ToListAsync());
         }
 
         // GET: Users/EditAsAdmin
@@ -117,7 +117,7 @@ namespace DGN.Controllers
                 }
                 _context.Add(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Login));
             }
             return View(user);
         }
