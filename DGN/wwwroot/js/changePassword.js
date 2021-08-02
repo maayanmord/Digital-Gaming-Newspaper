@@ -1,31 +1,23 @@
 ﻿$(function () {
-    var passwordMatch = false;
-    var passwordNOTEmpty = false;
 
-    $('#newPassword, #confirmNewPassword, #currPassword').on('keyup', function () {
-        if ($('#newPassword').val() == $('#confirmNewPassword').val()) {
-            passwordMatch = true;
-        } else {
-            passwordMatch = false;
-        }
-
-        if ($('#newPassword').val() == '' || $('#confirmNewPassword').val() == '' || $('#currPassword').val() == '' ) {
-            passwordNOTEmpty = false;
-        } else {
-            passwordNOTEmpty = true;
-        }
-
-        if (passwordMatch && passwordNOTEmpty) {
-            $('#submit').prop('disabled', false)
-            $('#message').html('');
-        } else {
-            $('#submit').prop('disabled', true)
-            if (!passwordMatch) {
-                $('#message').html('Passwords Not Matching');
-            } else {
-                $('#message').html('Some fields are missing!');
-            }
-            
-        }
-    });
 })
+
+function isValidForm() {
+    var currPass = $('#currPassword').val();
+    var newPass = $('#newPassword').val();
+    var confirmNewPass = $("#confirmNewPassword").val();
+
+    $("#currPasswordError").html("");
+    $("#message").html("");
+
+    if (currPass == '' || newPass == '' || confirmNewPass == '') {
+        $('#message').html("Please fill all the required fields")
+        return false;
+    }
+    if (newPass != confirmNewPass) {
+        $('#message').html("Passwords don't match")
+        return false;
+    }
+
+    return true;
+}
