@@ -40,7 +40,7 @@ namespace DGN.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.User.OrderBy(u => u.Username).ToListAsync());
+            return View(await _context.User.ToListAsync());
         }
 
         // GET: Users/EditAsAdmin
