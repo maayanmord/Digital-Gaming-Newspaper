@@ -250,7 +250,7 @@ namespace DGN.Controllers
 
         public async Task<IActionResult> Search(string queryTitle)
         {
-            return Json(await _context.Article.Where(a => (a.Title.Contains(queryTitle))).ToListAsync());
+            return Json(await _context.Article.Where(a => (a.Title.Contains(queryTitle))).OrderByDescending(a => a.CreationTimestamp).ToListAsync());
         }
 
         public async Task<IActionResult> AdvancedSearch(int? categoryId, string author, string title)
@@ -261,7 +261,7 @@ namespace DGN.Controllers
             }
             return Json(await _context.Article.Include(a => a.User).Where(a => (a.CategoryId.Equals(categoryId) || categoryId == null) && 
             (a.Title.Contains(title) || title == null) && 
-            ((a.User.Firstname + " " + a.User.Lastname).Contains(author) || author == null)).Select(a => new
+            ((a.User.Firstname + " " + a.User.Lastname).Contains(author) || author == null)).OrderByDescending(a => a.CreationTimestamp).Select(a => new
             {
                 a.Id,
                 a.Title,
