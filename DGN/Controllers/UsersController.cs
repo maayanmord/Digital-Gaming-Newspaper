@@ -234,7 +234,9 @@ namespace DGN.Controllers
             if (CanUsePassword(newPassword, confirmNewPassword))
             {
                 // Creating the new password
-                user.Password = new Password(user.Id, newPassword, user);
+                Password newPass = new Password(user.Id, newPassword, user);
+                user.Password.Hash = newPass.Hash;
+                user.Password.Salt = newPass.Salt;
                 _context.User.Update(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Profile), new { id = user.Id });
