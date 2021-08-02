@@ -239,7 +239,7 @@ namespace DGN.Controllers
                 user.Password.Salt = newPass.Salt;
                 _context.User.Update(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Profile), new { id = user.Id });
+                return await Logout();
             }
             return View();
         }
