@@ -40,7 +40,7 @@ namespace DGN.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.User.OrderBy(u => u.Username).ToListAsync());
+            return View(await _context.User.ToListAsync());
         }
 
         // GET: Users/EditAsAdmin
@@ -117,7 +117,7 @@ namespace DGN.Controllers
                 }
                 _context.Add(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Login));
             }
             return View(user);
         }
@@ -234,10 +234,12 @@ namespace DGN.Controllers
             if (CanUsePassword(newPassword, confirmNewPassword))
             {
                 // Creating the new password
-                user.Password = new Password(user.Id, newPassword, user);
+                Password newPass = new Password(user.Id, newPassword, user);
+                user.Password.Hash = newPass.Hash;
+                user.Password.Salt = newPass.Salt;
                 _context.User.Update(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Profile), new { id = user.Id });
+                return await Logout();
             }
             return View();
         }

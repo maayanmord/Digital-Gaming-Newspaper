@@ -11,17 +11,18 @@
                 <div class="inner">
                     <div class="formTitle">
                         <h2>Register</h2>
+                        <p class="text-danger">* Required</p>
                     </div>
                     <hr class="sep">
                     <form asp-action="Register" id="registerForm" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
-                            <label asp-for="Email" class="control-label"></label>
+                            <label asp-for="Email" class="control-label"></label><span class="text-danger">*</span>
                             <input asp-for="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Username" class="control-label"></label>
+                            <label asp-for="Username" class="control-label"></label><span class="text-danger">*</span>
                             <div class="row">
                                 <div class="col-md-6">
                                     <input asp-for="Username" class="form-control" />
@@ -34,36 +35,36 @@
                             <span id="generateUsernameError"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Firstname" class="control-label"></label>
+                            <label asp-for="Firstname" class="control-label"></label><span class="text-danger">*</span>
                             <input asp-for="Firstname" class="form-control" />
                             <span asp-validation-for="Firstname" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Lastname" class="control-label"></label>
+                            <label asp-for="Lastname" class="control-label"></label><span class="text-danger">*</span>
                             <input asp-for="Lastname" class="form-control" />
                             <span asp-validation-for="Lastname" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Birthday" class="control-label"></label>
-                            <input class="form-control" type="date" max="@DateTime.Now.Date.AddYears(-9)" asp-for="Birthday">
+                            <label asp-for="Birthday" class="control-label"></label><span class="text-danger">*</span>
+                            <input class="form-control" type="date" max="@DateTime.Now.Date.AddYears(-9)" asp-for="Birthday" />
                             <span asp-validation-for="Birthday" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="About" class="control-label"></label>
+                            <label asp-for="About" class="control-label"></label><span class="font-italic small"> (Optional)</span>
                             <textarea asp-for="About" class="form-control"></textarea>
                             <span asp-validation-for="About" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Profile Image</label>
+                            <label class="control-label">Profile Image</label><span class="font-italic small"> (Optional)</span>
                             <input type="file" name="ImageFile" id="ImageFile" accept="image/x-png,image/jpg,image/jpeg" />
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Password</label>
+                            <label class="control-label">Password</label><span class="text-danger">*</span>
                             <input type="password" id="Password" name="plainPass" class="form-control" />
                             <span id="passMessage"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Confirm Password</label>
+                            <label class="control-label">Confirm Password</label><span class="text-danger">*</span>
                             <input type="password" id="confirmPassword" name="confirmPass" class="form-control" />
                             <span id="confPassMessage"></span>
                         </div>

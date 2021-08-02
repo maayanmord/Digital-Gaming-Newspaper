@@ -21,9 +21,9 @@
         } else {
             $('#submit').prop('disabled', true)
             if (!passwordMatch) {
-                $('#message').html('Passwords Not Matching').css('color', 'red');
+                $('#message').html('Passwords Not Matching');
             } else {
-                $('#message').html('Some fields are missing!').css('color', 'red');
+                $('#message').html('Some fields are missing!');
             }
             
         }
