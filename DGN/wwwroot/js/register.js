@@ -15,11 +15,13 @@
 });
 
 function isValidForm() {
+    const regex = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])\\S{8,}$");
     var isValid = true;
     var pass = $('#Password').val();
     var confirmPass = $('#confirmPassword').val();
     $('#passMessage').html("");
     $('#confPassMessage').html("");
+    $('#errorMessage').html("");
 
     if (pass == '') {
         $('#passMessage').html("Please enter your password")
@@ -31,6 +33,16 @@ function isValidForm() {
     }
     if (pass != '' && confirmPass != '' && pass != confirmPass) {
         $('#confPassMessage').html("Passwords don't match");
+        isValid = false;
+    }
+
+    // Don't check regex validate if something went wrong before this validation
+    if (!isValid) {
+        return isValid
+    }
+
+    if (!regex.test(pass)) {
+        $('#confPassMessage').html("The minumum requierments for password are: 8 characters long containing 1 uppercase letter, 1 lowercase letter, a number and a special character");
         isValid = false;
     }
 
