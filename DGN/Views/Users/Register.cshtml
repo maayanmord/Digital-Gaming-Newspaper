@@ -14,7 +14,7 @@
                         <p class="text-danger">* Required</p>
                     </div>
                     <hr class="sep">
-                    <form asp-action="Register" id="registerForm" enctype="multipart/form-data">
+                    <form asp-action="Register" id="registerForm" enctype="multipart/form-data" onsubmit="return isValidForm()">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
                             <label asp-for="Email" class="control-label"></label><span class="text-danger">*</span>
@@ -46,7 +46,7 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="Birthday" class="control-label"></label><span class="text-danger">*</span>
-                            <input asp-for="Birthday" class="form-control" />
+                            <input class="form-control" type="date" max="@DateTime.Now.Date.AddYears(-9).ToString("yyyy-MM-dd")" asp-for="Birthday" />
                             <span asp-validation-for="Birthday" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -61,20 +61,19 @@
                         <div class="form-group">
                             <label class="control-label">Password</label><span class="text-danger">*</span>
                             <input type="password" id="Password" name="plainPass" class="form-control" />
-                            <span id="passMessage"></span>
+                            <span id="passMessage" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label class="control-label">Confirm Password</label><span class="text-danger">*</span>
                             <input type="password" id="confirmPassword" name="confirmPass" class="form-control" />
-                            <span id="confPassMessage"></span>
+                            <span id="confPassMessage" class="text-danger"></span>
                         </div>
-                        <span id="notMatchPassMessage"></span>
                         @if (ViewBag.Error != null)
                         {
                             <div class="text-danger">@ViewBag.Error</div>
                         }
                         <div class="form-group">
-                            <input id="submit" disabled type="submit" value="Register" class="btn btn-primary" />
+                            <input id="submit" type="submit" value="Register" class="btn btn-primary" />
                         </div>
                     </form>
                     <div>
