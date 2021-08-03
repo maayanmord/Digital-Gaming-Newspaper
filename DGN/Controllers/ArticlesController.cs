@@ -231,7 +231,7 @@ namespace DGN.Controllers
             var article = await _context.Article.FindAsync(id);
             if (DEFAULT_IMAGE != article.ImageLocation)
             {
-                await _service.DeleteImage(System.IO.Path.GetFileName(article.ImageLocation));
+                _service.DeleteImage(System.IO.Path.GetFileName(article.ImageLocation));
             }
             _context.Article.Remove(article);
             await _context.SaveChangesAsync();
