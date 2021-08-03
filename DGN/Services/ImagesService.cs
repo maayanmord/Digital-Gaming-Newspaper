@@ -32,7 +32,7 @@ namespace DGN.Services
             return true;
         }
 
-        public async Task DeleteImage(string fileName)
+        public void DeleteImage(string fileName)
         {
             if (System.IO.File.Exists(IMAGES_LOCATION + fileName))
             {
