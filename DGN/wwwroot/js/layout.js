@@ -4,7 +4,7 @@ $(function () {
     var img = new Image();
     img.onload = function () {
         var ctx = $("#logoCanvas").get(0).getContext("2d");
-        ctx.drawImage(img, 50, 30, 170, 93);
+        ctx.drawImage(img, 0, 0, 125, 45);
     }
 
     img.src = '/images/logo.png'
