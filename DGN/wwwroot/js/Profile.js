@@ -16,17 +16,10 @@ $(function () {
     }
 
     function reloadCache() {
-        $.ajax({
-            url: "",
-            context: document.body,
-            success: function (result) {
-                $('html[manifest=saveappoffline.appcache]').attr('content', '');
-                $(this).html(result);
-            }
-        });
+        location.reload();
     }
 
-    reloadCache();
+    // reloadCache();
     view();
     $('#SaveChangesButton').click(reloadCache);
     $('#Cancel').click(function () {
