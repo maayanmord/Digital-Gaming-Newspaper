@@ -504,7 +504,7 @@ namespace DGN.Controllers
                         user.ImageLocation = _service.CLIENT_IMAGES_LOCATION + fileName;
                         if (DEFAULT_IMAGE != oldUser.ImageLocation && user.ImageLocation != oldUser.ImageLocation)
                         {
-                            await _service.DeleteImage(System.IO.Path.GetFileName(oldUser.ImageLocation));
+                            _service.DeleteImage(System.IO.Path.GetFileName(oldUser.ImageLocation));
                         }
                     }
                     else
