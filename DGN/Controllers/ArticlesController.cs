@@ -169,7 +169,7 @@ namespace DGN.Controllers
                         // Delete the old image if the name was changed, for exmaple: Article2.png changed to Article2.jpg
                         if (DEFAULT_IMAGE != currArticle.ImageLocation && newArticle.ImageLocation != currArticle.ImageLocation)
                         {
-                            await _service.DeleteImage(System.IO.Path.GetFileName(currArticle.ImageLocation));
+                            _service.DeleteImage(System.IO.Path.GetFileName(currArticle.ImageLocation));
                         }
                     }
                     else
@@ -231,7 +231,7 @@ namespace DGN.Controllers
             var article = await _context.Article.FindAsync(id);
             if (DEFAULT_IMAGE != article.ImageLocation)
             {
-                await _service.DeleteImage(System.IO.Path.GetFileName(article.ImageLocation));
+                _service.DeleteImage(System.IO.Path.GetFileName(article.ImageLocation));
             }
             _context.Article.Remove(article);
             await _context.SaveChangesAsync();
