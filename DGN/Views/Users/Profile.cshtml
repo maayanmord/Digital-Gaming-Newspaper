@@ -7,9 +7,10 @@
 
 <div class="container">
     <div class="main-body">
+        <div class="text-danger" id="ErrorMessage"></div>
         <form id="form" class="row gutters-sm" method="post" asp-action="Profile" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input id="ProfileId" type="hidden" asp-for="Id" />
             <div class="col-md-4 mb-3">
                 <div class="card">
                     <div class="card-body">
@@ -93,9 +94,9 @@
                         @if ((User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Equals(Model.Id.ToString()))
                         {
                             <hr />
-                            <div class="row" id="EditButton">
+                            <div class="row">
                                 <div class="col-sm-12 text-secondary">
-                                    <button type="button" class="btn btn-info">Edit</button>
+                                    <button id="EditButton" type="button" class="btn btn-info">Edit</button>
                                 </div>
                             </div>
                         }
@@ -153,16 +154,18 @@
                                 <input type="file" name="ImageFile" id="ImageFile" accept="image/x-png,image/jpg,image/jpeg" />
                             </div>
                         </div>
-                        @if (ViewBag.Error != null)
-                        {
-                            <div class="text-danger">@ViewBag.Error</div>
-                        }
                         <div class="row">
                             <div class="col-sm-9 text-secondary">
                                 <input type="submit" class="btn btn-primary px-4" value="Save Changes" id="SaveChangesButton">
                                 <input type="button" class="btn btn-dark px-4" value="Cancel" id="Cancel">
                             </div>
                         </div>
+                    </div>
+                    <div class="container">
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="text-danger">@ViewBag.Error</div>
+                        }
                     </div>
                 </div>
                 <div class="card mb-3">
@@ -202,15 +205,6 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-
-    <script type="text/javascript">
-        function gettoken() {
-            var token = '@Html.AntiForgeryToken()';
-            token = $(token).val();
-            return token;
-        }
-    </script>
 
     <script id="NoMoreArticleTemplate" type="text/html">
         <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">

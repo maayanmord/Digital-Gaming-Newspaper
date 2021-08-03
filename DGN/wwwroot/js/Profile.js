@@ -1,5 +1,5 @@
-﻿
-$(function () {
+﻿$(function () {
+    view();
 
     function edit() {
         $("#ViewProperties").attr("hidden", true);
@@ -19,30 +19,31 @@ $(function () {
         location.reload();
     }
 
-    // reloadCache();
-    view();
-    $('#SaveChangesButton').click(reloadCache);
+    $('#form').submit(function (e) {
+        if ($('#form').valid()) {
+            reloadCache();
+        }
+    });
+
     $('#Cancel').click(function () {
+        $("form").trigger("reset");
+        $("#form").find(".field-validation-valid").empty();
         view();
     });
 
     $("#EditButton").click(function () {
         edit();
-        $('#SaveChangesButton').click(reloadCache);
-        $('#Cancel').click(function () {
-            view();
-        });
     });
     
     function getArticlePage(id, page, getUrl, sectionId) {
-        count=5
+        count = 5
         $.ajax({
             type: "GET",
-            url: getUrl + id,
+            url: getUrl,
             data: {
+                id: id,
                 page: page,
-                count: count,
-                __RequestVerificationToken: gettoken()
+                count: count
             },
             success: function (data) {
                 countCheck = 0;
@@ -81,7 +82,7 @@ $(function () {
                 }
             },
             error: function (data) {
-                alert(data);
+                $("#ErrorMessage").html("There was an error pulling all your profile information, some data might be missing");
             }
         });
     }
