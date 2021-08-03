@@ -169,7 +169,7 @@ namespace DGN.Controllers
                         // Delete the old image if the name was changed, for exmaple: Article2.png changed to Article2.jpg
                         if (DEFAULT_IMAGE != currArticle.ImageLocation && newArticle.ImageLocation != currArticle.ImageLocation)
                         {
-                            await _service.DeleteImage(System.IO.Path.GetFileName(currArticle.ImageLocation));
+                            _service.DeleteImage(System.IO.Path.GetFileName(currArticle.ImageLocation));
                         }
                     }
                     else
