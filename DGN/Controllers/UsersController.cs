@@ -273,7 +273,7 @@ namespace DGN.Controllers
         //
 
         // GET: Users/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (!isAuthorizeEditor(id))
@@ -291,7 +291,7 @@ namespace DGN.Controllers
         // in both cases the user needs to confirm its password
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id, string plainPass)
         {
 
@@ -560,6 +560,7 @@ namespace DGN.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Search(string query)
         {
             string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
