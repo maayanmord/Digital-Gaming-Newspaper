@@ -1,37 +1,4 @@
 ﻿$(function () {
-    var passwordsMatch = false;
-    var passwordNOTEmpty = false;
-    var confPasswordNOTEmpty = false;
-
-    $('#Password, #confirmPassword').on('keyup', function () {
-        if ($('#Password').val() == $('#confirmPassword').val()) {
-            $('#notMatchPassMessage').html('');
-            passwordsMatch = true;
-        } else {
-            $('#notMatchPassMessage').html('Passwords Not Matching').css('color', 'red');
-            passwordsMatch = false;
-        }
-
-        if ($('#Password').val() != '') {
-            $('#passMessage').html('');
-            passwordNOTEmpty = true;
-        } else {
-            $('#passMessage').html('You forget to enter the password!').css('color', 'red');
-            passwordNOTEmpty = false;
-        }
-
-        if ($('#confirmPassword').val() != '') {
-            $('#confPassMessage').html('');
-            confPasswordNOTEmpty = true;
-        } else {
-            $('#confPassMessage').html('Please enter the password again!').css('color', 'red');
-            confPasswordNOTEmpty = false;
-        }
-
-        // The submit button is enable only when the passwords match AND both of the passwords fields are not empty.
-        $('#submit').prop('disabled', (!(passwordsMatch && passwordNOTEmpty && confPasswordNOTEmpty)));
-    });
-
     $("#GenerateUsernameButton").click(function () {
         $.ajax({
             method: "GET",
@@ -41,8 +8,43 @@
                 $("#Username").val(data.results[0].login.username);
             },
             error: function (data) {
-                $("#generateUsernameError").html('Error occured while retrieving generated username').css('color','red');
+                $("#generateUsernameError").html('Error occured while retrieving generated username').css('color', 'red');
             }
         });
     });
-})
+});
+
+function isValidForm() {
+    const regex = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])\\S{8,}$");
+    var isValid = true;
+    var pass = $('#Password').val();
+    var confirmPass = $('#confirmPassword').val();
+    $('#passMessage').html("");
+    $('#confPassMessage').html("");
+    $('#errorMessage').html("");
+
+    if (pass == '') {
+        $('#passMessage').html("Please enter your password")
+        isValid = false;
+    }
+    if (confirmPass == '') {
+        $('#confPassMessage').html("Please enter your password again")
+        isValid = false;
+    }
+    if (pass != '' && confirmPass != '' && pass != confirmPass) {
+        $('#confPassMessage').html("Passwords don't match");
+        isValid = false;
+    }
+
+    // Don't check regex validate if something went wrong before this validation
+    if (!isValid) {
+        return isValid
+    }
+
+    if (!regex.test(pass)) {
+        $('#confPassMessage').html("The minumum requierments for password are: 8 characters long containing 1 uppercase letter, 1 lowercase letter, a number and a special character");
+        isValid = false;
+    }
+
+    return isValid;
+}

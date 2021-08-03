@@ -402,17 +402,22 @@ namespace DGN.Controllers
         }
         private bool ValidPass(string plainPass)
         {
-            Regex regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
+            Regex regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])\S{8,}$");
             return regex.IsMatch(plainPass);
         }
 
         // Checking if the given input is valid to be set as password
         private bool CanUsePassword(string password, string confirmPassword)
         {
-            // Making sure new password is valid
+            if (confirmPassword == null || password == null)
+            {
+                ViewData["Error"] = "Make sure to fill up the fields Password and Confirm Password";
+                return false;
+            }
+            // Making sure new password is valid and not null
             if (!ValidPass(password))
             {
-                ViewData["Error"] = "The minumum requierments are: 8 characters long containing 1 uppercase letter, 1 lowercase letter, a number and a special character";
+                ViewData["Error"] = "The minumum requierments for password are: 8 characters long containing 1 uppercase letter, 1 lowercase letter, a number and a special character";
                 return false;
             }
             // Making sure new password confirmed
