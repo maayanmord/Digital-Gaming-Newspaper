@@ -341,7 +341,7 @@ namespace DGN.Controllers
             }
             if (DEFAULT_IMAGE != user.ImageLocation)
             {
-                await _service.DeleteImage(System.IO.Path.GetFileName(user.ImageLocation));
+                _service.DeleteImage(System.IO.Path.GetFileName(user.ImageLocation));
             }
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
