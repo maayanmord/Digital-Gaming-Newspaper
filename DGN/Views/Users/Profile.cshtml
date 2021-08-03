@@ -8,28 +8,22 @@
 <div class="container">
     <div class="main-body">
         <form id="form" class="row gutters-sm" method="post" asp-action="Profile" enctype="multipart/form-data">
-            <input type="hidden" asp-for="Id" id="ProfileId" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <div class="col-md-4 mb-3">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center text-center">
                             <img src="@Model.ImageLocation" alt="Admin" class="rounded-circle" width="150" height="150">
-                            @if (ViewData.ModelState.IsValid && ViewData["Error"] == null)
-                            {
-                                <div class="mt-3" id="EditAbout">
-                                    <h4>@Model.Username</h4>
-                                    <p class="text-secondary mb-1">@Model.About</p>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="mt-3">
-                                    <h4>@Model.Username</h4>
-                                    <input class="form-control" asp-for="About">
-                                    <span asp-validation-for="About" class="text-danger" value="@Model.About"></span>
-                                </div>
-                            }
+                            <div class="mt-3" id="ViewAbout">
+                                <h4>@Model.Username</h4>
+                                <p class="text-secondary mb-1">@Model.About</p>
+                            </div>
+                            <div class="mt-3" id="EditAbout" hidden>
+                                <h4>@Model.Username</h4>
+                                <input class="form-control" asp-for="About">
+                                <span asp-validation-for="About" class="text-danger" value="@Model.About"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -50,136 +44,126 @@
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="card mb-3" id="ViewProperties">
-                    @if (ViewData.ModelState.IsValid && ViewData["Error"] == null)
-                    {
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">@Html.DisplayNameFor(model => model.Firstname)</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    @Model.Firstname
-                                </div>
+                <div class="card mb-3">
+                    <div class="card-body" id="ViewProperties">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Firstname)</h6>
                             </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">@Html.DisplayNameFor(model => model.Lastname)</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    @Model.Lastname
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">@Html.DisplayNameFor(model => model.Email)</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    @Model.Email
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">@Html.DisplayNameFor(model => model.Role)</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    @Model.Role.ToString()
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <h6 class="mb-0">@Html.DisplayNameFor(model => model.Birthday)</h6>
-                                </div>
-                                <div class="col-sm-9 text-secondary">
-                                    @Model.Birthday.ToString("dd/MM/yyyy")
-                                </div>
-                            </div>
-                            @if ((User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Equals(Model.Id.ToString()))
-                            {
-                                <hr />
-                                <div class="row" id="EditButton">
-                                    <div class="col-sm-12 text-secondary">
-                                        <button class="btn btn-info">Edit</button>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="col-lg-8">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Firstname)</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input class="form-control" asp-for="Firstname">
-                                            <span asp-validation-for="Firstname" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Lastname)</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input class="form-control" asp-for="Lastname">
-                                            <span asp-validation-for="Lastname" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Email)</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input asp-for="Email" class="form-control">
-                                            <span asp-validation-for="Email" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">Role</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input type="text" class="form-control" value="@Model.Role" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Birthday)</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input class="form-control" type="date" max="@DateTime.Now.Date.AddYears(-9).ToString("yyyy-MM-dd")" asp-for="Birthday" />
-                                            <span asp-validation-for="Birthday" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">Update Profile Image</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            <input type="file" name="ImageFile" id="ImageFile" accept="image/x-png,image/jpg,image/jpeg"/>
-                                        </div>
-                                    </div>
-                                    @if (ViewBag.Error != null)
-                                    {
-                                        <div class="text-danger">@ViewBag.Error</div>
-                                    }
-                                    <div class="row">
-                                        <div class="col-sm-9 text-secondary">
-                                            <input type="submit" class="btn btn-primary px-4" value="Save Changes" id="SaveChangesButton">
-                                            <input type="button" class="btn btn-dark px-4"  value="Cancel" id="Cancel">
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Firstname
                             </div>
                         </div>
-                    }
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Lastname)</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Lastname
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Email)</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Email
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Role)</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Role.ToString()
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Birthday)</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Birthday.ToString("dd/MM/yyyy")
+                            </div>
+                        </div>
+                        @if ((User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Equals(Model.Id.ToString()))
+                        {
+                            <hr />
+                            <div class="row" id="EditButton">
+                                <div class="col-sm-12 text-secondary">
+                                    <button type="button" class="btn btn-info">Edit</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="card-body" id="EditProperties" hidden>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Firstname)</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input class="form-control" asp-for="Firstname">
+                                <span asp-validation-for="Firstname" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Lastname)</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input class="form-control" asp-for="Lastname">
+                                <span asp-validation-for="Lastname" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Email)</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input asp-for="Email" class="form-control">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Role</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="text" class="form-control" value="@Model.Role" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">@Html.DisplayNameFor(model => model.Birthday)</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input class="form-control" type="date" max="@DateTime.Now.Date.AddYears(-9).ToString("yyyy-MM-dd")" asp-for="Birthday" />
+                                <span asp-validation-for="Birthday" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Update Profile Image</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="file" name="ImageFile" id="ImageFile" accept="image/x-png,image/jpg,image/jpeg" />
+                            </div>
+                        </div>
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="text-danger">@ViewBag.Error</div>
+                        }
+                        <div class="row">
+                            <div class="col-sm-9 text-secondary">
+                                <input type="submit" class="btn btn-primary px-4" value="Save Changes" id="SaveChangesButton">
+                                <input type="button" class="btn btn-dark px-4" value="Cancel" id="Cancel">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card mb-3">
                     <ul class="list-group list-group-flush">
@@ -219,6 +203,8 @@
 @section Scripts {
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
 
     <script type="text/javascript">
         function gettoken() {
@@ -226,83 +212,6 @@
             token = $(token).val();
             return token;
         }
-    </script>
-
-    <script id="EditAboutTemplate" type="text/html">
-        <h4>@Model.Username</h4>
-        <input class="form-control" asp-for="About">
-        <span asp-validation-for="About" class="text-danger"></span>
-    </script>
-
-    <script id="EditTemplate" type="text/html">
-        <div class="col-lg-8">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-sm-3">
-                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Firstname)</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                            <input class="form-control" asp-for="Firstname" id="firstName">
-                            <span asp-validation-for="Firstname" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-3">
-                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Lastname)</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                            <input class="form-control" asp-for="Lastname" id="lastName">
-                            <span asp-validation-for="Lastname" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-3">
-                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Email)</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                            <input asp-for="Email" class="form-control" id="email">
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-3">
-                            <h6 class="mb-0">Role</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                            <input type="text" class="form-control" value="@Model.Role" readonly>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-3">
-                            <h6 class="mb-0">@Html.DisplayNameFor(model => model.Birthday)</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                            <input class="form-control" type="date" max="@DateTime.Now.Date.AddYears(-9).ToString("yyyy-MM-dd")" asp-for="Birthday" />
-                            <span asp-validation-for="Birthday" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm-3">
-                            <h6 class="mb-0">Update Profile Image</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                            <input type="file" name="ImageFile" id="ImageFile" accept="image/x-png,image/jpg,image/jpeg"/>
-                        </div>
-                    </div>
-                    @if (ViewBag.Error != null)
-                    {
-                        <div class="text-danger">@ViewBag.Error</div>
-                    }
-                    <div class="row">
-                        <div class="col-sm-9 text-secondary">
-                            <input type="submit" class="btn btn-primary px-4" value="Save Changes" id="SaveChangesButton">
-                            <input type="button" class="btn btn-dark px-4" value="Cancel" id="Cancel">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </script>
 
     <script id="NoMoreArticleTemplate" type="text/html">

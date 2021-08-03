@@ -1,11 +1,18 @@
 ﻿
 $(function () {
 
-    function viewEdit() {
-        var editProperties = $("#EditTemplate").html();
-        $("#ViewProperties").html(editProperties);
-        var editAbout = $("#EditAboutTemplate").html();
-        $("#EditAbout").html(editAbout);
+    function edit() {
+        $("#ViewProperties").attr("hidden", true);
+        $("#EditProperties").removeAttr("hidden");
+        $("#ViewAbout").attr("hidden", true);
+        $("#EditAbout").removeAttr("hidden");
+    }
+
+    function view() {
+        $("#EditProperties").attr("hidden", true);
+        $("#ViewProperties").removeAttr("hidden");
+        $("#EditAbout").attr("hidden", true);
+        $("#ViewAbout").removeAttr("hidden");
     }
 
     function reloadCache() {
@@ -20,17 +27,17 @@ $(function () {
         });
     }
 
+    view();
     $('#SaveChangesButton').click(reloadCache);
     $('#Cancel').click(function () {
-        window.location.replace(window.location.href);
-
+        view();
     });
 
     $("#EditButton").click(function () {
-        viewEdit();
+        edit();
         $('#SaveChangesButton').click(reloadCache);
         $('#Cancel').click(function () {
-            window.location.replace(window.location.href);
+            view();
         });
     });
     
