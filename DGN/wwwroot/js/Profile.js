@@ -20,13 +20,13 @@ $(function () {
             url: "",
             context: document.body,
             success: function (result) {
-
                 $('html[manifest=saveappoffline.appcache]').attr('content', '');
                 $(this).html(result);
             }
         });
     }
 
+    reloadCache();
     view();
     $('#SaveChangesButton').click(reloadCache);
     $('#Cancel').click(function () {
