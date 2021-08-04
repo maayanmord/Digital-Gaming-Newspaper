@@ -44,7 +44,7 @@ namespace DGN.Data
                     Firstname = "Marion",
                     Lastname = "Pearson",
                     Birthday = new DateTime(1984, 6, 2),
-                    ImageLocation = "/images/ClientProfile.jpg",
+                    ImageLocation = "/images/ClientSeedProfile.jpg",
                     About = "Hi, My name is Marion Pearson",
                     Role = UserRole.Client
                 };
@@ -57,7 +57,7 @@ namespace DGN.Data
                     Firstname = "Dan",
                     Lastname = "Parker",
                     Birthday = new DateTime(1958, 10, 3),
-                    ImageLocation = "/images/AuthorProfile.jpg",
+                    ImageLocation = "/images/AuthorSeedProfile.jpg",
                     About = "Hi, My name is Dan Parker",
                     Role = UserRole.Author
                 };
@@ -70,7 +70,7 @@ namespace DGN.Data
                     Firstname = "Larry",
                     Lastname = "Rose",
                     Birthday = new DateTime(1995, 11, 7),
-                    ImageLocation = "/images/AdminProfile.jpg",
+                    ImageLocation = "/images/AdminSeedProfile.jpg",
                     About = "Hi, My name is Larry Rose",
                     Role = UserRole.Admin
                 };
