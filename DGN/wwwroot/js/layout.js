@@ -21,4 +21,8 @@ $(function () {
     if ($(window).scrollTop() > 50) {
         $('#header').addClass('header-scrolled');
     }
+
+    $.extend($.validator.messages, {
+        max: 'You must be at least 9 years old, less or equal to {0}'
+    });
 });
