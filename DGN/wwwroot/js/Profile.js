@@ -1,48 +1,49 @@
-﻿
-$(function () {
+﻿$(function () {
+    view();
 
-    function viewEdit() {
-        var editProperties = $("#EditTemplate").html();
-        $("#ViewProperties").html(editProperties);
-        var editAbout = $("#EditAboutTemplate").html();
-        $("#EditAbout").html(editAbout);
+    function edit() {
+        $("#ViewProperties").attr("hidden", true);
+        $("#EditProperties").removeAttr("hidden");
+        $("#ViewAbout").attr("hidden", true);
+        $("#EditAbout").removeAttr("hidden");
+    }
+
+    function view() {
+        $("#EditProperties").attr("hidden", true);
+        $("#ViewProperties").removeAttr("hidden");
+        $("#EditAbout").attr("hidden", true);
+        $("#ViewAbout").removeAttr("hidden");
     }
 
     function reloadCache() {
-        $.ajax({
-            url: "",
-            context: document.body,
-            success: function (result) {
-
-                $('html[manifest=saveappoffline.appcache]').attr('content', '');
-                $(this).html(result);
-            }
-        });
+        location.reload();
     }
 
-    $('#SaveChangesButton').click(reloadCache);
-    $('#Cancel').click(function () {
-        window.location.replace(window.location.href);
+    $('#form').submit(function (e) {
+        if ($('#form').valid()) {
+            reloadCache();
+        }
+    });
 
+    $('#Cancel').click(function () {
+        $("form").trigger("reset");
+        $("#form").find(".field-validation-valid").empty();
+        view();
     });
 
     $("#EditButton").click(function () {
-        viewEdit();
-        $('#SaveChangesButton').click(reloadCache);
-        $('#Cancel').click(function () {
-            window.location.replace(window.location.href);
-        });
+        edit();
     });
     
     function getArticlePage(id, page, getUrl, sectionId) {
-        count=5
+        count = 5
         $.ajax({
             type: "GET",
-            url: getUrl + id,
+            url: getUrl,
             data: {
+                id: id,
                 page: page,
-                count: count,
-                __RequestVerificationToken: gettoken()
+                count: count
             },
             success: function (data) {
                 countCheck = 0;
@@ -81,7 +82,7 @@ $(function () {
                 }
             },
             error: function (data) {
-                alert(data);
+                $("#ErrorMessage").html("There was an error pulling all your profile information, some data might be missing");
             }
         });
     }
