@@ -70,6 +70,11 @@ namespace DGN.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,CategoryName")] Category category)
         {
+            if (CategoryExists(category.CategoryName))
+            {
+                ViewData["Error"] = "Category is already exist!";
+                return View(category);
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(category);
@@ -104,9 +109,19 @@ namespace DGN.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryName")] Category category)
         {
-            if (id != category.Id)
+            var oldCategory = await _context.Category.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+            if ((oldCategory != null) && (id != category.Id))
             {
                 return NotFound();
+            }
+
+            if (oldCategory.CategoryName != category.CategoryName)
+            {
+                if (CategoryExists(category.CategoryName))
+                {
+                    ViewData["Error"] = "Category already exist!";
+                    return View(category);
+                }
             }
 
             if (ModelState.IsValid)
@@ -166,6 +181,10 @@ namespace DGN.Controllers
         private bool CategoryExists(int id)
         {
             return _context.Category.Any(e => e.Id == id);
+        }
+        private bool CategoryExists(string categoryName)
+        {
+            return _context.Category.Any(e => e.CategoryName == categoryName);
         }
 
         public async Task<IActionResult> Search(string categoryName)
