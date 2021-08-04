@@ -15,26 +15,26 @@ email: admin@test.com
 password: Aa123456!  
 
 ## Client
-- Articles - View, Comment, Share on twitter.
+- Articles - View, Comment, Like Share on twitter.
 - Comments - View, Create, Edit its own, Delete its own.
-- Catagories - View.
+- Categories - View Article Category.
 - Users - View users profiles, edit itself.
-- Branches - View our compony branches by map (not real compony).
+- Branches - View our company branches by map (not real company).
 
 ## Author
-- Article - View, Comment, Share on twitter, Create, Edit, Delete.
+- Article - View, Comment, Like, Share on twitter, Create, Edit, Delete.
 - Comments - View, Create, Edit its own, Delete its own.
-- Catagories - View.
+- Categories - View and Choose Article Category.
 - Users - View users profiles, edit itself.
-- Branches - View our compony branches by map (not real compony).
+- Branches - View our company branches by map (not real company).
 
 ## Admin
-- Articles - View, Comment, Share on twitter, Edit, Delete.
-- Comments - View, Create, Edit, Delete
-- Catagories - View, Edit, Create, Delete.
+- Articles - View, Comment, Like, Share on twitter, Create, Edit, Delete.
+- Comments - View, Create, Edit, Delete.
+- Categories - View, Edit, Create, Delete.
 - Users - View users profiles, Edit, Edit roles, Delete.
-- Branches - View our compony branches by map (not real compony), Edit, Create, Delete
-- Statistics - View. 
+- Branches - View our company branches by map (not real company), Edit, Create, Delete
+- Statistics - View.
 
 ## Authors
 Ran Biderman  
