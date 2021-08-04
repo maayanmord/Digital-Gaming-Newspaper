@@ -474,6 +474,7 @@ namespace DGN.Controllers
             if (!RoleChanged)
             {
                 user.Role = oldUser.Role;
+                user.Email = oldUser.Email;
             }
             else if (oldUser.Role == UserRole.Admin && user.Role != UserRole.Admin) 
             {
