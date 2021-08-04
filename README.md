@@ -27,13 +27,14 @@ password: Aa123456!
 - Categories - View and Choose Article Category.
 - Users - View users profiles, edit itself.
 - Branches - View our company branches by map (not real company).
+- Statistics - View.
 
 ## Admin
 - Articles - View, Comment, Like, Share on twitter, Create, Edit, Delete.
 - Comments - View, Create, Edit, Delete.
 - Categories - View, Edit, Create, Delete.
 - Users - View users profiles, Edit, Edit roles, Delete.
-- Branches - View our company branches by map (not real company), Edit, Create, Delete
+- Branches - View our company branches by map (not real company), Edit, Create, Delete.
 - Statistics - View.
 
 ## Authors
