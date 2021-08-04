@@ -7,7 +7,7 @@ Its permissions to features are by role, there are 3 roles [Client](#Client), [A
 - Client User:  
 email: client@test.com  
 password: Aa123456!  
-- Author User: 
+- Author User:  
 email: author@test.com  
 password: Aa123456!  
 - Admin User:  
