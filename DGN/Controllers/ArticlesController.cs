@@ -201,27 +201,6 @@ namespace DGN.Controllers
             return View(newArticle);
         }
 
-        // GET: Articles/Delete/5
-        [Authorize(Roles = "Author,Admin")]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var article = await _context.Article
-                .Include(a => a.Category)
-                .Include(a => a.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (article == null)
-            {
-                return NotFound();
-            }
-
-            return View(article);
-        }
-
         // POST: Articles/Delete/5
         [Authorize(Roles = "Author,Admin")]
         [HttpPost, ActionName("Delete")]

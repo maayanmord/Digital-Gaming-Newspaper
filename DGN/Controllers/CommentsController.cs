@@ -29,27 +29,6 @@ namespace DGN.Controllers
             return View(await dGNContext.ToListAsync());
         }
 
-        // GET: Comments/Details/5
-        [Authorize]
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var comment = await _context.Comment
-                .Include(c => c.RelatedArticle)
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (comment == null)
-            {
-                return NotFound();
-            }
-
-            return View(comment);
-        }
-
         // POST: Comments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -150,6 +129,7 @@ namespace DGN.Controllers
                                                                              c.Body,
                                                                              c.User.FullName,
                                                                              c.User.Username,
+                                                                             c.UserId,
                                                                              CreationTimestamp = c.CreationTimestamp.ToString("g"),
                                                                              c.RelatedArticle.Title,
                                                                              c.RelatedArticleId

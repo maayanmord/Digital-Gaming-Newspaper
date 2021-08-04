@@ -20,7 +20,7 @@
     }
 
     $('#form').submit(function (e) {
-        if ($('#form').valid()) {
+        if ($('#form').valid() && isValidImageExtension()) {
             reloadCache();
         }
     });
@@ -28,6 +28,7 @@
     $('#Cancel').click(function () {
         $("form").trigger("reset");
         $("#form").find(".field-validation-valid").empty();
+        $("#imageExtensionError").html('');
         view();
     });
 
@@ -122,3 +123,19 @@
         getArticlePage(profileId, counterAuthored, "/Users/GetUserArticles/", "Authored");
     });
 })
+
+function isValidImageExtension() {
+    var allowedExtensions = ["png", "jpeg", "jpg"];
+    var imageFile = $("#ImageFile").val();
+    $("#imageExtensionError").html('');
+
+    if (imageFile != "") {
+        var extension = imageFile.split('.').pop();
+
+        if (!(allowedExtensions.includes(extension))) {
+            $("#imageExtensionError").html("Can't upload this image, make sure its png,jpeg,jpg");
+            return false;
+        }
+    }
+    return true;
+}
