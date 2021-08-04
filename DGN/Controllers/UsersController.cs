@@ -99,7 +99,7 @@ namespace DGN.Controllers
                 user.Password = new Password(user.Id, plainPass, user);
                 if (ImageFile != null)
                 {
-                    string imageName = user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
+                    string imageName = "User" + user.Id + System.IO.Path.GetExtension(ImageFile.FileName);
                     bool uploaded = await _service.UploadImage(ImageFile, imageName);
                     if (uploaded)
                     {
@@ -474,6 +474,7 @@ namespace DGN.Controllers
             if (!RoleChanged)
             {
                 user.Role = oldUser.Role;
+                user.Email = oldUser.Email;
             }
             else if (oldUser.Role == UserRole.Admin && user.Role != UserRole.Admin) 
             {
@@ -497,7 +498,7 @@ namespace DGN.Controllers
             {
                 if (ImageFile != null)
                 {
-                    string fileName = user.Username + "Profile" + System.IO.Path.GetExtension(ImageFile.FileName);
+                    string fileName = "User" + user.Id + System.IO.Path.GetExtension(ImageFile.FileName);
                     bool uploaded = await _service.UploadImage(ImageFile, fileName);
                     if (uploaded)
                     {
