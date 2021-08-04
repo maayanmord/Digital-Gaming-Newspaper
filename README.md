@@ -4,15 +4,15 @@ The website is managing Digital Gaming Newspaper.
 Its permissions to features are by role, there are 3 roles [Client](#Client), [Author](#Author), [Admin](#Admin)
 
 ## Connecting to the dbseed Users
-- Client User: 
-email: client@test.com
-password: Aa123456!
+- Client User:  
+email: client@test.com  
+password: Aa123456!  
 - Author User: 
-email: author@test.com 
-password: Aa123456!
-- Admin User: 
-email: admin@test.com
-password: Aa123456!
+email: author@test.com  
+password: Aa123456!  
+- Admin User:  
+email: admin@test.com  
+password: Aa123456!  
 
 ## Client
 - Articles - View, Comment, Share on twitter.
@@ -37,6 +37,7 @@ password: Aa123456!
 - Statistics - View. 
 
 ## Authors
-Maayan Mordehai
-Bar Ben Yosef
-Ran Biderman
+Ran Biderman  
+Maayan Mordehai  
+Bar Ben Yosef  
+Ori Granot
