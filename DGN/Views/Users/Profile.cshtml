@@ -8,7 +8,7 @@
 <div class="container">
     <div class="main-body">
         <div class="text-danger" id="ErrorMessage"></div>
-        <form id="form" class="row gutters-sm" method="post" asp-action="Profile" enctype="multipart/form-data">
+        <form id="form" class="row gutters-sm" method="post" asp-action="Profile" enctype="multipart/form-data" onsubmit="return isValidImageExtension()">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input id="ProfileId" type="hidden" asp-for="Id" />
             <div class="col-md-4 mb-3">
@@ -152,6 +152,7 @@
                             </div>
                             <div class="col-sm-9 text-secondary">
                                 <input type="file" name="ImageFile" id="ImageFile" accept="image/x-png,image/jpg,image/jpeg" />
+                                <div id="imageExtensionError" class="text-danger"></div>
                             </div>
                         </div>
                         <div class="row">
