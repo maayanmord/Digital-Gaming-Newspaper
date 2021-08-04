@@ -129,6 +129,7 @@ namespace DGN.Controllers
                                                                              c.Body,
                                                                              c.User.FullName,
                                                                              c.User.Username,
+                                                                             c.UserId,
                                                                              CreationTimestamp = c.CreationTimestamp.ToString("g"),
                                                                              c.RelatedArticle.Title,
                                                                              c.RelatedArticleId
